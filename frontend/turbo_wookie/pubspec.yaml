@@ -1,0 +1,4 @@
+name: turbo_wookie
+description: A sample Polymer application
+dependencies:
+    polymer: any
