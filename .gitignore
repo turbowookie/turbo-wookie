@@ -1,3 +1,4 @@
 frontend/turbo_wookie/packages
 frontend/turbo_wookie/web/packages
 backend/mpd/music
+backend/mpd/mpdconf
