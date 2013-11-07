@@ -2,14 +2,68 @@
   
   <template>
     <style>
+    
+      button {
+        /*border-style: none; */
+        background: none;
+      }
+      img {
+        width: 50px;
+        height: 50px;
+      }
+      
+      #volumeSlider {
+        width: 25%;
+      }
+      
+      /* Range Slider Things */
+      .rangeslider-content {
+        border: 1px solid #aaaaaa;
+        color: #222222;
+        border-radius: 4px;
+        position: relative;
+      }
+      
+      .rangeslider-content-horizontal {
+        height: .8em;
+      }
+      
+      .rangeslider-handle {
+        background: #e6e6e6;
+        top: -.3em;
+        margin-left: -.6em;
+        position: absolute;
+        z-index: 2;
+        width: 1.2em;
+        height: 1.2em;
+        cursor: default;
+        border: 1px solid #d3d3d3;
+        border-radius: 4px;
+      }
+      
+      .rangeslider-handle:hover {
+        border: 1px solid #999999;
+        background: #dadada;
+        font-weight: normal;
+        color: #212121;
+      }
+      
+      .rangeslider-range-left {
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
     </style>
     
     <div>
-      sdfsdjfalk;sdjflkasdjl;fjsdalkfj
+      <button id="toggleSound" on-click="{{toggleSound}}"><img src="../img/rest.svg"></button>
+      <br>
+      Volume:
+      <div id="volumeSlider" slider_color="blue" value="75" min="0" max="100"></div>
     </div>
     
   </template>
   
-  <script type="application/dart" src="../dart/media-bar.dart"></script>
-  
+  <script type="application/dart" src="../dart/media-bar.dart"></script>  
 </polymer-element>

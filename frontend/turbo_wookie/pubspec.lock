@@ -16,11 +16,11 @@ packages:
   browser:
     description: browser
     source: hosted
-    version: "0.8.7"
+    version: "0.5.16"
   csslib:
     description: csslib
     source: hosted
-    version: "0.8.7"
+    version: "0.4.7+11"
   custom_element:
     description: custom_element
     source: hosted
@@ -28,7 +28,7 @@ packages:
   html5lib:
     description: html5lib
     source: hosted
-    version: "0.8.7"
+    version: "0.8.9"
   html_import:
     description: html_import
     source: hosted
@@ -52,7 +52,7 @@ packages:
   path:
     description: path
     source: hosted
-    version: "0.8.7"
+    version: "0.8.10+3"
   polymer:
     description: polymer
     source: hosted
@@ -61,6 +61,10 @@ packages:
     description: polymer_expressions
     source: hosted
     version: "0.8.7"
+  range_slider:
+    description: range_slider
+    source: hosted
+    version: "0.0.2"
   shadow_dom:
     description: shadow_dom
     source: hosted
