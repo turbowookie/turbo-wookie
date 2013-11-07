@@ -1,0 +1,188 @@
+info_begin
+format: 1
+mpd_version: 0.18
+fs_charset: UTF-8
+tag: Artist
+tag: ArtistSort
+tag: Album
+tag: AlbumArtist
+tag: AlbumArtistSort
+tag: Title
+tag: Track
+tag: Name
+tag: Genre
+tag: Date
+tag: Composer
+tag: Performer
+tag: Disc
+tag: MUSICBRAINZ_ARTISTID
+tag: MUSICBRAINZ_ALBUMID
+tag: MUSICBRAINZ_ALBUMARTISTID
+tag: MUSICBRAINZ_TRACKID
+info_end
+directory: Reflektor - prerelease
+mtime: 1383851957
+begin: Reflektor - prerelease
+directory: CD1
+mtime: 1383851957
+begin: Reflektor - prerelease/CD1
+song_begin: 00 - Hidden Track.mp3
+Time: 602
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Hidden Track
+Album: Reflektor
+Track: 00/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 01 - Reflektor.mp3
+Time: 454
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Reflektor
+Album: Reflektor
+Track: 01/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 02 - We Exist.mp3
+Time: 344
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: We Exist
+Album: Reflektor
+Track: 02/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 03 - Flashbulb Eyes.mp3
+Time: 162
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Flashbulb Eyes
+Album: Reflektor
+Track: 03/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 04 - Here Comes the Night Time.mp3
+Time: 391
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Here Comes the Night Time
+Album: Reflektor
+Track: 04/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 05 - Normal Person.mp3
+Time: 262
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Normal Person
+Album: Reflektor
+Track: 05/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 06 - You Already Know.mp3
+Time: 239
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: You Already Know
+Album: Reflektor
+Track: 06/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+song_begin: 07 - Joan of Arc.mp3
+Time: 327
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Joan of Arc
+Album: Reflektor
+Track: 07/7
+Date: 2013
+Disc: 1/2
+mtime: 1383851957
+song_end
+end: Reflektor - prerelease/CD1
+directory: CD2
+mtime: 1383851957
+begin: Reflektor - prerelease/CD2
+song_begin: 01 - Here Comes the Night Time II.mp3
+Time: 172
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Here Comes the Night Time II
+Album: Reflektor
+Track: 01/6
+Date: 2013
+Disc: 2/2
+mtime: 1383851957
+song_end
+song_begin: 02 - Awful Sound (Oh Eurydice).mp3
+Time: 374
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Awful Sound (Oh Eurydice)
+Album: Reflektor
+Track: 02/6
+Date: 2013
+Disc: 2/2
+mtime: 1383851957
+song_end
+song_begin: 03 - It's Never Over (Oh Orpheus).mp3
+Time: 403
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: It's Never Over (Oh Orpheus)
+Album: Reflektor
+Track: 03/6
+Date: 2013
+Disc: 2/2
+mtime: 1383851957
+song_end
+song_begin: 04 - Porno.mp3
+Time: 363
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Porno
+Album: Reflektor
+Track: 04/6
+Date: 2013
+Disc: 2/2
+mtime: 1383851957
+song_end
+song_begin: 05 - Afterlife.mp3
+Time: 353
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Afterlife
+Album: Reflektor
+Track: 05/6
+Date: 2013
+Disc: 2/2
+mtime: 1383851957
+song_end
+song_begin: 06 - Supersymmetry.mp3
+Time: 677
+Artist: Arcade Fire
+AlbumArtist: Arcade Fire
+Title: Supersymmetry
+Album: Reflektor
+Track: 06/6
+Date: 2013
+Disc: 2/2
+mtime: 1383851957
+song_end
+end: Reflektor - prerelease/CD2
+end: Reflektor - prerelease

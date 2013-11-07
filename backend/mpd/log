@@ -1,0 +1,282 @@
+Nov 07 13:14 : state_file: failed to open /home/don/code/turbo-wookie/backend/mpd/state: No such file or directory
+Nov 07 13:19 : client: [0] opened from 127.0.0.1:58159
+Nov 07 13:19 : client: [0] closed
+Nov 07 13:19 : client: [1] opened from 127.0.0.1:58161
+Nov 07 13:19 : client: [1] closed
+Nov 07 13:19 : client: [2] opened from 127.0.0.1:58163
+Nov 07 13:19 : client: [2] closed
+Nov 07 13:19 : client: [3] opened from 127.0.0.1:58165
+Nov 07 13:19 : client: [3] closed
+Nov 07 13:19 : client: [4] opened from 127.0.0.1:58167
+Nov 07 13:19 : client: [4] closed
+Nov 07 13:19 : client: [5] opened from 127.0.0.1:58169
+Nov 07 13:19 : client: [5] closed
+Nov 07 13:19 : client: [6] opened from 127.0.0.1:58171
+Nov 07 13:19 : client: [6] closed
+Nov 07 13:19 : client: [7] opened from 127.0.0.1:58173
+Nov 07 13:19 : client: [7] closed
+Nov 07 13:19 : client: [8] opened from 127.0.0.1:58175
+Nov 07 13:19 : client: [8] closed
+Nov 07 13:19 : client: [9] opened from 127.0.0.1:58177
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [9] closed
+Nov 07 13:19 : client: [10] opened from 127.0.0.1:58179
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [10] closed
+Nov 07 13:19 : client: [11] opened from 127.0.0.1:58181
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [11] closed
+Nov 07 13:19 : client: [12] opened from 127.0.0.1:58183
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [12] closed
+Nov 07 13:19 : client: [13] opened from 127.0.0.1:58185
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [13] closed
+Nov 07 13:19 : client: [14] opened from 127.0.0.1:58187
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [14] closed
+Nov 07 13:19 : client: [15] opened from 127.0.0.1:58189
+Nov 07 13:19 : db: No such directory
+Nov 07 13:19 : client: [15] closed
+Nov 07 13:19 : client: [16] opened from 127.0.0.1:58192
+Nov 07 13:19 : client: [16] closed
+Nov 07 13:19 : client: [17] opened from 127.0.0.1:58194
+Nov 07 13:19 : client: [17] closed
+Nov 07 13:19 : client: [18] opened from 127.0.0.1:58196
+Nov 07 13:19 : client: [18] closed
+Nov 07 13:19 : client: [19] opened from 127.0.0.1:58198
+Nov 07 13:19 : client: [19] closed
+Nov 07 13:19 : client: [20] opened from 127.0.0.1:58200
+Nov 07 13:19 : client: [20] closed
+Nov 07 13:19 : client: [21] opened from 127.0.0.1:58202
+Nov 07 13:19 : client: [21] closed
+Nov 07 13:20 : client: [22] opened from 127.0.0.1:58204
+Nov 07 13:20 : db: No such directory
+Nov 07 13:20 : client: [22] closed
+Nov 07 13:22 : client: [23] opened from 127.0.0.1:58212
+Nov 07 13:22 : db: No such directory
+Nov 07 13:22 : client: [23] closed
+Nov 07 13:24 : client: [0] opened from 127.0.0.1:58239
+Nov 07 13:24 : client: [0] closed
+Nov 07 13:24 : client: [1] opened from 127.0.0.1:58241
+Nov 07 13:24 : db: No such directory
+Nov 07 13:24 : client: [1] closed
+Nov 07 13:24 : client: [2] opened from 127.0.0.1:58243
+Nov 07 13:24 : client: [2] closed
+Nov 07 13:24 : client: [3] opened from 127.0.0.1:58245
+Nov 07 13:24 : client: [3] closed
+Nov 07 13:24 : client: [4] opened from 127.0.0.1:58247
+Nov 07 13:24 : db: No such directory
+Nov 07 13:24 : client: [4] closed
+Nov 07 13:24 : client: [5] opened from 127.0.0.1:58249
+Nov 07 13:24 : db: No such directory
+Nov 07 13:24 : client: [5] closed
+Nov 07 13:25 : client: [6] opened from 127.0.0.1:58251
+Nov 07 13:25 : client: [6] closed
+Nov 07 13:25 : client: [7] opened from 127.0.0.1:58253
+Nov 07 13:25 : client: [7] closed
+Nov 07 13:25 : client: [8] opened from 127.0.0.1:58255
+Nov 07 13:25 : client: [8] closed
+Nov 07 13:25 : client: [9] opened from 127.0.0.1:58257
+Nov 07 13:25 : client: [9] closed
+Nov 07 13:25 : client: [10] opened from 127.0.0.1:58259
+Nov 07 13:25 : client: [10] closed
+Nov 07 13:25 : client: [11] opened from 127.0.0.1:58261
+Nov 07 13:25 : client: [11] closed
+Nov 07 13:25 : client: [12] opened from 127.0.0.1:58263
+Nov 07 13:25 : client: [12] closed
+Nov 07 13:25 : client: [13] opened from 127.0.0.1:58265
+Nov 07 13:25 : client: [13] closed
+Nov 07 13:25 : client: [14] opened from 127.0.0.1:58267
+Nov 07 13:25 : client: [14] closed
+Nov 07 13:25 : client: [15] opened from 127.0.0.1:58269
+Nov 07 13:25 : client: [15] closed
+Nov 07 13:25 : client: [16] opened from 127.0.0.1:58271
+Nov 07 13:25 : client: [16] closed
+Nov 07 13:25 : client: [17] opened from 127.0.0.1:58273
+Nov 07 13:25 : client: [17] closed
+Nov 07 13:25 : client: [18] opened from 127.0.0.1:58275
+Nov 07 13:25 : client: [18] closed
+Nov 07 13:25 : client: [19] opened from 127.0.0.1:58277
+Nov 07 13:25 : client: [19] closed
+Nov 07 13:25 : client: [20] opened from 127.0.0.1:58279
+Nov 07 13:25 : client: [20] closed
+Nov 07 13:25 : client: [21] opened from 127.0.0.1:58281
+Nov 07 13:25 : client: [21] closed
+Nov 07 13:25 : client: [22] opened from 127.0.0.1:58283
+Nov 07 13:25 : client: [22] closed
+Nov 07 13:25 : client: [23] opened from 127.0.0.1:58285
+Nov 07 13:25 : client: [23] closed
+Nov 07 13:25 : client: [24] opened from 127.0.0.1:58287
+Nov 07 13:25 : client: [24] closed
+Nov 07 13:25 : client: [25] opened from 127.0.0.1:58289
+Nov 07 13:25 : client: [25] closed
+Nov 07 13:25 : client: [26] opened from 127.0.0.1:58291
+Nov 07 13:25 : client: [26] closed
+Nov 07 13:25 : client: [27] opened from 127.0.0.1:58293
+Nov 07 13:25 : client: [27] closed
+Nov 07 13:25 : client: [28] opened from 127.0.0.1:58295
+Nov 07 13:25 : client: [28] closed
+Nov 07 13:25 : client: [29] opened from 127.0.0.1:58297
+Nov 07 13:25 : client: [29] closed
+Nov 07 13:25 : client: [30] opened from 127.0.0.1:58299
+Nov 07 13:25 : client: [30] closed
+Nov 07 13:25 : client: [31] opened from 127.0.0.1:58301
+Nov 07 13:25 : client: [31] closed
+Nov 07 13:25 : client: [32] opened from 127.0.0.1:58303
+Nov 07 13:25 : client: [32] closed
+Nov 07 13:25 : client: [33] opened from 127.0.0.1:58305
+Nov 07 13:25 : client: [33] closed
+Nov 07 13:25 : client: [34] opened from 127.0.0.1:58307
+Nov 07 13:25 : client: [34] closed
+Nov 07 13:25 : client: [35] opened from 127.0.0.1:58309
+Nov 07 13:25 : client: [35] closed
+Nov 07 13:25 : client: [36] opened from 127.0.0.1:58311
+Nov 07 13:25 : client: [36] closed
+Nov 07 13:25 : client: [37] opened from 127.0.0.1:58313
+Nov 07 13:25 : client: [37] closed
+Nov 07 13:25 : client: [38] opened from 127.0.0.1:58315
+Nov 07 13:25 : client: [38] closed
+Nov 07 13:25 : client: [39] opened from 127.0.0.1:58317
+Nov 07 13:25 : client: [39] closed
+Nov 07 13:25 : client: [40] opened from 127.0.0.1:58319
+Nov 07 13:25 : client: [40] closed
+Nov 07 13:25 : client: [41] opened from 127.0.0.1:58321
+Nov 07 13:25 : client: [41] closed
+Nov 07 13:26 : client: [42] opened from 127.0.0.1:58368
+Nov 07 13:27 : client: [42] closed
+Nov 07 13:28 : client: [43] opened from 127.0.0.1:58386
+Nov 07 13:28 : db: No such directory
+Nov 07 13:28 : client: [43] closed
+Nov 07 13:29 : client: [44] opened from 127.0.0.1:58388
+Nov 07 13:29 : db: No such directory
+Nov 07 13:29 : client: [44] closed
+Nov 07 13:29 : client: [45] opened from 127.0.0.1:58390
+Nov 07 13:29 : db: No such directory
+Nov 07 13:29 : client: [45] closed
+Nov 07 13:29 : client: [46] opened from 127.0.0.1:58393
+Nov 07 13:29 : db: No such directory
+Nov 07 13:29 : client: [46] closed
+Nov 07 13:29 : client: [47] opened from 127.0.0.1:58395
+Nov 07 13:29 : client: [47] closed
+Nov 07 13:29 : client: [48] opened from 127.0.0.1:58397
+Nov 07 13:29 : client: [48] closed
+Nov 07 13:29 : client: [49] opened from 127.0.0.1:58399
+Nov 07 13:29 : client: [49] closed
+Nov 07 13:29 : client: [50] opened from 127.0.0.1:58401
+Nov 07 13:29 : client: [50] closed
+Nov 07 13:29 : client: [51] opened from 127.0.0.1:58403
+Nov 07 13:29 : client: [51] closed
+Nov 07 13:29 : client: [52] opened from 127.0.0.1:58405
+Nov 07 13:29 : client: [52] closed
+Nov 07 13:29 : client: [53] opened from 127.0.0.1:58407
+Nov 07 13:29 : client: [53] closed
+Nov 07 13:29 : client: [54] opened from 127.0.0.1:58409
+Nov 07 13:29 : client: [54] closed
+Nov 07 13:29 : client: [55] opened from 127.0.0.1:58411
+Nov 07 13:29 : client: [55] closed
+Nov 07 13:29 : client: [56] opened from 127.0.0.1:58413
+Nov 07 13:29 : db: No such directory
+Nov 07 13:29 : client: [56] closed
+Nov 07 13:31 : client: [0] opened from 127.0.0.1:58421
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/04 - Here Comes the Night Time.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/03 - Flashbulb Eyes.mp3
+Nov 07 13:31 : client: [0] closed
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/00 - Hidden Track.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/07 - Joan of Arc.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/02 - We Exist.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/06 - You Already Know.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/01 - Reflektor.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD1/05 - Normal Person.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD2/06 - Supersymmetry.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD2/04 - Porno.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD2/02 - Awful Sound (Oh Eurydice).mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD2/03 - It's Never Over (Oh Orpheus).mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD2/05 - Afterlife.mp3
+Nov 07 13:31 : update: added Reflektor - prerelease/CD2/01 - Here Comes the Night Time II.mp3
+Nov 07 13:31 : client: [1] opened from 127.0.0.1:58423
+Nov 07 13:31 : client: [1] closed
+Nov 07 13:31 : client: [2] opened from 127.0.0.1:58426
+Nov 07 13:31 : db: No such directory
+Nov 07 13:31 : client: [2] closed
+Nov 07 13:31 : client: [3] opened from 127.0.0.1:58428
+Nov 07 13:31 : db: No such directory
+Nov 07 13:31 : client: [3] closed
+Nov 07 13:31 : client: [4] opened from 127.0.0.1:58430
+Nov 07 13:31 : db: No such directory
+Nov 07 13:31 : client: [4] closed
+Nov 07 13:31 : client: [5] opened from 127.0.0.1:58432
+Nov 07 13:31 : db: No such directory
+Nov 07 13:31 : client: [5] closed
+Nov 07 13:31 : client: [6] opened from 127.0.0.1:58434
+Nov 07 13:31 : db: No such directory
+Nov 07 13:31 : client: [6] closed
+Nov 07 13:31 : client: [7] opened from 127.0.0.1:58436
+Nov 07 13:31 : db: No such directory
+Nov 07 13:31 : client: [7] closed
+Nov 07 13:31 : client: [8] opened from 127.0.0.1:58439
+Nov 07 13:31 : client: [8] closed
+Nov 07 13:31 : client: [9] opened from 127.0.0.1:58441
+Nov 07 13:31 : client: [9] closed
+Nov 07 13:31 : client: [10] opened from 127.0.0.1:58444
+Nov 07 13:31 : client: [10] closed
+Nov 07 13:31 : client: [11] opened from 127.0.0.1:58446
+Nov 07 13:31 : client: [11] closed
+Nov 07 13:31 : client: [12] opened from 127.0.0.1:58448
+Nov 07 13:31 : client: [12] closed
+Nov 07 13:36 : client: [13] opened from 10.212.169.149:38245
+Nov 07 13:36 : client: [14] opened from 10.212.169.149:38835
+Nov 07 13:36 : client: [14] closed
+Nov 07 13:36 : client: [15] opened from 10.212.169.149:48910
+Nov 07 13:36 : client: [15] closed
+Nov 07 13:36 : client: [16] opened from 10.212.169.149:47899
+Nov 07 13:36 : client: [16] closed
+Nov 07 13:36 : client: [13] closed
+Nov 07 13:36 : client: [17] opened from 10.212.169.149:32768
+Nov 07 13:36 : client: [17] closed
+Nov 07 13:36 : client: [18] opened from 10.212.169.149:45446
+Nov 07 13:36 : client: [18] closed
+Nov 07 13:37 : client: [19] opened from 10.212.169.149:55539
+Nov 07 13:37 : client: [20] opened from 10.212.169.149:55369
+Nov 07 13:37 : client: [20] closed
+Nov 07 13:37 : client: [21] opened from 127.0.0.1:58466
+Nov 07 13:37 : client: [21] closed
+Nov 07 13:37 : client: [19] closed
+Nov 07 13:42 : client: [0] opened from 10.212.169.149:34386
+Nov 07 13:42 : client: [1] opened from 10.212.169.149:37071
+Nov 07 13:42 : client: [1] closed
+Nov 07 13:42 : client: [2] opened from 10.212.169.149:41328
+Nov 07 13:42 : client: [2] closed
+Nov 07 13:42 : client: [0] closed
+Nov 07 13:42 : client: [3] opened from 10.212.169.149:42647
+Nov 07 13:43 : client: [3] closed
+Nov 07 13:43 : client: [0] opened from 127.0.0.1:58505
+Nov 07 13:43 : client: [0] closed
+Nov 07 13:43 : client: [1] opened from 127.0.0.1:58507
+Nov 07 13:43 : client: [1] closed
+Nov 07 13:43 : client: [2] opened from 127.0.0.1:58509
+Nov 07 13:43 : client: [2] closed
+Nov 07 13:43 : client: [3] opened from 127.0.0.1:58511
+Nov 07 13:43 : client: [3] closed
+Nov 07 13:43 : client: [4] opened from 127.0.0.1:58513
+Nov 07 13:43 : db: No such directory
+Nov 07 13:43 : client: [4] closed
+Nov 07 13:44 : client: [5] opened from 127.0.0.1:58515
+Nov 07 13:44 : client: [5] closed
+Nov 07 13:44 : client: [6] opened from 127.0.0.1:58517
+Nov 07 13:44 : client: [6] closed
+Nov 07 13:44 : client: [7] opened from 127.0.0.1:58519
+Nov 07 13:44 : client: [7] closed
+Nov 07 13:45 : client: [8] opened from 127.0.0.1:58535
+Nov 07 13:45 : client: [8] closed
+Nov 07 13:45 : client: [9] opened from 127.0.0.1:58537
+Nov 07 13:45 : client: [9] closed
+Nov 07 13:45 : client: [10] opened from 127.0.0.1:58539
+Nov 07 13:45 : db: No such directory
+Nov 07 13:45 : client: [10] closed
+Nov 07 13:45 : client: [11] opened from 127.0.0.1:58541
+Nov 07 13:45 : db: No such directory
+Nov 07 13:45 : client: [11] closed
+Nov 07 13:45 : client: [12] opened from 127.0.0.1:58543
+Nov 07 13:45 : db: No such directory
+Nov 07 13:45 : client: [12] closed

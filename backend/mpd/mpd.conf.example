@@ -25,7 +25,7 @@ playlist_directory		"~/code/turbo-wookie/backend/mpd/playlists"
 # MPD to accept files over ipc socket (using file:// protocol) or streaming
 # files over an accepted protocol.
 #
-db_file			"~/code/turbo-wookie/backend/mpd/database"
+db_file			"~/code/turbo-wookie/backend/mpd/database.db"
 # 
 # These settings are the locations for the daemon log files for the daemon.
 # These logs are great for troubleshooting, depending on your log_level
@@ -121,12 +121,12 @@ sticker_file			"~/code/turbo-wookie/backend/mpd/sticker.sql"
 # This setting enables automatic update of MPD's database when files in 
 # music_directory are changed.
 #
-#auto_update	"yes"
+auto_update	"yes"
 #
 # Limit the depth of the directories being watched, 0 means only watch
 # the music directory itself.  There is no limit by default.
 #
-#auto_update_depth "3"
+auto_update_depth "10"
 #
 ###############################################################################
 
@@ -260,17 +260,17 @@ input {
 #
 # An example of a httpd output (built-in HTTP streaming server):
 #
-#audio_output {
-#	type		"httpd"
-#	name		"My HTTP Stream"
-#	encoder		"vorbis"		# optional, vorbis or lame
-#	port		"8000"
-#	bind_to_address	"0.0.0.0"		# optional, IPv4 or IPv6
+audio_output {
+	type		"httpd"
+  name		"My HTTP Stream"
+	encoder		"vorbis"		# optional, vorbis or lame
+	port		"8000"
+	bind_to_address	"0.0.0.0"		# optional, IPv4 or IPv6
 ##	quality		"5.0"			# do not define if bitrate is defined
-#	bitrate		"128"			# do not define if quality is defined
-#	format		"44100:16:1"
-#	max_clients	"0"			# optional 0=no limit
-#}
+	bitrate		"128"			# do not define if quality is defined
+	format		"44100:16:1"
+	max_clients	"0"			# optional 0=no limit
+}
 #
 # An example of a pulseaudio output (streaming to a remote pulseaudio server)
 #
