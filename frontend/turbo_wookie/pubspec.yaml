@@ -1,0 +1,5 @@
+name: turbo_wookie
+description: A sample Polymer application
+dependencies:
+  polymer: any
+  range_slider: any
