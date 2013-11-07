@@ -1,17 +1,104 @@
-<?xml version="1.0"?><svg width="744.09448" height="1052.3622" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <title>Quarter Rest</title>
- <defs>
-  <linearGradient gradientTransform="matrix(2.9275109,0,0,2.9275109,-554.67638,-69.165884)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient3013-0" id="linearGradient3902" y2="133.84236" x2="268.80136" y1="49.627041" x1="262.36795"/>
-  <linearGradient id="linearGradient3013-0">
-   <stop stop-color="#000000" stop-opacity="0.826389" offset="0" id="stop3015-2"/>
-   <stop stop-color="#000000" offset="1" id="stop3017-3"/>
-  </linearGradient>
-  <linearGradient gradientTransform="matrix(2.9562645,0,0,2.9562645,-434.63707,268.14569)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient3013-0" id="linearGradient3935" y2="133.84236" x2="268.80136" y1="49.627041" x1="262.36795"/>
-  <linearGradient xlink:href="#linearGradient3013-0" id="linearGradient3790" y2="0.79899" x2="0.025008" y1="0.230662" x1="0.670723"/>
- </defs>
- <metadata id="metadata3917">image/svg+xmlQuarter Restjaschon</metadata>
- <g>
-  <title>Layer 1</title>
-  <path fill="#000000" fill-rule="evenodd" stroke-width="4.703036" stroke-linecap="round" stroke-linejoin="round" id="path2986-1" d="m508.039764,298.776917c0,59.363342 -118.726746,148.408386 -118.726746,267.134949c0,44.522705 89.045013,178.09021 148.408478,252.294373c-29.681732,-14.84082 -59.363464,-29.681763 -103.885986,-29.681763c-89.045044,0 -118.726654,74.204285 -118.726654,118.726868c0,29.68158 29.68161,59.363342 44.522522,89.044983c-89.045135,-59.363403 -148.408432,-118.726624 -148.408432,-178.090088c0,-148.408447 101.3629,-96.465393 175.567123,-126.147217c-74.204224,-74.204102 -145.885406,-185.510376 -145.885406,-230.032898c0,-29.681732 89.045013,-133.567474 118.726715,-207.77182l0,-44.522415c0,-44.522537 -29.681702,-103.885857 -44.522522,-148.408478c59.363342,74.204239 192.930908,207.771896 192.930908,237.453506z"/>
- </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448"
+   height="1052.3622"
+   id="svg2995"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="rest.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview3013"
+     showgrid="false"
+     inkscape:zoom="0.22425739"
+     inkscape:cx="372.04724"
+     inkscape:cy="526.18109"
+     inkscape:window-x="699"
+     inkscape:window-y="194"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2995" />
+  <title
+     id="title2997">Quarter Rest</title>
+  <defs
+     id="defs2999">
+    <linearGradient
+       gradientTransform="matrix(2.9275109,0,0,2.9275109,-554.67638,-69.165884)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient3013-0"
+       id="linearGradient3902"
+       y2="133.84236"
+       x2="268.80136"
+       y1="49.627041"
+       x1="262.36795" />
+    <linearGradient
+       id="linearGradient3013-0">
+      <stop
+         stop-color="#000000"
+         stop-opacity="0.826389"
+         offset="0"
+         id="stop3015-2" />
+      <stop
+         stop-color="#000000"
+         offset="1"
+         id="stop3017-3" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(2.9562645,0,0,2.9562645,-434.63707,268.14569)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient3013-0"
+       id="linearGradient3935"
+       y2="133.84236"
+       x2="268.80136"
+       y1="49.627041"
+       x1="262.36795" />
+    <linearGradient
+       xlink:href="#linearGradient3013-0"
+       id="linearGradient3790"
+       y2="0.79899"
+       x2="0.025008"
+       y1="0.230662"
+       x1="0.670723" />
+  </defs>
+  <metadata
+     id="metadata3917">image/svg+xmlQuarter Restjaschon<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <g
+     id="g3008"
+     style="fill:#ffffff">
+    <title
+       id="title3010">Layer 1</title>
+    <path
+       fill="#000000"
+       fill-rule="evenodd"
+       stroke-width="4.703036"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       id="path2986-1"
+       d="m508.039764,298.776917c0,59.363342 -118.726746,148.408386 -118.726746,267.134949c0,44.522705 89.045013,178.09021 148.408478,252.294373c-29.681732,-14.84082 -59.363464,-29.681763 -103.885986,-29.681763c-89.045044,0 -118.726654,74.204285 -118.726654,118.726868c0,29.68158 29.68161,59.363342 44.522522,89.044983c-89.045135,-59.363403 -148.408432,-118.726624 -148.408432,-178.090088c0,-148.408447 101.3629,-96.465393 175.567123,-126.147217c-74.204224,-74.204102 -145.885406,-185.510376 -145.885406,-230.032898c0,-29.681732 89.045013,-133.567474 118.726715,-207.77182l0,-44.522415c0,-44.522537 -29.681702,-103.885857 -44.522522,-148.408478c59.363342,74.204239 192.930908,207.771896 192.930908,237.453506z"
+       style="fill:#ffffff" />
+  </g>
 </svg>

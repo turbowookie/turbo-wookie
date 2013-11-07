@@ -3502,3 +3502,549 @@ malformed type used.
 #4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
 build.dart finished [191 ms]
 
+---
+build.dart --machine --changed=web/dart/media-bar.dart
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/dart/media-bar.dart
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [197 ms]
+
+---
+build.dart --machine --changed=web/html/index.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [190 ms]
+
+---
+build.dart --machine --changed=web/html/index.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [192 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [193 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [190 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [190 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [192 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [193 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [195 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [191 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [195 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [197 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [200 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [188 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [191 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [198 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [189 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [258 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [192 ms]
+
+---
+build.dart --machine --changed=web/html/media-bar.html
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [194 ms]
+
+---
+build.dart --machine --changed=web/img/rest.svg
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [200 ms]
+
+---
+build.dart --machine --changed=web/img/note.svg
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [190 ms]
+
+---
+build.dart --machine --changed=web/img/mute.svg
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [192 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [194 ms]
+
+---
+build.dart --machine --changed=web/css/turbo_wookie.css
+Unhandled exception:
+'package:polymer/builder.dart': Error: line 320 pos 43: type 'Options' is not loaded
+    res = parser.parse(args == null ? new Options().arguments : args);
+                                          ^
+malformed type used.
+#0      parseOptions (package:polymer/builder.dart:320:43)
+#1      parseOptions (package:polymer/builder.dart:321:5)
+#2      _options (package:polymer/builder.dart:259:31)
+#3      build (package:polymer/builder.dart:116:42)
+#4      main (file:///home/michael/Code/turbo-wookie/frontend/turbo_wookie/build.dart:4:8)
+build.dart finished [192 ms]
+

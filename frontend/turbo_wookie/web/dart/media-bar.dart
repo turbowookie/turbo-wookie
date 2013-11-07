@@ -17,7 +17,8 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     volumeSlider = new RangeSlider($["volumeSlider"]);
-    volumeSlider.$elmt.onChange.listen((Event e){
+
+    volumeSlider.$elmt.onChange.listen((CustomEvent e){
       changeVolume(e.detail["value"]);
     });
 
