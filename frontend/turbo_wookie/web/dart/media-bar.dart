@@ -14,6 +14,7 @@ class MediaBar extends PolymerElement {
 
   void enteredView() {
     super.enteredView();
+    getShadowRoot("media-bar").applyAuthorStyles = true;
 
     toggleSoundButton = $["toggleSound"];
     volumeSlider = new RangeSlider($["volumeSlider"]);
