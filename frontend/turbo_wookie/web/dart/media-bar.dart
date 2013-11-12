@@ -11,7 +11,6 @@ class MediaBar extends PolymerElement {
   RangeSlider volumeSlider;
   bool isPlaying;
   GainNode gainNode;
-  double oldVol;
 
   MediaBar.created()
     : super.created() {
@@ -35,12 +34,11 @@ class MediaBar extends PolymerElement {
     ImageElement image = toggleSoundButton.children.first;
     if(isPlaying) {
       image.src = "../img/note.svg";
-      oldVol = getVolume();
       setVolume(0.0);
     }
     else {
       image.src = "../img/rest.svg";
-      setVolume(oldVol);
+      setVolume(volumeSlider.value);
     }
 
     isPlaying = !isPlaying;
