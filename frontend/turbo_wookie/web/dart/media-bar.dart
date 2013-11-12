@@ -13,7 +13,10 @@ class MediaBar extends PolymerElement {
   AudioContext audioContext;
   GainNode gainNode;
 
-  MediaBar.created() : super.created();
+  MediaBar.created()
+    : super.created() {
+    isPlaying = true;
+  }
 
   void enteredView() {
     super.enteredView();
@@ -27,8 +30,6 @@ class MediaBar extends PolymerElement {
     volumeSlider.$elmt.onChange.listen((CustomEvent e){
       changeVolume(e.detail["value"]);
     });
-
-    isPlaying = true;
   }
 
 

@@ -2,25 +2,32 @@
   
   <template>
     <style>
+      
       button {
-        index: -1;
         border-style: none;
         background: none;
       }
+      
+      #toggleSound {
+        display: block;
+        float: left;
+      }
+      
       img {
         width: 50px;
         height: 50px;
       }
       
       #volumeSlider {
-        width: 25%;
+        width: calc(100% - 100px);
+        float: right;
+        margin-right: 25px;
+        top: 25px;
       }
     </style>
     
     <div>
       <button id="toggleSound" on-click="{{toggleSound}}"><img src="../img/rest.svg"></button>
-      <br>
-      Volume:
       <div id="volumeSlider" slider_color="#33B5E5" value="15" min="0" max="100"></div>
     </div>
     

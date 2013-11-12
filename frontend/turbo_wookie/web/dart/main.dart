@@ -8,7 +8,7 @@ void main() {
   initPolymer();
   print("\t\t\t__TURBO WOOKIE__");
 
-  loadData();
+  //loadData();
 }
 
 void loadData() {
