@@ -1,0 +1,21 @@
+body {
+  background-color: #202020;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.2em;
+  margin: 15px;
+}
+
+h1 {
+  color: #33B5E5;
+}
+
+#mediaBar {
+  background: #1a1a1a;
+  position: fixed;
+  left:0px;
+  bottom: 0px;
+  width: 100%;
+}

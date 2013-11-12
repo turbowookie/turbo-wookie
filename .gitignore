@@ -1,2 +1,13 @@
-frontend/turbo_wookie/packages
-frontend/turbo_wookie/web/packages
+packages
+.project
+*.iml
+*.ipr
+*.iws
+.idea/
+*.dart.js
+*.js_
+*.js.deps
+*.js.map
+pubspec.lock
+frontend/turbo_wookie/pubspec.lock
+frontend/turbo_wookie/.buildlog

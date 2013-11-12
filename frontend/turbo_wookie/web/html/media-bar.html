@@ -1,0 +1,42 @@
+<polymer-element name="media-bar">
+  
+  <template>
+    <style>
+      
+      button {
+        border: none;
+        background: none;
+        padding-bottom: 0px;
+      }
+      
+      #toggleSound {
+        display: block;
+        float: left;
+        border-right: 1px solid #202020;
+      }
+      
+      img {
+        border: none;
+        background: none;
+        width: 50px;
+        height: 50px;
+      }
+      
+      #volumeSlider {
+        width: calc(100% - 160px);
+        float: right;
+        margin-right: 25px;
+        top: 25px;
+      }
+    </style>
+    
+    <div>
+      <button id="toggleSound" on-click="{{toggleSound}}"><img src="../img/rest.svg"></button>
+      <img src="../img/volume.svg"></img>
+      <div id="volumeSlider" slider_color="#33B5E5" value="0.02" min="0" max="1.0"></div>
+    </div>
+    
+  </template>
+  
+  <script type="application/dart" src="../dart/media-bar.dart"></script>  
+</polymer-element>
