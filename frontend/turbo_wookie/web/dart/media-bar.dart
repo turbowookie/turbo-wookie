@@ -34,14 +34,14 @@ class MediaBar extends PolymerElement {
     ImageElement image = toggleSoundButton.children.first;
     if(isPlaying) {
       image.src = "../img/note.svg";
+      isPlaying = false;
       setVolume(0.0);
     }
     else {
       image.src = "../img/rest.svg";
+      isPlaying = true;
       setVolume(volumeSlider.value);
     }
-
-    isPlaying = !isPlaying;
   }
 
   void setGainNode(GainNode gainNode) {
@@ -50,7 +50,8 @@ class MediaBar extends PolymerElement {
   }
 
   void setVolume(double vol) {
-    gainNode.gain.value = vol;
+    if(isPlaying || vol == 0.0)
+      gainNode.gain.value = vol;
   }
 
   double getVolume() {
