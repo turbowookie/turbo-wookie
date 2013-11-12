@@ -8,19 +8,19 @@ void main() {
   initPolymer();
   print("\t\t\t__TURBO WOOKIE__");
 
-  //loadData();
-}
-
-void loadData() {
-  String url = "http://shtuff.kuntz.co/deepnote.ogg";
+  String url = "http://shtuff.kuntz.co/notdeepnote.ogg";
   //String url = "10.212.119.247:8000";
   //String url = "http://radiomilwaukee.streamguys.net/live.m3u";
+
+  playSound(url);
+}
+
+void playSound(String url) {
   AudioContext audioContext = new AudioContext();
   GainNode gainNode = audioContext.createGainNode();
 
   MediaBar mediaBar = querySelector("#mediaBar");
-  mediaBar.audioContext = audioContext;
-  mediaBar.gainNode = gainNode;
+  mediaBar.setGainNode(gainNode);
 
 
   HttpRequest request = new HttpRequest();
@@ -30,7 +30,6 @@ void loadData() {
     audioContext.decodeAudioData(request.response)
     .then((buffer) {
       playSound() {
-        gainNode.gain.value = 0.05;
         AudioBufferSourceNode source = audioContext.createBufferSource();
         source.connectNode(gainNode, 0, 0);
         gainNode.connectNode(audioContext.destination, 0, 0);

@@ -10,8 +10,8 @@ class MediaBar extends PolymerElement {
   ButtonElement toggleSoundButton;
   RangeSlider volumeSlider;
   bool isPlaying;
-  AudioContext audioContext;
   GainNode gainNode;
+  double oldVol;
 
   MediaBar.created()
     : super.created() {
@@ -24,11 +24,9 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     volumeSlider = new RangeSlider($["volumeSlider"]);
-    changeVolume(volumeSlider.value);
-    changeVolume(50.0);
 
-    volumeSlider.$elmt.onChange.listen((CustomEvent e){
-      changeVolume(e.detail["value"]);
+    volumeSlider.$elmt.onChange.listen((CustomEvent e) {
+      setVolume(e.detail["value"]);
     });
   }
 
@@ -37,15 +35,28 @@ class MediaBar extends PolymerElement {
     ImageElement image = toggleSoundButton.children.first;
     if(isPlaying) {
       image.src = "../img/note.svg";
+      oldVol = getVolume();
+      setVolume(0.0);
     }
-    else
+    else {
       image.src = "../img/rest.svg";
+      setVolume(oldVol);
+    }
 
     isPlaying = !isPlaying;
   }
 
-  void changeVolume(double vol) {
-    gainNode.gain.value = vol / 100;
+  void setGainNode(GainNode gainNode) {
+    this.gainNode = gainNode;
+    setVolume(volumeSlider.value);
+  }
+
+  void setVolume(double vol) {
+    gainNode.gain.value = vol;
+  }
+
+  double getVolume() {
+    return gainNode.gain.value;
   }
 
 }
