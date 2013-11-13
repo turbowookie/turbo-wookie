@@ -23,10 +23,17 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     volumeSlider = new RangeSlider($["volumeSlider"]);
+    volumeSlider.value = .5;
 
     volumeSlider.$elmt.onChange.listen((CustomEvent e) {
       setVolume(e.detail["value"]);
     });
+    //Was having issues with letting go of slider and music stopping
+    //This listener fires after the user stops scrolling and sets value to slider value
+    volumeSlider.$elmt.onDragEnd.listen((MouseEvent e) {
+      setVolume(volumeSlider.value);
+    });
+    
   }
 
 
