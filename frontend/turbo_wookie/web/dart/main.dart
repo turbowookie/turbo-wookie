@@ -6,13 +6,13 @@ import "media-bar.dart";
 
 void main() {
   initPolymer();
-  print("\t\t\t__TURBO WOOKIE__");
+  print("\n\t\t\t__TURBO WOOKIE__");
 
   //String url = "http://shtuff.kuntz.co/notdeepnote.ogg";
   String url = "deepnote.ogg";
 
   //playSound(url);
-  playSound("deepnote.ogg");
+  playSound(url);
 }
 
 void playSound(String url) {
