@@ -1,3 +1,5 @@
+
+
 body {
   background-color: #202020;
   color: #fff;
@@ -9,6 +11,7 @@ body {
 }
 
 h1 {
+  text-align: center;
   color: #33B5E5;
 }
 
