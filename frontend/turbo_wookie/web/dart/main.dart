@@ -44,19 +44,3 @@ void playSound(String url) {
 
   request.send();
 }
-
-void onData(var event) {
-  print(event);
-}
-
-void requestComplete(HttpRequest request) {
-  if(request.status == 200) {
-    print(request.response);
-  }
-  else
-    print("Status Not 200: ${request.status}");
-}
-
-void onDataLoaded(String responseText) {
-  print(responseText);
-}
