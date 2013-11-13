@@ -12,7 +12,8 @@ void main() {
   //String url = "10.212.119.247:8000";
   //String url = "http://radiomilwaukee.streamguys.net/live.m3u";
 
-  playSound(url);
+  //playSound(url);
+  playSound("deepnote.ogg");
 }
 
 void playSound(String url) {
