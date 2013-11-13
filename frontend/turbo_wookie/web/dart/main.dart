@@ -9,7 +9,8 @@ void main() {
   print("\n\t\t\t__TURBO WOOKIE__");
 
   //String url = "http://shtuff.kuntz.co/notdeepnote.ogg";
-  String url = "deepnote.ogg";
+  //String url = "deepnote.ogg";
+  String url = "testing.ogg";
 
   //playSound(url);
   playSound(url);
