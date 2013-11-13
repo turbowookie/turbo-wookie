@@ -2,28 +2,32 @@ package main
 
 import (
   "github.com/fhs/gompd/mpd"
-  "log"
   "fmt"
-  "time"
+  //"log"
+  //"time"
 )
 
 func main() {
-  conn, err := mpd.Dial("tcp", "localhost:6600")
-  if err != nil {
-    log.Fatalln(err)
-  }
-  defer conn.Close()
+  client := connect("localhost:6600")
+  defer client.Close()
 
+  files, _ := client.GetFiles()
+  
+  //fmt.Printf("%s\n", files)
+  for _, song := range files {
+    fmt.Printf("%s\n", song)
+  }
+
+  /*
   line := ""
   line1 := ""
-
   for {
-    status, err := conn.Status()
+    status, err := client.Status()
     if err != nil {
       log.Fatalln(err)
     }
 
-    song, err := conn.CurrentSong()
+    song, err := client.CurrentSong()
     if err != nil {
       log.Fatalln(err)
     }
@@ -41,4 +45,16 @@ func main() {
 
     time.Sleep(1e9)
   }
+  */
+
+  // do something awesome?
 }
+
+func connect(addr string) *mpd.Client {
+  client, err := mpd.Dial("tcp", addr)
+  if err != nil {
+    return nil
+  }
+
+  return client
+} 
