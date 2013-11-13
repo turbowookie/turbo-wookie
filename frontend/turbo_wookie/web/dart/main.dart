@@ -8,9 +8,8 @@ void main() {
   initPolymer();
   print("\t\t\t__TURBO WOOKIE__");
 
-  String url = "http://shtuff.kuntz.co/notdeepnote.ogg";
-  //String url = "10.212.119.247:8000";
-  //String url = "http://radiomilwaukee.streamguys.net/live.m3u";
+  //String url = "http://shtuff.kuntz.co/notdeepnote.ogg";
+  String url = "deepnote.ogg";
 
   //playSound(url);
   playSound("deepnote.ogg");
