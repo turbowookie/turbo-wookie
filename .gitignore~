@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 packages
 .project
 *.iml
@@ -11,6 +12,7 @@ packages
 pubspec.lock
 frontend/turbo_wookie/pubspec.lock
 frontend/turbo_wookie/.buildlog
+=======
 frontend/turbo_wookie/packages
 frontend/turbo_wookie/web/packages
 backend/mpd/music
@@ -20,3 +22,4 @@ backend/mpd/log
 backend/mpd/state
 backend/mpd/pid
 backend/mpd/sticker.sql
+>>>>>>> 5b6af9d1cf998300ca63647c8a3aba36a82d840b
