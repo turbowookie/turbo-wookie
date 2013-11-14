@@ -3,3 +3,8 @@ build.dart --machine --full
 
 build.dart finished [1093 ms]
 
+---
+build.dart --machine --full
+warning: now that main takes arguments, you need to explicitly pass options to build(). Running as if no options were passed.
+build.dart finished [793 ms]
+
