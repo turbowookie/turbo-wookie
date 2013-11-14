@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><script src="packages/shadow_dom/shadow_dom.debug.js"></script>
+<script src="packages/custom_element/custom-elements.debug.js"></script>
+<script src="packages/browser/interop.js"></script>
+
+    <meta charset="utf-8">
+    <title>Turbo Wookie</title>
+    <link rel="stylesheet" href="../css/turbo_wookie.css">
+    <link rel="stylesheet" href="packages/range_slider/range_slider.css">
+
+    <!-- Import our polymer things -->
+    
+
+    <script src="index.html_bootstrap.dart.js"></script>
+    
+    
+    
+  </head>
+  <body><polymer-element name="media-bar">
+  
+  <template>
+    <style>
+      
+      button {
+        border: none;
+        background: none;
+        padding-bottom: 0px;
+      }
+      
+      #toggleSound {
+        display: block;
+        float: left;
+        border-right: 1px solid #202020;
+      }
+      
+      img {
+        border: none;
+        background: none;
+        width: 50px;
+        height: 50px;
+      }
+      
+      #volumeSlider {
+        width: calc(100% - 160px);
+        float: right;
+        margin-right: 25px;
+        top: 25px;
+      }
+    </style>
+    
+    <div>
+      <button id="toggleSound" on-click="{{toggleSound}}"><img src="../img/rest.svg"></button>
+      <img src="../img/volume.svg">
+      <div id="volumeSlider" slider_color="#33B5E5" value="0.02" min="0" max="1.0"></div>
+    </div>
+    
+  </template>
+  
+    
+</polymer-element>
+    <h1>Turbo Wookie</h1>
+    <media-bar id="mediaBar"></media-bar>
+
+  
+
+</body></html>
