@@ -13,8 +13,9 @@ import (
 
 func main() {
   r := mux.NewRouter()
-  r.HandleFunc("/stream", httputil.NewSingleHostReverseProxy(&url.URL{Scheme:"http", Host: "localhost:8000", Path: "/"}).ServeHTTP)
-  r.HandleFunc("/", DefaultHandler)
+  r.HandleFunc("/stream", 
+    httputil.NewSingleHostReverseProxy(&url.URL{Scheme:"http", Host: "localhost:8000", Path: "/"}).ServeHTTP)
+  r.HandleFunc("/", http.FileServer(http.Dir("../frontend/turbo_wookie/web/html")).ServeHTTP)
 
   http.Handle("/", r)
 
@@ -26,5 +27,7 @@ func StreamForwarder(w http.ResponseWriter, r *http.Request) {
 
 }
 
+
 func DefaultHandler(w http.ResponseWriter, r *http.Request) {
+  // serve from `frontend/turbo_wookie/web/html`
 }
