@@ -1,2 +1,9 @@
 frontend/turbo_wookie/packages
 frontend/turbo_wookie/web/packages
+backend/mpd/music
+backend/mpd/mpd.conf
+backend/mpd/database.db
+backend/mpd/log
+backend/mpd/state
+backend/mpd/pid
+backend/mpd/sticker.sql
