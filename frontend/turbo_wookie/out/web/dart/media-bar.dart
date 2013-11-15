@@ -32,19 +32,19 @@ class MediaBar extends PolymerElement {
     volumeSlider.$elmt.onDragEnd.listen((MouseEvent e) {
       setVolume(volumeSlider.value);
     });
-    
+
   }
 
 
   void toggleSound(Event e) {
     ImageElement image = toggleSoundButton.children.first;
     if(isPlaying) {
-      image.src = "../img/note.svg";
+      image.src = "img/note.svg";
       isPlaying = false;
       setVolume(0.0);
     }
     else {
-      image.src = "../img/rest.svg";
+      image.src = "img/rest.svg";
       isPlaying = true;
       setVolume(volumeSlider.value);
     }
