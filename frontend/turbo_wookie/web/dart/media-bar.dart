@@ -1,6 +1,5 @@
 import "package:polymer/polymer.dart";
 import "dart:html";
-import "dart:web_audio";
 import 'package:range_slider/range_slider.dart';
 
 @CustomTag('media-bar')
@@ -10,11 +9,11 @@ class MediaBar extends PolymerElement {
   ButtonElement toggleSoundButton;
   RangeSlider volumeSlider;
   bool isPlaying;
-  GainNode gainNode;
+  AudioElement stream;
 
   MediaBar.created()
     : super.created() {
-    isPlaying = true;
+    isPlaying = false;
   }
 
   void enteredView() {
@@ -23,6 +22,7 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     volumeSlider = new RangeSlider($["volumeSlider"]);
+    stream = $["audioElement"];
 
     volumeSlider.$elmt.onChange.listen((CustomEvent e) {
       setVolume(e.detail["value"]);
@@ -32,7 +32,11 @@ class MediaBar extends PolymerElement {
     volumeSlider.$elmt.onDragEnd.listen((MouseEvent e) {
       setVolume(volumeSlider.value);
     });
+    toggleSound(null);
 
+    stream.onEmptied.listen((e) {
+      stream.play();
+    });
   }
 
 
@@ -42,26 +46,18 @@ class MediaBar extends PolymerElement {
       image.src = "img/note.svg";
       isPlaying = false;
       setVolume(0.0);
+      stream.pause();
     }
     else {
       image.src = "img/rest.svg";
       isPlaying = true;
       setVolume(volumeSlider.value);
+      stream.play();
     }
-  }
-
-  void setGainNode(GainNode gainNode) {
-    this.gainNode = gainNode;
-    setVolume(volumeSlider.value);
   }
 
   void setVolume(double vol) {
     if(isPlaying || vol == 0.0)
-      gainNode.gain.value = vol;
+      stream.volume = vol;
   }
-
-  double getVolume() {
-    return gainNode.gain.value;
-  }
-
 }
