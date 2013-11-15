@@ -10,9 +10,9 @@ void main() {
 
   //String url = "http://shtuff.kuntz.co/notdeepnote.ogg";
   //String url = "deepnote.ogg";
-  String url = "testing.ogg";
+  //String url = "testing.ogg";
+  String url = "/stream";
 
-  //playSound(url);
   playSound(url);
 }
 
