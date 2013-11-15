@@ -34,15 +34,8 @@ class MediaBar extends PolymerElement {
     });
     toggleSound(null);
 
-    stream.onChange.listen((e) {
-      toggleSound(e);
-      toggleSound(e);
-      stream.currentTime = 0;
-    });
-    stream.onEnded.listen((e) {
-      toggleSound(e);
-      toggleSound(e);
-      stream.currentTime = 0;
+    stream.onEmptied.listen((e) {
+      stream.play();
     });
   }
 
