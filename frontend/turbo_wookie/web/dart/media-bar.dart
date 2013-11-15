@@ -10,6 +10,7 @@ class MediaBar extends PolymerElement {
   RangeSlider volumeSlider;
   bool isPlaying;
   AudioElement stream;
+  ImageElement toggleSoundImage;
 
   MediaBar.created()
     : super.created() {
@@ -21,6 +22,7 @@ class MediaBar extends PolymerElement {
     getShadowRoot("media-bar").applyAuthorStyles = true;
 
     toggleSoundButton = $["toggleSound"];
+    toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
@@ -29,7 +31,7 @@ class MediaBar extends PolymerElement {
     volumeSlider.value = vol;
 
     // Initially play the stream
-    toggleSound(null);
+    play();
 
     // Set the volume slider listeners.
     volumeSlider.$elmt.onChange.listen((CustomEvent e) {
@@ -48,17 +50,24 @@ class MediaBar extends PolymerElement {
 
 
   void toggleSound(Event e) {
-    ImageElement image = toggleSoundButton.children.first;
     if(isPlaying) {
-      image.src = "img/note.svg";
-      isPlaying = false;
-      setVolume(0.0);
+      pause();
     }
     else {
-      image.src = "img/rest.svg";
-      isPlaying = true;
-      setVolume(volumeSlider.value);
+      play();
     }
+  }
+
+  void play() {
+    toggleSoundImage.src = "img/rest.svg";
+    isPlaying = true;
+    setVolume(volumeSlider.value);
+  }
+
+  void pause() {
+    toggleSoundImage.src = "img/note.svg";
+    isPlaying = false;
+    setVolume(0.0);
   }
 
   void setVolume(double vol) {
