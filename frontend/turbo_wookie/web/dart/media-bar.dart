@@ -10,6 +10,7 @@ class MediaBar extends PolymerElement {
   RangeSlider volumeSlider;
   bool isPlaying;
   AudioElement stream;
+  ImageElement toggleSoundImage;
 
   MediaBar.created()
     : super.created() {
@@ -21,19 +22,27 @@ class MediaBar extends PolymerElement {
     getShadowRoot("media-bar").applyAuthorStyles = true;
 
     toggleSoundButton = $["toggleSound"];
+    toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
+    // Load local storage settings
+    double vol = double.parse(window.localStorage["volume"]);
+    volumeSlider.value = vol;
+
+    // Initially play the stream
+    play();
+
+    // Set the volume slider listeners.
     volumeSlider.$elmt.onChange.listen((CustomEvent e) {
       setVolume(e.detail["value"]);
     });
-    //Was having issues with letting go of slider and music stopping
-    //This listener fires after the user stops scrolling and sets value to slider value
     volumeSlider.$elmt.onDragEnd.listen((MouseEvent e) {
       setVolume(volumeSlider.value);
+      window.localStorage["volume"] = volumeSlider.value.toString();
     });
-    toggleSound(null);
 
+    // Tell the stream to keep playing when a song ends
     stream.onEmptied.listen((e) {
       stream.play();
     });
@@ -41,19 +50,24 @@ class MediaBar extends PolymerElement {
 
 
   void toggleSound(Event e) {
-    ImageElement image = toggleSoundButton.children.first;
     if(isPlaying) {
-      image.src = "img/note.svg";
-      isPlaying = false;
-      setVolume(0.0);
-      stream.pause();
+      pause();
     }
     else {
-      image.src = "img/rest.svg";
-      isPlaying = true;
-      setVolume(volumeSlider.value);
-      stream.play();
+      play();
     }
+  }
+
+  void play() {
+    toggleSoundImage.src = "img/rest.svg";
+    isPlaying = true;
+    setVolume(volumeSlider.value);
+  }
+
+  void pause() {
+    toggleSoundImage.src = "img/note.svg";
+    isPlaying = false;
+    setVolume(0.0);
   }
 
   void setVolume(double vol) {
