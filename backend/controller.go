@@ -2,52 +2,44 @@ package main
 
 import (
   "github.com/fhs/gompd/mpd"
-  "fmt"
-  //"log"
-  //"time"
+  "github.com/ascherkus/go-id3/src/id3"
+  "os"
+  "log"
+  "encoding/json"
 )
+
+type MusicFile struct {
+  Name string
+  Artist string
+  Album string
+}
 
 func main() {
   client := connect("localhost:6600")
   defer client.Close()
 
   files, _ := client.GetFiles()
+
+  // TODO: grab this from a config.yaml file
+  const music_dir string = "mpd/music/"
   
-  //fmt.Printf("%s\n", files)
   for _, song := range files {
-    fmt.Printf("%s\n", song)
+    f, err := os.Open(music_dir + song)
+    if err != nil {
+      log.Fatal(err)
+      break
+    }
+
+    id3_file := id3.Read(f)
+
+    //log.Printf("%s by %s", id3_file.Name, id3_file.Artist)
+    //mfile := MusicFile{id3_file.Name, id3_file.Artist, id3_file.}
+
+    obj, _ := json.Marshal(id3_file)
+    log.Print(string(obj))
   }
 
-  /*
-  line := ""
-  line1 := ""
-  for {
-    status, err := client.Status()
-    if err != nil {
-      log.Fatalln(err)
-    }
 
-    song, err := client.CurrentSong()
-    if err != nil {
-      log.Fatalln(err)
-    }
-
-    if status["state"] == "play" {
-      line1 = fmt.Sprintf("%s - %s", song["Artist"], song["Title"])
-    } else {
-      line1 = fmt.Sprintf("State: %s", status["state"])
-    }
-
-    if line != line1 {
-      line = line1
-      fmt.Println(line)
-    }
-
-    time.Sleep(1e9)
-  }
-  */
-
-  // do something awesome?
 }
 
 func connect(addr string) *mpd.Client {
