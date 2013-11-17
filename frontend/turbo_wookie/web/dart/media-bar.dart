@@ -19,6 +19,7 @@ class MediaBar extends PolymerElement {
 
   void enteredView() {
     super.enteredView();
+    // Allows us to link external css files in index.html.
     getShadowRoot("media-bar").applyAuthorStyles = true;
 
     toggleSoundButton = $["toggleSound"];
@@ -45,6 +46,24 @@ class MediaBar extends PolymerElement {
     // Tell the stream to keep playing when a song ends
     stream.onEmptied.listen((e) {
       stream.play();
+    });
+
+    testThings();
+  }
+
+  void testThings() {
+    /*
+    stream.onTimeUpdate.listen((e) {
+      // Prints the current time of the stream:
+      //print("Time: ${stream.currentTime}");
+    });
+    */
+
+    stream.onLoadedMetadata.listen((e) {
+      // Should print the title of the stream, but it is always blank.
+      print("Title: ${stream.title}");
+      // Duration is infinate
+      print("Duration: ${stream.duration}");
     });
   }
 
