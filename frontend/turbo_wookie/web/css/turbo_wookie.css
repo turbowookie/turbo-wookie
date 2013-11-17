@@ -10,6 +10,14 @@ body {
   margin: 15px;
 }
 
+header {
+  background-color: #1a1a1a;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100% 
+}
+
 h1 {
   text-align: center;
   color: #33B5E5;
