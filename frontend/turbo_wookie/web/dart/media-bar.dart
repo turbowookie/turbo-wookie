@@ -62,14 +62,18 @@ class MediaBar extends PolymerElement {
 
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      print(request.responseText);
+
       if(json.containsKey("Title"))
         title.setInnerHtml(json["Title"]);
       else
         title.setInnerHtml("");
+
       if(json.containsKey("Artist"))
         artist.setInnerHtml(json["Artist"]);
       else
         artist.setInnerHtml("");
+
       if(json.containsKey("Album"))
         album.setInnerHtml(json["Album"]);
       else
