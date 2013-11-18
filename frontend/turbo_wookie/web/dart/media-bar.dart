@@ -60,10 +60,13 @@ class MediaBar extends PolymerElement {
     DivElement album = $["songAlbum"];
 
     HttpRequest.request("/current").then((HttpRequest request) {
-       JsonObject json = new JsonObject.fromJsonString(request.responseText);
-       title.setInnerHtml(json["title"]);
-       artist.setInnerHtml(json["artist"]);
-       album.setInnerHtml(json["album"]);
+      JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      if(json.containsKey("Title"))
+        title.setInnerHtml(json["Title"]);
+      if(json.containsKey("Artist"))
+        artist.setInnerHtml(json["Artist"]);
+      if(json.containsKey("Album"))
+        album.setInnerHtml(json["Album"]);
     });
   }
 
