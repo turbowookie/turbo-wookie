@@ -19,34 +19,21 @@ var mpd_conn *mpd.Client
 
 
 func main() {
-
-  // TODO: functionize?
-  // connect to MPD
-  conn, err := mpd.Dial("tcp", "localhost:6600")
-  
-  // if we can't connect to MPD everything's fucked, nothing's going to work
-  // kill all humans, and die, respectfully, after explaining what the issue
-  // is.
-  if err != nil {
-    log.Fatal(err)
-    log.Println("\n\nServer quiting because it can't connect to MPD");
-    return
-  }
-  defer conn.Close()
-
-  // set global mpd_conn to our new connection.
-  mpd_conn = conn
+  mpdConnect("localhost:6600")
 
   // create a new mux router for our server.
   r := mux.NewRouter()
 
   // requests to `/stream` are proxied to the MPD httpd.
   r.HandleFunc("/stream", 
-    httputil.NewSingleHostReverseProxy(&url.URL{Scheme:"http", Host: "localhost:8000", Path: "/"}).ServeHTTP)
+    httputil.NewSingleHostReverseProxy(
+      &url.URL{
+        Scheme:"http", 
+        Host: "localhost:8000", 
+        Path: "/",
+      }).ServeHTTP)
 
-  // list all songs
   r.HandleFunc("/songs", listSongs)
-
   r.HandleFunc("/current", getCurrentSong)
 
   // This MUST go last! It takes precidence over any after it, meaning
@@ -56,28 +43,18 @@ func main() {
   // serve up the frontend files.
   r.PathPrefix("/").Handler(http.FileServer(http.Dir("../frontend/turbo_wookie/web")))
 
-  // create a new http.Server
-  server := &http.Server{
-    Addr: ":9000",
-    Handler: r,
-  }
-  
-  log.Println("Starting server on port 9000")
 
   // sit, waiting, like a hunter, spying on its prey.
-  server.ListenAndServe()
+  log.Println("Starting server on port 9000")
+  http.ListenAndServe(":9000", r)
 }
 
-func jsoniffy(v interface {}) string {
-  obj, err := json.MarshalIndent(v, "", "  ")
-  if err != nil {
-    log.Print("Couldn't turn something into JSON: ", v)
-    log.Fatal(err)
-  }
 
-  return string(obj)
-}
+/********************
+  Handler Functions
+ ********************/
 
+// return all songs known to MPD to the client.
 func listSongs(w http.ResponseWriter, r *http.Request) {
   // get all files from MPD
   mpdfiles, err := mpd_conn.GetFiles()
@@ -113,6 +90,8 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, string(files_json))
 }
 
+
+// Return a JSON representation of the currently playing song.
 func getCurrentSong(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
@@ -123,3 +102,38 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(currentSong))
 }
 
+
+
+/*******************
+  Helper Functions  
+ *******************/
+
+// Connect to MPD's control channel, and set the global mpd_conn to it.
+func mpdConnect(url string) {
+  conn, err := mpd.Dial("tcp", url)
+  
+  // if we can't connect to MPD everything's fucked, nothing's going to work
+  // kill all humans, and die, respectfully, after explaining what the issue
+  // is.
+  if err != nil {
+    log.Println("\n\nServer quiting because it can't connect to MPD");
+    log.Fatal(err)
+    return
+  }
+  defer conn.Close()
+
+  // set global mpd_conn to our new connection.
+  mpd_conn = conn
+}
+
+
+// turn anything into JSON.
+func jsoniffy(v interface {}) string {
+  obj, err := json.MarshalIndent(v, "", "  ")
+  if err != nil {
+    log.Print("Couldn't turn something into JSON: ", v)
+    log.Fatal(err)
+  }
+
+  return string(obj)
+}
