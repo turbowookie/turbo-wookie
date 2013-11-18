@@ -80,7 +80,7 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
   }
 
   // send the json to the client.
-  fmt.Fprintf(w, jsoniffy(files_json))
+  fmt.Fprintf(w, jsoniffy(files))
 }
 
 
