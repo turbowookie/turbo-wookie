@@ -47,6 +47,7 @@ func main() {
   // list all songs
   r.HandleFunc("/songs", listSongs)
 
+  r.HandleFunc("/current", getCurrentSong)
 
   // This MUST go last! It takes precidence over any after it, meaning
   // the server will try to serve a file, which most likely doesn't exist,
@@ -67,10 +68,21 @@ func main() {
   server.ListenAndServe()
 }
 
+func jsoniffy(v interface {}) string {
+  obj, err := json.MarshalIndent(v, "", "  ")
+  if err != nil {
+    log.Print("Couldn't turn something into JSON: ", v)
+    log.Fatal(err)
+  }
+
+  return string(obj)
+}
+
 func listSongs(w http.ResponseWriter, r *http.Request) {
   // get all files from MPD
   mpdfiles, err := mpd_conn.GetFiles()
   if err != nil {
+    log.Println("Couldn't get a list of files...")
     log.Fatal(err)
   }
 
@@ -81,6 +93,7 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
     // grab the file on the filesystem
     file, err := os.Open("mpd/music/" + song)
     if err != nil {
+      log.Println("Couldn't open file: " + song)
       log.Fatal(err)
     }
 
@@ -91,7 +104,22 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
 
   // turn the files slice into some json
   files_json, err := json.MarshalIndent(files, "", "  ")
+  if err != nil {
+    log.Println("Couldn't turn files into json")
+    log.Fatal(err)
+  }
 
   // send the json to the client.
   fmt.Fprintf(w, string(files_json))
 }
+
+func getCurrentSong(w http.ResponseWriter, r *http.Request) {
+  currentSong, err := mpd_conn.CurrentSong()
+  if err != nil {
+    log.Println("Couldn't get current song info")
+    log.Fatal(err)
+  }
+
+  fmt.Fprintf(w, jsoniffy(currentSong))
+}
+
