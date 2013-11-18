@@ -79,15 +79,8 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
     files = append(files, id3_file)
   }
 
-  // turn the files slice into some json
-  files_json, err := json.MarshalIndent(files, "", "  ")
-  if err != nil {
-    log.Println("Couldn't turn files into json")
-    log.Fatal(err)
-  }
-
   // send the json to the client.
-  fmt.Fprintf(w, string(files_json))
+  fmt.Fprintf(w, jsoniffy(files_json))
 }
 
 
