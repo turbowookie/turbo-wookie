@@ -50,6 +50,7 @@ class MediaBar extends PolymerElement {
     // Tell the stream to keep playing when a song ends
     stream.onEmptied.listen((e) {
       stream.play();
+      loadMetaData();
     });
 
   }
@@ -63,10 +64,16 @@ class MediaBar extends PolymerElement {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
       if(json.containsKey("Title"))
         title.setInnerHtml(json["Title"]);
+      else
+        title.setInnerHtml("");
       if(json.containsKey("Artist"))
         artist.setInnerHtml(json["Artist"]);
+      else
+        artist.setInnerHtml("");
       if(json.containsKey("Album"))
         album.setInnerHtml(json["Album"]);
+      else
+        album.setInnerHtml("");
     });
   }
 
