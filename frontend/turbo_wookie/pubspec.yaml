@@ -1,5 +1,6 @@
 name: turbo_wookie
 description: A sample Polymer application
 dependencies:
+  json_object: any
   polymer: any
   range_slider: any
