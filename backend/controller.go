@@ -6,6 +6,7 @@ import (
   "os"
   "log"
   "encoding/json"
+  "fmt"
 )
 
 type MusicFile struct {
@@ -18,6 +19,20 @@ func main() {
   client := connect("localhost:6600")
   defer client.Close()
 
+  getCurrentSong(client)
+
+}
+
+func connect(addr string) *mpd.Client {
+  client, err := mpd.Dial("tcp", addr)
+  if err != nil {
+    return nil
+  }
+
+  return client
+} 
+
+func listSongs(client *mpd.Client) {
   files, _ := client.GetFiles()
 
   // TODO: grab this from a config.yaml file
@@ -38,15 +53,10 @@ func main() {
     obj, _ := json.Marshal(id3_file)
     log.Print(string(obj))
   }
-
-
 }
 
-func connect(addr string) *mpd.Client {
-  client, err := mpd.Dial("tcp", addr)
-  if err != nil {
-    return nil
-  }
-
-  return client
-} 
+func getCurrentSong(client *mpd.Client) {
+  csong, _ := client.CurrentSong()
+  obj, _ := json.MarshalIndent(csong, "", "  ")
+  fmt.Print(string(obj))
+}
