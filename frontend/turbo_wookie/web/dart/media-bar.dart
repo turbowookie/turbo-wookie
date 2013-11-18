@@ -5,7 +5,7 @@ import 'package:range_slider/range_slider.dart';
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
 
-  
+
   ButtonElement toggleSoundButton;
   RangeSlider volumeSlider;
   bool isPlaying;
