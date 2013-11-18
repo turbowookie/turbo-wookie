@@ -1,18 +1,26 @@
-# How to setup MPD directory
+# MPD Info
 
-Create the following files (no contents):
+All MPD files are stored in `./backend/mpd`.
 
-- `database.db`
-- `log`
-- `state`
-- `sticker.sql`
-- `pid`
+To setup your MPD config, open your mpd directory, and do the following:
 
-Create the following directories:
+1.  Make sure you have the following files:
+    a.  database.db
+    b.  log
+    c.  pid
+    d.  state
+    e.  sticker.sql
+    f.  a `music/` directory
+    g.  a `playlits/` directory
+    
+    You may need to make the directories, as I think they're currently ignored.
 
-- `music`
-- `playlists`
+2.  Copy `mpd.conf.example` to `mpd.conf`, and adjust the values as needed.
+    Everything you need to change should be in the first 55 lines. Just change
+    the file paths.
 
-Music is where you'll put any media files you want to use. It's in the gitignore file.
+3.  Copy some music into your `music/` directory. It doesn't matter what you
+    copy because the music directory is ignored.
 
-Also, copy `mpd.conf.example` to `mpd.conf`, and adjust as needed (you'll probably need to change the paths, which are all set to `~/code/turbo-wookie/backend/mpd/[x]`).
+4.  Run `mpd [path to mpd.conf]` in Linux. Windows users ... I'm not sure what
+    you need to do.
