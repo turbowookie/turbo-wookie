@@ -1,6 +1,7 @@
 import "package:polymer/polymer.dart";
 import "dart:html";
-import 'package:range_slider/range_slider.dart';
+import "package:range_slider/range_slider.dart";
+import "package:json_object/json_object.dart";
 
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
@@ -27,6 +28,9 @@ class MediaBar extends PolymerElement {
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
+    testThings();
+    loadMetaData();
+
     // Load local storage settings
     double vol = double.parse(window.localStorage["volume"]);
     volumeSlider.value = vol;
@@ -48,7 +52,19 @@ class MediaBar extends PolymerElement {
       stream.play();
     });
 
-    testThings();
+  }
+
+  void loadMetaData() {
+    DivElement title = $["songTitle"];
+    DivElement artist = $["songArtist"];
+    DivElement album = $["songAlbum"];
+
+    HttpRequest.request("/current").then((HttpRequest request) {
+       JsonObject json = new JsonObject.fromJsonString(request.responseText);
+       title.setInnerHtml(json["title"]);
+       artist.setInnerHtml(json["artist"]);
+       album.setInnerHtml(json["album"]);
+    });
   }
 
   void testThings() {
@@ -58,15 +74,7 @@ class MediaBar extends PolymerElement {
       //print("Time: ${stream.currentTime}");
     });
     */
-
-    stream.onLoadedMetadata.listen((e) {
-      // Should print the title of the stream, but it is always blank.
-      print("Title: ${stream.title}");
-      // Duration is infinate
-      print("Duration: ${stream.duration}");
-    });
   }
-
 
   void toggleSound(Event e) {
     if(isPlaying) {

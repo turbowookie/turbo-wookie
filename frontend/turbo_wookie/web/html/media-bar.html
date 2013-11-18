@@ -10,8 +10,6 @@
       }
       
       #toggleSound {
-        display: block;
-        float: left;
         border-right: 1px solid #202020;
       }
       
@@ -23,10 +21,20 @@
       }
       
       #volumeSlider {
-        width: calc(100% - 160px);
+        width: calc(100% - 5% - 180px);
         float: right;
         margin-right: 25px;
         top: 25px;
+      }
+      
+      #songInfo {
+        float: left;
+        padding-top: 5px;
+        padding-left: 5px;
+        width: 5%;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 1px solid #202020;
       }
     </style>
     
@@ -35,6 +43,11 @@
         <source src="/stream" type="audio/ogg" />
       </audio>
       
+      <div id="songInfo">
+        <div id="songTitle">Title of Song</div>
+        <div id="songArtist">Artist</div>
+        <div id="songAlbum">Album</div>
+      </div>
       <button id="toggleSound" on-click="{{toggleSound}}"><img src="img/rest.svg"></button>
       <img src="img/volume.svg">
       <div id="volumeSlider" slider_color="#33B5E5" value="0.5" min="0" max="1.0"></div>
