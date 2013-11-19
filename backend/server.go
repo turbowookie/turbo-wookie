@@ -97,8 +97,19 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
 func getCurrentSong(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
-    log.Println("Couldn't get current song info")
-    log.Fatal(err)
+
+    count := 0;
+    for err != nil && count < 10 {
+      time.Sleep(10)
+
+      currentSong, err = mpd_conn.CurrentSong()
+      count ++
+    }
+
+    if err != nil {
+      log.Println("Couldn't get current song info for upcoming list")
+      log.Fatal(err)
+    }
   }
 
   fmt.Fprintf(w, jsoniffy(currentSong))
@@ -172,3 +183,4 @@ func jsoniffy(v interface {}) string {
 
   return string(obj)
 }
+
