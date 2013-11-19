@@ -7,6 +7,7 @@ import (
   "log"
   "encoding/json"
   "fmt"
+  "strconv"
 )
 
 type MusicFile struct {
@@ -19,9 +20,15 @@ func main() {
   client := connect("localhost:6600")
   defer client.Close()
 
-  getCurrentSong(client)
+  upcoming(client)
 
 }
+
+func jsoniffy(v interface {}) string {
+  obj, _ := json.MarshalIndent(v, "", "  ")
+  return string(obj)
+}
+
 
 func connect(addr string) *mpd.Client {
   client, err := mpd.Dial("tcp", addr)
@@ -59,4 +66,14 @@ func getCurrentSong(client *mpd.Client) {
   csong, _ := client.CurrentSong()
   obj, _ := json.MarshalIndent(csong, "", "  ")
   fmt.Print(string(obj))
+}
+
+func upcoming(client *mpd.Client) {
+  csong, _ := client.CurrentSong()
+  pos, _ := strconv.Atoi(csong["Pos"])
+
+  playlist, _ := client.PlaylistInfo(-1, -1)
+  upcoming := playlist[pos:]
+
+  fmt.Print(jsoniffy(upcoming))
 }

@@ -11,6 +11,7 @@ import (
   "os"
   "fmt"
   "encoding/json"
+  "strconv"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -41,6 +42,7 @@ func main() {
 
   r.HandleFunc("/songs", listSongs)
   r.HandleFunc("/current", getCurrentSong)
+  r.HandleFunc("/upcoming", getUpcomingSongs)
 
   // This MUST go last! It takes precidence over any after it, meaning
   // the server will try to serve a file, which most likely doesn't exist,
@@ -99,6 +101,29 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
   }
 
   fmt.Fprintf(w, jsoniffy(currentSong))
+}
+
+
+func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
+  currentSong, err := mpd_conn.CurrentSong()
+  if err != nil {
+    log.Println("Couldn't get current song info for upcoming list")
+    log.Fatal(err)
+  }
+
+  pos, err := strconv.Atoi(currentSong["Pos"])
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  playlist, err := mpd_conn.PlaylistInfo(-1, -1)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  upcoming := playlist[pos:]
+
+  fmt.Fprintf(w, jsoniffy(upcoming))
 }
 
 
