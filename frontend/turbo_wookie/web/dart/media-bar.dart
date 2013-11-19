@@ -28,6 +28,7 @@ class MediaBar extends PolymerElement {
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
+    setupHotKeys();
     setupListeners();
     loadMetaData();
 
@@ -39,6 +40,26 @@ class MediaBar extends PolymerElement {
     play();
   }
 
+  void setupHotKeys() {
+    window.onKeyPress.listen((KeyboardEvent e) {
+      e.preventDefault();
+
+      // Pause/Play
+      if(e.keyCode == KeyCode.SPACE) {
+        toggleSound(e);
+      }
+
+      // Change volume
+      else if(e.keyCode == 44) {
+        setVolume(getVolume() - 0.05, true);
+      }
+      else if(e.keyCode == 46) {
+        setVolume(getVolume() + 0.05, true);
+      }
+
+    });
+  }
+
   void loadMetaData() {
     DivElement title = $["songTitle"];
     DivElement artist = $["songArtist"];
@@ -46,7 +67,7 @@ class MediaBar extends PolymerElement {
 
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
-      print(request.responseText);
+      //print(request.responseText);
 
       if(json.containsKey("Title"))
         title.setInnerHtml(json["Title"]);
@@ -104,8 +125,22 @@ class MediaBar extends PolymerElement {
     setVolume(0.0);
   }
 
-  void setVolume(double vol) {
+  void setVolume(double vol, [bool changeSlider = false]) {
+    if(vol > 1.0)
+      vol = 1.0;
+    else if(vol < 0.0)
+      vol = 0.0;
+
     if(isPlaying || vol == 0.0)
       stream.volume = vol;
+
+    if(changeSlider) {
+      volumeSlider.value = vol;
+      window.localStorage["volume"] = volumeSlider.value.toString();
+    }
+  }
+
+  double getVolume() {
+    return volumeSlider.value;
   }
 }
