@@ -19,7 +19,21 @@ var mpd_conn *mpd.Client
 
 
 func main() {
-  mpdConnect("localhost:6600")
+  //mpdConnect("localhost:6600")
+  conn, err := mpd.Dial("tcp", "localhost:6600")
+  
+  // if we can't connect to MPD everything's fucked, nothing's going to work
+  // kill all humans, and die, respectfully, after explaining what the issue
+  // is.
+  if err != nil {
+    log.Println("\n\nServer quiting because it can't connect to MPD");
+    log.Fatal(err)
+    return
+  }
+  defer conn.Close()
+
+  // set global mpd_conn to our new connection.
+  mpd_conn = conn
 
   // create a new mux router for our server.
   r := mux.NewRouter()
