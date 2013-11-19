@@ -11,6 +11,7 @@ import (
   "os"
   "fmt"
   "encoding/json"
+  "strconv"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -19,21 +20,13 @@ var mpd_conn *mpd.Client
 
 
 func main() {
-  //mpdConnect("localhost:6600")
-  conn, err := mpd.Dial("tcp", "localhost:6600")
-  
-  // if we can't connect to MPD everything's fucked, nothing's going to work
-  // kill all humans, and die, respectfully, after explaining what the issue
-  // is.
-  if err != nil {
-    log.Println("\n\nServer quiting because it can't connect to MPD");
-    log.Fatal(err)
-    return
-  }
-  defer conn.Close()
+  mpd_conn = mpdConnect("localhost:6600")
+  defer mpd_conn.Close()
 
-  // set global mpd_conn to our new connection.
-  mpd_conn = conn
+  //log.Println(mpd_conn)
+  if mpd_conn == nil {
+    log.Fatal("MPD Connection is nil!")
+  }
 
   // create a new mux router for our server.
   r := mux.NewRouter()
@@ -49,6 +42,7 @@ func main() {
 
   r.HandleFunc("/songs", listSongs)
   r.HandleFunc("/current", getCurrentSong)
+  r.HandleFunc("/upcoming", getUpcomingSongs)
 
   // This MUST go last! It takes precidence over any after it, meaning
   // the server will try to serve a file, which most likely doesn't exist,
@@ -110,13 +104,36 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
 }
 
 
+func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
+  currentSong, err := mpd_conn.CurrentSong()
+  if err != nil {
+    log.Println("Couldn't get current song info for upcoming list")
+    log.Fatal(err)
+  }
+
+  pos, err := strconv.Atoi(currentSong["Pos"])
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  playlist, err := mpd_conn.PlaylistInfo(-1, -1)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  upcoming := playlist[pos:]
+
+  fmt.Fprintf(w, jsoniffy(upcoming))
+}
+
+
 
 /*******************
   Helper Functions  
  *******************/
 
 // Connect to MPD's control channel, and set the global mpd_conn to it.
-func mpdConnect(url string) {
+func mpdConnect(url string) *mpd.Client {
   conn, err := mpd.Dial("tcp", url)
   
   // if we can't connect to MPD everything's fucked, nothing's going to work
@@ -124,13 +141,15 @@ func mpdConnect(url string) {
   // is.
   if err != nil {
     log.Println("\n\nServer quiting because it can't connect to MPD");
-    log.Fatal(err)
-    return
+    log.Println(err)
+
+    conn.Close()
+    return nil
   }
-  defer conn.Close()
+  //defer conn.Close()
 
   // set global mpd_conn to our new connection.
-  mpd_conn = conn
+  return conn
 }
 
 
