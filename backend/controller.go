@@ -8,6 +8,7 @@ import (
   "encoding/json"
   "fmt"
   "strconv"
+  "time"
 )
 
 type MusicFile struct {
@@ -17,12 +18,10 @@ type MusicFile struct {
 }
 
 func main() {
-  client := connect("localhost:6600")
-  defer client.Close()
-
-  upcoming(client)
-
+  //testClient()
+  testWatcher()
 }
+
 
 func jsoniffy(v interface {}) string {
   obj, _ := json.MarshalIndent(v, "", "  ")
@@ -30,7 +29,16 @@ func jsoniffy(v interface {}) string {
 }
 
 
-func connect(addr string) *mpd.Client {
+
+func testClient() {
+  client := clientConnect("localhost:6600")
+  defer client.Close()
+
+  upcoming(client)
+
+}
+
+func clientConnect(addr string) *mpd.Client {
   client, err := mpd.Dial("tcp", addr)
   if err != nil {
     return nil
@@ -76,4 +84,29 @@ func upcoming(client *mpd.Client) {
   upcoming := playlist[pos:]
 
   fmt.Print(jsoniffy(upcoming))
+}
+
+
+///////////////////
+
+func testWatcher() {
+  w, _ := mpd.NewWatcher("tcp", ":6600", "")
+  defer w.Close()
+
+  go logWatcherErrors(w)
+  go logWatcherEvents(w)
+
+  time.Sleep(3 * time.Minute)
+}
+
+func logWatcherErrors(w *mpd.Watcher) {
+  for err := range w.Error {
+    log.Println("Error:", err)
+  }
+}
+
+func logWatcherEvents(w *mpd.Watcher) {
+  for subsystem := range w.Event {
+    log.Println("Changed subsystem:", subsystem)
+  }
 }
