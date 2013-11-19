@@ -12,6 +12,7 @@ import (
   "fmt"
   "encoding/json"
   "strconv"
+  "time"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -107,8 +108,19 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
 func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
-    log.Println("Couldn't get current song info for upcoming list")
-    log.Fatal(err)
+
+    count := 0;
+    for err != nil && count < 10 {
+      time.Sleep(10)
+
+      currentSong, err = mpd_conn.CurrentSong()
+      count ++
+    }
+
+    if err != nil {
+      log.Println("Couldn't get current song info for upcoming list")
+      log.Fatal(err)
+    }
   }
 
   pos, err := strconv.Atoi(currentSong["Pos"])
@@ -143,12 +155,9 @@ func mpdConnect(url string) *mpd.Client {
     log.Println("\n\nServer quiting because it can't connect to MPD");
     log.Println(err)
 
-    conn.Close()
     return nil
   }
-  //defer conn.Close()
 
-  // set global mpd_conn to our new connection.
   return conn
 }
 
