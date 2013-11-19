@@ -28,7 +28,7 @@ class MediaBar extends PolymerElement {
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
-    testThings();
+    keepSongPlaying();
     loadMetaData();
 
     // Load local storage settings
@@ -46,14 +46,6 @@ class MediaBar extends PolymerElement {
       setVolume(volumeSlider.value);
       window.localStorage["volume"] = volumeSlider.value.toString();
     });
-
-    // Tell the stream to keep playing when a song ends
-    stream.onEmptied.listen((e) {
-      stream.src = "/stream";
-      stream.play();
-      loadMetaData();
-    });
-
   }
 
   void loadMetaData() {
@@ -82,7 +74,13 @@ class MediaBar extends PolymerElement {
     });
   }
 
-  void testThings() {
+  void keepSongPlaying() {
+    stream.onEmptied.listen((e) {
+      print("onEmptied");
+      stream.src = "/stream";
+      stream.play();
+      loadMetaData();
+    });
   }
 
   void toggleSound(Event e) {
