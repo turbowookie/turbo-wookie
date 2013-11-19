@@ -49,6 +49,7 @@ class MediaBar extends PolymerElement {
 
     // Tell the stream to keep playing when a song ends
     stream.onEmptied.listen((e) {
+      stream.src = "/stream";
       stream.play();
       loadMetaData();
     });
@@ -82,12 +83,6 @@ class MediaBar extends PolymerElement {
   }
 
   void testThings() {
-    /*
-    stream.onTimeUpdate.listen((e) {
-      // Prints the current time of the stream:
-      //print("Time: ${stream.currentTime}");
-    });
-    */
   }
 
   void toggleSound(Event e) {
