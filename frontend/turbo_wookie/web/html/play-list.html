@@ -1,18 +1,21 @@
 <polymer-element name="play-list">
   
   <template>
-    <style>
+    <style>    
       #list {
         list-style: none;
-        border-right: 1px solid #ccc;
         margin: 0;
         padding: 0;
-        height: 100%;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
         display: block;
+        max-height: 100%;
+        overflow: auto;
       }
       
       #list li {
-        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
         padding: 10px;
       }
       
@@ -29,8 +32,8 @@
       }
       
     </style>
-    
-    <ul id="list"></ul>
+    <div id="push"></div>
+      <ul id="list"></ul>
     
   </template>
   

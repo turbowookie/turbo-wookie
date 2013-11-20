@@ -30,6 +30,8 @@ h1 {
   width: calc(73px + 20%);
   height: calc(100% - 108px);
   overflow-y: auto;
+  position: relative;
+  border-right: 1px solid #ccc;
 }
 
 #mediaBar {

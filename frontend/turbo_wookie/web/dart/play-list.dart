@@ -22,15 +22,22 @@ class PlayList extends PolymerElement {
     HttpRequest.request("/upcoming")
     .then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      List<JsonObject> jsonReverse = new List<JsonObject>();
+
       json.forEach((JsonObject song) {
+        jsonReverse.add(song);
+      });
+
+      jsonReverse.reversed.forEach((JsonObject song) {
         LIElement listElement = createListItem(song);
         songList.children.add(listElement);
       });
+
+      songList.children.last.scrollIntoView();
     });
   }
 
   LIElement createListItem(JsonObject song) {
-    print(song);
     LIElement listElement = new LIElement();
     String innerHtml = """<div class="title">${song["Title"]}</div>
                           <div class="artist">${song["Artist"]}</div>""";
