@@ -33,9 +33,12 @@ class MediaBar extends PolymerElement {
     loadMetaData();
 
     // Load local storage settings
-    double vol = double.parse(window.localStorage["volume"]);
-    volumeSlider.value = vol;
-
+    double vol = 0.5;
+    if(window.localStorage["volume"] != null) {
+      vol = double.parse(window.localStorage["volume"]);
+    }
+    setVolume(vol, true);
+    
     // Initially play the stream
     play();
   }

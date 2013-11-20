@@ -21,6 +21,7 @@ class PlayList extends PolymerElement {
   void getPlaylist() {
     HttpRequest.request("/upcoming")
     .then((HttpRequest request) {
+      print(request.responseText);
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
       List<JsonObject> jsonReverse = new List<JsonObject>();
 
@@ -32,8 +33,10 @@ class PlayList extends PolymerElement {
         LIElement listElement = createListItem(song);
         songList.children.add(listElement);
       });
-
-      songList.children.last.scrollIntoView();
+      if(songList.children.isNotEmpty)
+      {
+        songList.children.last.scrollIntoView();
+      }
     });
   }
 
