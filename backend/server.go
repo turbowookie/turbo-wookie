@@ -13,6 +13,7 @@ import (
   "encoding/json"
   "strconv"
   "time"
+  "io"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -72,7 +73,8 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
   }
 
   // create a slice of id3.File s
-  files := make([]*id3.File, 0)
+  //files := make([]*id3.File, 0)
+  files := make([]*TBFile, 0)
 
   for _, song := range mpdfiles {
     // grab the file on the filesystem
@@ -83,7 +85,7 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
     }
 
     // add the current file to our slice
-    id3_file := id3.Read(file)
+    id3_file := id3Read(file, song)
     files = append(files, id3_file)
   }
 
@@ -155,7 +157,7 @@ func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  upcoming := playlist[pos:]
+  upcoming := playlist[pos + 1:]
 
   fmt.Fprintf(w, jsoniffy(upcoming))
 }
@@ -183,6 +185,25 @@ func mpdConnect(url string) *mpd.Client {
   return conn
 }
 
+type TBFile struct {id3.File; FilePath string;}
+func id3Read(reader io.Reader, filePath string) *TBFile {
+  id3File := id3.Read(reader)
+  
+  file := new(TBFile)
+  file.Header = id3File.Header
+  file.Name = id3File.Name
+  file.Artist = id3File.Artist
+  file.Album = id3File.Album
+  file.Year = id3File.Year
+  file.FilePath = filePath
+
+  //file := TBFile{id3File}
+  //var file TBFile = TBFile{id3.File{*id3File}, FilePath: filePath};
+  //file.FilePath = filePath
+
+  return file
+}
+
 // turn anything into JSON.
 func jsoniffy(v interface {}) string {
   obj, err := json.MarshalIndent(v, "", "  ")
@@ -197,7 +218,7 @@ func jsoniffy(v interface {}) string {
 func error(w http.ResponseWriter, message string, err interface{Error() string;}) {
   log.Println("An error occured; telling the client.")
   log.Println("Message:", message)
-  log.Println("Error:", err)
+  log.Println("Error:", err, "\n\n")
 
   fmt.Fprintf(w, message + "\n")
 }
