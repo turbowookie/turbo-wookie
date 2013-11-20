@@ -1,3 +1,4 @@
+library MediaBar;
 import "package:polymer/polymer.dart";
 import "dart:html";
 import "package:range_slider/range_slider.dart";
