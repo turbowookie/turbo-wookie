@@ -1,0 +1,38 @@
+<polymer-element name="play-list">
+  
+  <template>
+    <style>
+      #list {
+        list-style: none;
+        border-right: 1px solid #ccc;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        display: block;
+      }
+      
+      #list li {
+        border-bottom: 1px solid #ccc;
+        padding: 10px;
+      }
+      
+      #list li .title {
+        font-size: 16px;
+        height: 1em;
+        overflow: hidden;
+        margin-bottom: 2px;
+      }
+      
+      #list li .artist {
+        height: 1em;
+        overflow: hidden;
+      }
+      
+    </style>
+    
+    <ul id="list"></ul>
+    
+  </template>
+  
+  <script type="application/dart" src="../dart/play-list.dart"></script>  
+</polymer-element>
