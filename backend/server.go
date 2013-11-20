@@ -13,6 +13,7 @@ import (
   "encoding/json"
   "strconv"
   "time"
+  "io"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -21,13 +22,14 @@ var mpd_conn *mpd.Client
 
 
 func main() {
+  // setup our global MPD connection
   mpd_conn = mpdConnect("localhost:6600")
   defer mpd_conn.Close()
 
-  //log.Println(mpd_conn)
   if mpd_conn == nil {
     log.Fatal("MPD Connection is nil!")
   }
+
 
   // create a new mux router for our server.
   r := mux.NewRouter()
@@ -68,22 +70,35 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
   // get all files from MPD
   mpdfiles, err := mpd_conn.GetFiles()
   if err != nil {
-    error(w, "Couldn't get a list of files...", err)
+    count := 0
+
+    for err != nil && count < 10 {
+      time.Sleep(10)
+
+      mpdfiles, err = mpd_conn.GetFiles()
+      count ++
+    }
+
+    if err != nil {
+      error(w, "Couldn't get a list of files...", err)
+      return
+    }
   }
 
   // create a slice of id3.File s
-  files := make([]*id3.File, 0)
+  //files := make([]*id3.File, 0)
+  files := make([]*TBFile, 0)
 
   for _, song := range mpdfiles {
     // grab the file on the filesystem
     file, err := os.Open("mpd/music/" + song)
     if err != nil {
-      log.Println("Couldn't open file: " + song)
-      log.Fatal(err)
+      error(w, "Couldn't open file: " + song, err)
+      return
     }
 
     // add the current file to our slice
-    id3_file := id3.Read(file)
+    id3_file := id3Read(file, song)
     files = append(files, id3_file)
   }
 
@@ -107,7 +122,7 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
 
     if err != nil {
       error(w, "Couldn't get current song info for upcoming list", err)
-      return;
+      return
     }
   }
 
@@ -155,7 +170,7 @@ func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  upcoming := playlist[pos:]
+  upcoming := playlist[pos + 1:]
 
   fmt.Fprintf(w, jsoniffy(upcoming))
 }
@@ -183,6 +198,24 @@ func mpdConnect(url string) *mpd.Client {
   return conn
 }
 
+// helper struct; used to hold some ID3 info, plus an MPD file path.
+type TBFile struct {id3.File; FilePath string;}
+
+// helper method, returns a pointer to one of our helper structs (see above).
+func id3Read(reader io.Reader, filePath string) *TBFile {
+  id3File := id3.Read(reader)
+  
+  file := new(TBFile)
+  file.Header = id3File.Header
+  file.Name = id3File.Name
+  file.Artist = id3File.Artist
+  file.Album = id3File.Album
+  file.Year = id3File.Year
+  file.FilePath = filePath
+
+  return file
+}
+
 // turn anything into JSON.
 func jsoniffy(v interface {}) string {
   obj, err := json.MarshalIndent(v, "", "  ")
@@ -197,7 +230,7 @@ func jsoniffy(v interface {}) string {
 func error(w http.ResponseWriter, message string, err interface{Error() string;}) {
   log.Println("An error occured; telling the client.")
   log.Println("Message:", message)
-  log.Println("Error:", err)
+  log.Println("Error:", err, "\n\n")
 
   fmt.Fprintf(w, message + "\n")
 }
