@@ -75,7 +75,7 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
     for err != nil && count < 10 {
       time.Sleep(10)
 
-      mpdfiles, err := mpd_conn.GetFiles()
+      mpdfiles, err = mpd_conn.GetFiles()
       count ++
     }
 
