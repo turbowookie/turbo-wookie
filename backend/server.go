@@ -12,6 +12,7 @@ import (
   "fmt"
   "encoding/json"
   "strconv"
+  "time"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -67,8 +68,7 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
   // get all files from MPD
   mpdfiles, err := mpd_conn.GetFiles()
   if err != nil {
-    log.Println("Couldn't get a list of files...")
-    log.Fatal(err)
+    error(w, "Couldn't get a list of files...", err)
   }
 
   // create a slice of id3.File s
@@ -96,8 +96,19 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
 func getCurrentSong(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
-    log.Println("Couldn't get current song info")
-    log.Fatal(err)
+
+    count := 0;
+    for err != nil && count < 10 {
+      time.Sleep(10)
+
+      currentSong, err = mpd_conn.CurrentSong()
+      count ++
+    }
+
+    if err != nil {
+      error(w, "Couldn't get current song info for upcoming list", err)
+      return;
+    }
   }
 
   fmt.Fprintf(w, jsoniffy(currentSong))
@@ -107,18 +118,41 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
 func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
-    log.Println("Couldn't get current song info for upcoming list")
-    log.Fatal(err)
+
+    count := 0;
+    for err != nil && count < 10 {
+      time.Sleep(10)
+
+      currentSong, err = mpd_conn.CurrentSong()
+      count ++
+    }
+
+    if err != nil {
+      error(w, "Couldn't get current song info for upcoming list", err)
+      return
+    }
   }
 
   pos, err := strconv.Atoi(currentSong["Pos"])
   if err != nil {
-    log.Fatal(err)
+    error(w, "Couldn't turn current song's position to int", err)
+    return
   }
 
   playlist, err := mpd_conn.PlaylistInfo(-1, -1)
   if err != nil {
-    log.Fatal(err)
+    count := 0
+    for err != nil && count < 10 {
+      time.Sleep(10)
+
+      playlist, err = mpd_conn.PlaylistInfo(-1, -1)
+      count ++
+    }
+
+    if err != nil {
+      error(w, "Couldn't get the current playlist", err)
+      return
+    }
   }
 
   upcoming := playlist[pos:]
@@ -143,15 +177,11 @@ func mpdConnect(url string) *mpd.Client {
     log.Println("\n\nServer quiting because it can't connect to MPD");
     log.Println(err)
 
-    conn.Close()
     return nil
   }
-  //defer conn.Close()
 
-  // set global mpd_conn to our new connection.
   return conn
 }
-
 
 // turn anything into JSON.
 func jsoniffy(v interface {}) string {
@@ -163,3 +193,17 @@ func jsoniffy(v interface {}) string {
 
   return string(obj)
 }
+
+func error(w http.ResponseWriter, message string, err interface{Error() string;}) {
+  log.Println("An error occured; telling the client.")
+  log.Println("Message:", message)
+  log.Println("Error:", err)
+
+  fmt.Fprintf(w, message + "\n")
+}
+
+func jsonError(w http.ResponseWriter, message string, err interface{Error() string;}) {
+  message = "{error:\"" + message + "\"}"
+  error(w, message, err)
+}
+
