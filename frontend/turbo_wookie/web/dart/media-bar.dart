@@ -2,6 +2,7 @@ import "package:polymer/polymer.dart";
 import "dart:html";
 import "package:range_slider/range_slider.dart";
 import "package:json_object/json_object.dart";
+import "play-list.dart";
 
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
@@ -12,6 +13,7 @@ class MediaBar extends PolymerElement {
   bool isPlaying;
   AudioElement stream;
   ImageElement toggleSoundImage;
+  PlayList playlist;
 
   MediaBar.created()
     : super.created() {
@@ -28,6 +30,7 @@ class MediaBar extends PolymerElement {
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
+
     setupHotKeys();
     setupListeners();
     loadMetaData();
@@ -38,7 +41,7 @@ class MediaBar extends PolymerElement {
       vol = double.parse(window.localStorage["volume"]);
     }
     setVolume(vol, true);
-    
+
     // Initially play the stream
     play();
   }
@@ -93,6 +96,7 @@ class MediaBar extends PolymerElement {
     stream.onEmptied.listen((e) {
       stream.src = "/stream";
       stream.play();
+      playlist.getPlaylist();
       loadMetaData();
     });
 
