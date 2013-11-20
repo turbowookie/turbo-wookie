@@ -88,7 +88,6 @@ class MediaBar extends PolymerElement {
 
   void setupListeners() {
     stream.onEmptied.listen((e) {
-      print("onEmptied");
       stream.src = "/stream";
       stream.play();
       loadMetaData();
