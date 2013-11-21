@@ -1,0 +1,28 @@
+<polymer-element name="current-song">
+  
+  <template>
+    <style>
+      #songInfo {
+        color: white;
+        margin-top: -20px;
+      }
+      
+      #title {
+      }
+      
+      img {
+        max-width: 100%;
+      }
+      
+    </style>
+    
+    <img id="albumArt" />
+    <div id="songInfo">
+      <div id="title">{{title}}</div>
+      <div id="artist">{{artist}}</div>
+      <div id="album">{{album}}</div>
+    </div>
+  </template>
+  
+  <script type="application/dart" src="../dart/current-song.dart"></script>  
+</polymer-element>

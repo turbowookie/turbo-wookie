@@ -2,11 +2,14 @@ library Playlist;
 import "package:polymer/polymer.dart";
 import "dart:html";
 import "package:json_object/json_object.dart";
+import "current-song.dart";
 
 @CustomTag("play-list")
 class PlayList extends PolymerElement {
 
   UListElement songList;
+  CurrentSong currentSong;
+
 
   PlayList.created()
     :super.created() {
@@ -16,6 +19,7 @@ class PlayList extends PolymerElement {
     super.enteredView();
 
     songList = $["list"];
+    currentSong = $["currentSong"];
     getPlaylist();
   }
 
@@ -38,6 +42,8 @@ class PlayList extends PolymerElement {
       if(songList.children.isNotEmpty) {
         songList.children.last.scrollIntoView();
       }
+
+      songList.children.add(currentSong);
     });
   }
 

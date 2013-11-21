@@ -4,6 +4,7 @@ import "dart:html";
 import "package:range_slider/range_slider.dart";
 import "package:json_object/json_object.dart";
 import "play-list.dart";
+import "current-song.dart";
 
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
@@ -15,7 +16,9 @@ class MediaBar extends PolymerElement {
   AudioElement stream;
   ImageElement toggleSoundImage;
   PlayList playlist;
-  ImageElement albumArt;
+  String artist;
+  String album;
+  CurrentSong currentSong;
 
   MediaBar.created()
     : super.created() {
@@ -31,7 +34,6 @@ class MediaBar extends PolymerElement {
     toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
-    albumArt = $["albumArt"];
 
 
     setupHotKeys();
@@ -70,30 +72,20 @@ class MediaBar extends PolymerElement {
   }
 
   void loadMetaData() {
-    DivElement title = $["songTitle"];
-    DivElement artist = $["songArtist"];
-    DivElement album = $["songAlbum"];
-
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
       //print(request.responseText);
 
       if(json.containsKey("Title"))
-        title.setInnerHtml(json["Title"]);
-      else
-        title.setInnerHtml("");
+        currentSong.title = json["Title"];
 
       if(json.containsKey("Artist"))
-        artist.setInnerHtml(json["Artist"]);
-      else
-        artist.setInnerHtml("");
+        currentSong.artist = json["Artist"];
 
       if(json.containsKey("Album"))
-        album.setInnerHtml(json["Album"]);
-      else
-        album.setInnerHtml("");
+        currentSong.album = json["Album"];
 
-      getAlbumArt(json["Artist"], json["Album"]);
+      currentSong.getAlbumArt();
     });
   }
 
@@ -155,37 +147,8 @@ class MediaBar extends PolymerElement {
     return volumeSlider.value;
   }
 
-  void getAlbumArt(String artist, String album) {
-    if(artist != null && album != null) {
-      HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
-        .then((HttpRequest request) {
-          // Last.FM gives us a a JSON object that has another JSON object
-          // in it ("album"). "album" has a list of images ("image") of
-          // varius sizes. It is set up to request a "large" image, because
-          // the image sizes are very ununiform. Some small images are 200px,
-          // some are 32px. So why not get a bigger one?
-          JsonObject obj = new JsonObject.fromJsonString(request.responseText);
-          JsonObject album = obj["album"];
-          List images = album["image"];
-          int imageSize = 2;
-          JsonObject image = images[imageSize];
-
-          // Just in case Last.FM doesn't have a large image for us.
-          while(image == null && imageSize > 0) {
-            imageSize--;
-            image = images[imageSize];
-          }
-
-          String url = image["#text"];
-          albumArt.src = url;
-        })
-        .catchError((e) {
-          print("error: $e");
-        });
-    }
-    else {
-      // Add wookiee image
-      albumArt.src = "";
-    }
+  void setPlayList(PlayList playList) {
+    this.playlist = playList;
+    this.currentSong = playList.currentSong;
   }
 }
