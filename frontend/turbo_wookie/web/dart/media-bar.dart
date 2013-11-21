@@ -91,7 +91,7 @@ class MediaBar extends PolymerElement {
       else
         album.setInnerHtml("");
 
-      getAlbumArt(json["Artist"], json["Title"]);
+      getAlbumArt(json["Artist"], json["Album"]);
     });
   }
 
@@ -160,9 +160,12 @@ class MediaBar extends PolymerElement {
         .then((HttpRequest request) {
           JsonObject obj = new JsonObject.fromJsonString(request.responseText);
           JsonObject album = obj["album"];
+          // Last.fm gives us a list of differently sized images.
           List images = album["image"];
+          // Small/Medium were really so this chooses large.
           JsonObject image = images[2];
-          String url = image["#text"].toString();
+          String url = image["#text"];
+
           albumArt.src = url;
         });
     }
