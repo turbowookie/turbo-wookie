@@ -12,7 +12,6 @@ import (
   "fmt"
   "encoding/json"
   "strconv"
-  "time"
   "io"
 )
 
@@ -46,6 +45,7 @@ func main() {
   r.HandleFunc("/songs", listSongs)
   r.HandleFunc("/current", getCurrentSong)
   r.HandleFunc("/upcoming", getUpcomingSongs)
+  r.HandleFunc("/add", addSong)
 
   // This MUST go last! It takes precidence over any after it, meaning
   // the server will try to serve a file, which most likely doesn't exist,
@@ -70,14 +70,9 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
   // get all files from MPD
   mpdfiles, err := mpd_conn.GetFiles()
   if err != nil {
-    count := 0
+    MPDReconnect()
 
-    for err != nil && count < 10 {
-      time.Sleep(10)
-
-      mpdfiles, err = mpd_conn.GetFiles()
-      count ++
-    }
+    mpdfiles, err = mpd_conn.GetFiles()
 
     if err != nil {
       error(w, "Couldn't get a list of files...", err)
@@ -111,14 +106,9 @@ func listSongs(w http.ResponseWriter, r *http.Request) {
 func getCurrentSong(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
+    MPDReconnect()
 
-    count := 0;
-    for err != nil && count < 10 {
-      time.Sleep(10)
-
-      currentSong, err = mpd_conn.CurrentSong()
-      count ++
-    }
+    currentSong, err = mpd_conn.CurrentSong()
 
     if err != nil {
       error(w, "Couldn't get current song info for upcoming list", err)
@@ -133,14 +123,9 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
 func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
   currentSong, err := mpd_conn.CurrentSong()
   if err != nil {
+    MPDReconnect()
 
-    count := 0;
-    for err != nil && count < 10 {
-      time.Sleep(10)
-
-      currentSong, err = mpd_conn.CurrentSong()
-      count ++
-    }
+    currentSong, err = mpd_conn.CurrentSong()
 
     if err != nil {
       error(w, "Couldn't get current song info for upcoming list", err)
@@ -156,14 +141,9 @@ func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
 
   playlist, err := mpd_conn.PlaylistInfo(-1, -1)
   if err != nil {
-    count := 0
-    for err != nil && count < 10 {
-      time.Sleep(10)
-
-      playlist, err = mpd_conn.PlaylistInfo(-1, -1)
-      count ++
-    }
-
+    MPDReconnect()
+    playlist, err = mpd_conn.PlaylistInfo(-1, -1)
+    
     if err != nil {
       error(w, "Couldn't get the current playlist", err)
       return
@@ -173,6 +153,37 @@ func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
   upcoming := playlist[pos + 1:]
 
   fmt.Fprintf(w, jsoniffy(upcoming))
+}
+
+
+func addSong(w http.ResponseWriter, r *http.Request) {
+  r.ParseForm()
+  log.Println(r.Form)
+
+  song, ok := r.Form["song"]
+  if !ok {
+    jsonError(w, "No song given", nil)
+    return
+  }
+
+  err := mpd_conn.Add(song[0])
+  log.Println(err)
+  ue := "unexpected response: "
+  
+  if err.Error()[:len(ue)] != ue {
+    jsonError(w, "Unknown song", err)
+    return
+  } else if err != nil {
+    MPDReconnect()
+    err = mpd_conn.Add(song[0])
+
+    if err != nil {
+      jsonError(w, "Couldn't add song to playlist.", err)
+      return
+    }
+  }
+
+
 }
 
 
@@ -216,6 +227,12 @@ func id3Read(reader io.Reader, filePath string) *TBFile {
   return file
 }
 
+
+func MPDReconnect() {
+  mpd_conn.Close()
+  mpd_conn = mpdConnect("localhost:6600")
+}
+
 // turn anything into JSON.
 func jsoniffy(v interface {}) string {
   obj, err := json.MarshalIndent(v, "", "  ")
@@ -236,7 +253,8 @@ func error(w http.ResponseWriter, message string, err interface{Error() string;}
 }
 
 func jsonError(w http.ResponseWriter, message string, err interface{Error() string;}) {
-  message = "{error:\"" + message + "\"}"
-  error(w, message, err)
+  m := make(map[string]string)
+  m["error"] = message
+  error(w, jsoniffy(m), err)
 }
 
