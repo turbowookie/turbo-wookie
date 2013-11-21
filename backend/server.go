@@ -13,6 +13,8 @@ import (
   "encoding/json"
   "strconv"
   "io"
+  "os/exec"
+  "github.com/kylelemons/go-gypsy/yaml"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -20,7 +22,23 @@ import (
 var mpd_conn *mpd.Client
 
 
-func main() {
+func main() {	
+	//get yaml config file info
+	file, err := yaml.ReadFile("config.yaml")
+	if err != nil {
+      log.Fatal("Cannot read config.yaml")
+      return
+   }
+   
+   //just pull out the mpc command from config.yaml
+   mpdCommand, err := file.Get("mpd_command")
+   if err != nil {
+      log.Fatal("could not get mpc command from config.yaml")
+      return
+   }
+  
+	//start up MPD
+	go startMpd(mpdCommand)
   // setup our global MPD connection
   mpd_conn = mpdConnect("localhost:6600")
   defer mpd_conn.Close()
@@ -195,6 +213,20 @@ func addSong(w http.ResponseWriter, r *http.Request) {
   Helper Functions  
  *******************/
 
+func startMpd(mpdCommand string){
+	log.Println("MPD Starting!")
+	cmd := exec.Command(mpdCommand)
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal("Could not start MPD Server! Check the mpc_command in config.yaml.")
+	}
+	defer stopMPD(cmd.Process)
+}
+
+func stopMPD(cmd *os.Process) {
+		log.Println("Killing MPD")
+		cmd.Kill()
+	}
 // Connect to MPD's control channel, and set the global mpd_conn to it.
 func mpdConnect(url string) *mpd.Client {
   conn, err := mpd.Dial("tcp", url)
