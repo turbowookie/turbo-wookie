@@ -158,8 +158,6 @@ func getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
 
 func addSong(w http.ResponseWriter, r *http.Request) {
   r.ParseForm()
-  log.Println(r.Form)
-
   song, ok := r.Form["song"]
   if !ok {
     jsonError(w, "No song given", nil)
@@ -167,13 +165,16 @@ func addSong(w http.ResponseWriter, r *http.Request) {
   }
 
   err := mpd_conn.Add(song[0])
-  log.Println(err)
   ue := "unexpected response: "
   
-  if err.Error()[:len(ue)] != ue {
-    jsonError(w, "Unknown song", err)
-    return
-  } else if err != nil {
+  if err != nil {
+    if err.Error()[:len(ue)] == ue {
+      log.Println("add UE song error:", err)
+      jsonError(w, "Unknown song", err)
+      return
+    } 
+
+    log.Println("add song error:", err)
     MPDReconnect()
     err = mpd_conn.Add(song[0])
 
@@ -183,7 +184,9 @@ func addSong(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-
+  m := make(map[string]string)
+  m["note"] = "Added song: " + song[0]
+  fmt.Fprintf(w, jsoniffy(m))
 }
 
 
