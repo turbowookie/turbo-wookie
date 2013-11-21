@@ -30,10 +30,10 @@ func main() {
       return
    }
    
-   //just pull out the mpc command from config.yaml
+   //just pull out the mpd command from config.yaml
    mpdCommand, err := file.Get("mpd_command")
    if err != nil {
-      log.Fatal("could not get mpc command from config.yaml")
+      log.Fatal("could not get mpd command from config.yaml")
       return
    }
   
@@ -65,7 +65,7 @@ func main() {
   r.HandleFunc("/upcoming", getUpcomingSongs)
   r.HandleFunc("/add", addSong)
 
-  // This MUST go last! It takes precidence over any after it, meaning
+  // This MUST go last! It takes precedence over any after it, meaning
   // the server will try to serve a file, which most likely doesn't exist,
   // and will 404.
   //
@@ -218,7 +218,7 @@ func startMpd(mpdCommand string){
 	cmd := exec.Command(mpdCommand)
 	err := cmd.Run()
 	if err != nil {
-		log.Fatal("Could not start MPD Server! Check the mpc_command in config.yaml.")
+		log.Fatal("Could not start MPD Server! Check the mpd_command in config.yaml.")
 	}
 	defer stopMPD(cmd.Process)
 }

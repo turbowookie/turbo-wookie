@@ -2,7 +2,7 @@
 # an example configuration for Turbo Wookie's backend.
 # 
 # config.yaml is used in two ways, to generate an mpd.conf file
-# and to set some server configuation variables (such as domain, and port, 
+# and to set some server configuration variables (such as domain, and port, 
 # and MPD's port).
 
 
@@ -14,8 +14,8 @@ mpd_http_domain: "localhost"
 mpd_http_port: 8000
 mpd_control_port: 6600
 
-turbo_wookie_directory: "~/code/turbo-wookie"
-mpd_subdirectory: "/backend/mpd"
+turbo_wookie_directory: "c:/users/rick/desktop/turbo-wookie/turbo-wookie"
+mpd_subdirectory: "c:/users/rick/desktop/turbo-wookie/turbo-wookie/backend/mpd"
 
 mpd_music_directory: "music"
 mpd_playlist_directory: "playlists"
