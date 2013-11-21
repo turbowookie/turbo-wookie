@@ -22,4 +22,6 @@ backend/mpd/log
 backend/mpd/state
 backend/mpd/pid
 backend/mpd/sticker.sql
-backend/mpd/config.yaml
+
+#yaml config file
+backend/config.yaml
