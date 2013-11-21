@@ -90,6 +90,8 @@ class MediaBar extends PolymerElement {
         album.setInnerHtml(json["Album"]);
       else
         album.setInnerHtml("");
+
+      getAlbumArt(json["Artist"], json["Title"]);
     });
   }
 
@@ -149,5 +151,23 @@ class MediaBar extends PolymerElement {
 
   double getVolume() {
     return volumeSlider.value;
+  }
+
+  void getAlbumArt(String artist, String album) {
+    if(artist != null && album != null) {
+      ImageElement albumArt = $["albumArt"];
+      HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
+        .then((HttpRequest request) {
+          JsonObject obj = new JsonObject.fromJsonString(request.responseText);
+          JsonObject album = obj["album"];
+          List images = album["image"];
+          JsonObject image = images[2];
+          String url = image["#text"].toString();
+          albumArt.src = url;
+        });
+    }
+    else {
+      // Add wookiee image
+    }
   }
 }

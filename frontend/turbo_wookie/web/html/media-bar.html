@@ -22,7 +22,7 @@
       }
       
       #volumeSlider {
-        width: calc(100% - 20% - 180px);
+        width: calc(100% - 20% - 230px);
         float: right;
         margin-right: 25px;
         top: 25px;
@@ -33,10 +33,15 @@
         float: left;
         padding-top: 7px;
         padding-left: 5px;
-        width: 20%;
+        width: 25%;
         white-space: nowrap;
         overflow: hidden;
         border-right: 1px solid #202020;
+      }
+      
+      #albumArt {
+        float: left;
+        padding-right: 5px;
       }
       
       #songTitle {
@@ -52,6 +57,7 @@
       
       <button id="toggleSound" on-click="{{toggleSound}}"><img src="img/rest.svg"></button>
       <div id="songInfo">
+        <img id="albumArt" />
         <div id="songTitle"></div>
         <div id="songArtist"></div>
         <div id="songAlbum"></div>
