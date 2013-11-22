@@ -15,7 +15,6 @@ class CurrentSong extends PolymerElement {
   String title;
   String artist;
   String album;
-  bool isAlbum = true;
   JsonObject image = null;
 
   CurrentSong.created()
@@ -30,7 +29,7 @@ class CurrentSong extends PolymerElement {
   }
 
   void getAlbumArt() {
-    if(artist != null && isAlbum) {
+    if(artist != null && album != null) {
       HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
         .then((HttpRequest request) {
           // Last.FM gives us a a JSON object that has another JSON object
@@ -38,64 +37,59 @@ class CurrentSong extends PolymerElement {
           // varius sizes. It is set up to request a "large" image, because
           // the image sizes are very ununiform. Some small images are 200px,
           // some are 32px. So why not get a bigger one?
+          try {
           JsonObject obj = new JsonObject.fromJsonString(request.responseText);
-          JsonObject album = obj["album"];
+          JsonObject albumJson = obj["album"];
           int imageSize = 4;
-          if(album !=null)
-          {
-            List images = album["image"];
-            if(images.length > imageSize)
-              image = images[imageSize];
-            else
-            {
-              // Just in case Last.FM doesn't have a large image for us.
-             image = images[images.length-1];
-            }
-          }
-          
-          if(image == null)
-            albumArt.src = "../img/wookie.jpg";
+
+          List images = albumJson["image"];
+          while(imageSize >= images.length && imageSize != -1)
+            imageSize --;
+
+          if(imageSize > -1)
+            image = images[imageSize];
 
           String url = image["#text"];
           albumArt.src = url;
-        })
-        .catchError((e) {
-          print("error: $e");
+          } catch(exception, stackTrace) {
+            print(exception);
+            albumArt.src = "../img/wookie.jpg";
+          }
         });
     }
     else {
       // Add wookiee image
       albumArt.src = "../img/wookie.jpg";
-      isAlbum = true;
     }
   }
 
   void loadMetaData() {
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
-      //print(request.responseText);
 
       if(json.containsKey("Title"))
         title = json["Title"];
-      else
-        title = "Unknown Title";
 
       if(json.containsKey("Artist"))
         artist = json["Artist"];
-      else
-        artist = "Unknown Artist";
 
       if(json.containsKey("Album"))
         album = json["Album"];
-      else
-      {
-        album = "Unknown Album";
-        isAlbum = false;
-      }
 
-      titleDiv.setInnerHtml(title);
-      artistDiv.setInnerHtml(artist);
-      albumDiv.setInnerHtml(album);
+      if(title == null)
+        titleDiv.setInnerHtml("Unknown Title");
+      else
+        titleDiv.setInnerHtml(title);
+
+      if(artist == null)
+        artistDiv.setInnerHtml("Unknown Artist");
+      else
+        artistDiv.setInnerHtml(artist);
+
+      if(album == null)
+        albumDiv.setInnerHtml("Unknown Album");
+      else
+        albumDiv.setInnerHtml(album);
 
       getAlbumArt();
     });
