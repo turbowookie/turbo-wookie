@@ -53,7 +53,7 @@ class CurrentSong extends PolymerElement {
     else {
       // Add wookiee image
       albumArt.src = "../img/wookie.jpg";
-      album = "Album Unknown";
+      album = "Unknown Album";
     }
   }
 }
