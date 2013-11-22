@@ -14,7 +14,7 @@ import (
   "strconv"
   "io"
   "os/exec"
-  "github.com/kylelemons/go-gypsy/yaml"
+ // "github.com/kylelemons/go-gypsy/yaml"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -24,7 +24,7 @@ var mpd_conn *mpd.Client
 
 func main() {	
 	//get yaml config file info
-	file, err := yaml.ReadFile("config.yaml")
+	/*file, err := yaml.ReadFile("config.yaml")
 	if err != nil {
       log.Fatal("Cannot read config.yaml")
       return
@@ -38,7 +38,7 @@ func main() {
    }
   
 	//start up MPD
-	go startMpd(mpdCommand)
+	go startMpd(mpdCommand)*/
   // setup our global MPD connection
   mpd_conn = mpdConnect("localhost:6600")
   defer mpd_conn.Close()

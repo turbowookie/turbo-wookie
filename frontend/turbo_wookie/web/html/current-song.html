@@ -2,9 +2,13 @@
   
   <template>
     <style>
+      #songInfoBox{
+        background-color: black;
+        opacity: 0.8;
+      }
       #songInfo {
-        color: white;
-        margin-top: -20px;
+        color: #33B5E5;
+        margin-top: -50px;
       }
       
       #title {
@@ -17,11 +21,14 @@
     </style>
     
     <img id="albumArt" />
-    <div id="songInfo">
-      <div id="title">{{title}}</div>
-      <div id="artist">{{artist}}</div>
-      <div id="album">{{album}}</div>
-    </div>
+     <div id="songInfoBox">
+      <div id="songInfo">
+        <div id="title">{{title}}</div>
+        <div id="artist">{{artist}}</div>
+        <div id="album">{{album}}</div>
+      </div>
+     </div> 
+      
   </template>
   
   <script type="application/dart" src="../dart/current-song.dart"></script>  
