@@ -3,6 +3,7 @@ import "dart:html";
 import "package:polymer/polymer.dart";
 import "package:json_object/json_object.dart";
 import "media-bar.dart";
+import "song.dart";
 
 @CustomTag('current-song')
 class CurrentSong extends PolymerElement {
@@ -12,10 +13,7 @@ class CurrentSong extends PolymerElement {
   DivElement titleDiv;
   DivElement artistDiv;
   DivElement albumDiv;
-  String title;
-  String artist;
-  String album;
-  JsonObject image = null;
+  Song song;
 
   CurrentSong.created()
       : super.created() {
@@ -26,40 +24,7 @@ class CurrentSong extends PolymerElement {
     titleDiv = $["title"];
     artistDiv = $["artist"];
     albumDiv = $["album"];
-  }
-
-  void getAlbumArt() {
-    if(artist != null && album != null) {
-      HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
-        .then((HttpRequest request) {
-          // Last.FM gives us a a JSON object that has another JSON object
-          // in it ("album"). "album" has a list of images ("image") of
-          // varius sizes. It is set up to request a "large" image, because
-          // the image sizes are very ununiform. Some small images are 200px,
-          // some are 32px. So why not get a bigger one?
-          try {
-          JsonObject obj = new JsonObject.fromJsonString(request.responseText);
-          JsonObject albumJson = obj["album"];
-          int imageSize = 4;
-
-          List images = albumJson["image"];
-          while(imageSize >= images.length && imageSize != -1)
-            imageSize --;
-
-          if(imageSize > -1)
-            image = images[imageSize];
-
-          String url = image["#text"];
-          albumArt.src = url;
-          } catch(exception, stackTrace) {
-            albumArt.src = "../img/wookie.jpg";
-          }
-        });
-    }
-    else {
-      // Add wookiee image
-      albumArt.src = "../img/wookie.jpg";
-    }
+    song = new Song();
   }
 
   void loadMetaData() {
@@ -67,30 +32,30 @@ class CurrentSong extends PolymerElement {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
 
       if(json.containsKey("Title"))
-        title = json["Title"];
+        song.title = json["Title"];
 
       if(json.containsKey("Artist"))
-        artist = json["Artist"];
+        song.artist = json["Artist"];
 
       if(json.containsKey("Album"))
-        album = json["Album"];
+        song.album = json["Album"];
 
       if(title == null)
         titleDiv.setInnerHtml("Unknown Title");
       else
-        titleDiv.setInnerHtml(title);
+        titleDiv.setInnerHtml(song.title);
 
-      if(artist == null)
+      if(song.artist == null)
         artistDiv.setInnerHtml("Unknown Artist");
       else
-        artistDiv.setInnerHtml(artist);
+        artistDiv.setInnerHtml(song.artist);
 
-      if(album == null)
+      if(song.album == null)
         albumDiv.setInnerHtml("Unknown Album");
       else
-        albumDiv.setInnerHtml(album);
+        albumDiv.setInnerHtml(song.album);
 
-      getAlbumArt();
+      song.albumArtUrl.then((String url) => albumArt.src = url);
     });
   }
 }
