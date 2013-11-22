@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+
 html {
   height: 100%;
 }
@@ -5,7 +7,7 @@ html {
 body {
   background-color: #202020;
   color: #aaa;
-  font-family: 'Open Sans', sans-serif;
+  font-family: Roboto, "Open Sans", "Droid Sans", sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.5em;
