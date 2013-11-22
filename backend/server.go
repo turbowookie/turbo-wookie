@@ -15,37 +15,36 @@ import (
   "io"
   "os/exec"
   "github.com/kylelemons/go-gypsy/yaml"
+  //"time"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
 //       make some classes, or something...
 var mpd_conn *mpd.Client
+var config *yaml.File
 
 
 func main() {	
 	//get yaml config file info
 	file, err := yaml.ReadFile("config.yaml")
 	if err != nil {
-      log.Fatal("Cannot read config.yaml")
-      return
-   }
-   
-   //just pull out the mpc command from config.yaml
-   mpdCommand, err := file.Get("mpd_command")
-   if err != nil {
-      log.Fatal("could not get mpc command from config.yaml")
-      return
-   }
-  
-	//start up MPD
-	go startMpd(mpdCommand)
-  // setup our global MPD connection
-  mpd_conn = mpdConnect("localhost:6600")
-  defer mpd_conn.Close()
-
-  if mpd_conn == nil {
-    log.Fatal("MPD Connection is nil!")
+    log.Fatal("Cannot read config.yaml")
   }
+
+  config = file
+  
+  c := make(chan bool, 1)
+
+	//start up MPD
+	go startMpd(c)
+
+  /*for b := <- c; !b; b = <- c {
+    time.Sleep(10)
+  }*/
+
+  /*if mpd_conn == nil {
+    log.Fatal("MPD Connection is nil!")
+  }*/
 
 
   // create a new mux router for our server.
@@ -213,14 +212,32 @@ func addSong(w http.ResponseWriter, r *http.Request) {
   Helper Functions  
  *******************/
 
-func startMpd(mpdCommand string){
+func startMpd(c chan bool) {
+
+  tbdir, err := config.Get("turbo_wookie_directory")
+  if err != nil {
+    log.Fatal("No key 'turbo_wookie_directory'.", err)
+  }
+
+  mpddir, err := config.Get("mpd_subdirectory")
+  if err != nil {
+    log.Fatal("No key 'mpd_subdirectory'.", err)
+  }
+
 	log.Println("MPD Starting!")
-	cmd := exec.Command(mpdCommand)
-	err := cmd.Run()
+	cmd := exec.Command("mpd", tbdir + mpddir + "/mpd.conf")
+
+	err = cmd.Run()
+
 	if err != nil {
-		log.Fatal("Could not start MPD Server! Check the mpc_command in config.yaml.")
+		log.Fatal("Could not start MPD Server!", err)
 	}
+
 	defer stopMPD(cmd.Process)
+
+  mpd_conn = mpdConnect("localhost:6600")
+
+  //c <- true
 }
 
 func stopMPD(cmd *os.Process) {
