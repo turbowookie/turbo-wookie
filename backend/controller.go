@@ -9,6 +9,8 @@ import (
   "fmt"
   "strconv"
   "time"
+  "github.com/kylelemons/go-gypsy/yaml"
+  "os/exec"
 )
 
 type MusicFile struct {
@@ -19,7 +21,36 @@ type MusicFile struct {
 
 func main() {
   //testClient()
-  testWatcher()
+  //testWatcher()
+
+  config, err := yaml.ReadFile("config.yaml")
+  if err != nil {
+    log.Fatal("Cannot read config file")
+  }
+
+  tbdir, err := config.Get("turbo_wookie_directory")
+  if err != nil {
+    log.Fatal("No key 'turbo_wookie_directory'.", err)
+  }
+
+  mpddir, err := config.Get("mpd_subdirectory")
+  if err != nil {
+    log.Fatal("No key 'mpd_subdirectory'.", err)
+  }
+
+  log.Println("MPD Starting!")
+  cmd := exec.Command("mpd", tbdir + mpddir + "/mpd.conf")
+
+  err = cmd.Run()
+
+  time.Sleep(3 * time.Minute)
+
+  if err != nil {
+    log.Fatal("Could not start MPD Server!\n", err)
+  }
+
+  //defer stopMPD(cmd.Process)
+
 }
 
 

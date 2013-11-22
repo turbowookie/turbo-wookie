@@ -14,18 +14,25 @@ import (
   "strconv"
   "io"
   "os/exec"
+  "github.com/kylelemons/go-gypsy/yaml"
+  //"time"
  // "github.com/kylelemons/go-gypsy/yaml"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
 //       make some classes, or something...
 var mpd_conn *mpd.Client
+var config *yaml.File
 
 
 func main() {	
 	//get yaml config file info
 	/*file, err := yaml.ReadFile("config.yaml")
 	if err != nil {
+    log.Fatal("Cannot read config.yaml")
+  }
+
+  config = file
       log.Fatal("Cannot read config.yaml")
       return
    }
@@ -37,15 +44,15 @@ func main() {
       return
    }
   
+  c := make(chan bool, 1)
+
 	//start up MPD
+	go startMpd(c)
 	go startMpd(mpdCommand)*/
+
   // setup our global MPD connection
   mpd_conn = mpdConnect("localhost:6600")
   defer mpd_conn.Close()
-
-  if mpd_conn == nil {
-    log.Fatal("MPD Connection is nil!")
-  }
 
 
   // create a new mux router for our server.
@@ -213,14 +220,32 @@ func addSong(w http.ResponseWriter, r *http.Request) {
   Helper Functions  
  *******************/
 
-func startMpd(mpdCommand string){
+func startMpd(c chan bool) {
+
+  tbdir, err := config.Get("turbo_wookie_directory")
+  if err != nil {
+    log.Fatal("No key 'turbo_wookie_directory'.", err)
+  }
+
+  mpddir, err := config.Get("mpd_subdirectory")
+  if err != nil {
+    log.Fatal("No key 'mpd_subdirectory'.", err)
+  }
+
 	log.Println("MPD Starting!")
-	cmd := exec.Command(mpdCommand)
-	err := cmd.Run()
+	cmd := exec.Command("mpd", tbdir + mpddir + "/mpd.conf")
+
+	err = cmd.Run()
+
 	if err != nil {
-		log.Fatal("Could not start MPD Server! Check the mpd_command in config.yaml.")
+		log.Fatal("Could not start MPD Server!", err)
 	}
+
 	defer stopMPD(cmd.Process)
+
+  mpd_conn = mpdConnect("localhost:6600")
+
+  //c <- true
 }
 
 func stopMPD(cmd *os.Process) {
