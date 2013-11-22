@@ -22,7 +22,6 @@ class CurrentSong extends PolymerElement {
   }
 
   void getAlbumArt() {
-    print(artist);
     if(artist != null && album != null) {
       HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
         .then((HttpRequest request) {
@@ -53,7 +52,6 @@ class CurrentSong extends PolymerElement {
     else {
       // Add wookiee image
       albumArt.src = "../img/wookie.jpg";
-      album = "Album Unknown";
     }
   }
 }
