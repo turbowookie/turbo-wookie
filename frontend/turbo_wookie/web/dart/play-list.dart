@@ -28,7 +28,7 @@ class PlayList extends PolymerElement {
     .then((HttpRequest request) {
       songList.children.clear();
       songList.children.add(currentSong);
-      //setCurrentSong(songList.children[0]);
+      setCurrentSong(songList.children[0]);
 
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
 

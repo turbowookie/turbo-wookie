@@ -9,9 +9,12 @@ class CurrentSong extends PolymerElement {
 
   ImageElement albumArt;
   MediaBar mediaBar;
-  @observable String title;
-  @observable String artist;
-  @observable String album;
+  DivElement titleDiv;
+  DivElement artistDiv;
+  DivElement albumDiv;
+  String title;
+  String artist;
+  String album;
 
   CurrentSong.created()
       : super.created() {
@@ -19,6 +22,9 @@ class CurrentSong extends PolymerElement {
 
   void enteredView() {
     albumArt = $["albumArt"];
+    titleDiv = $["title"];
+    artistDiv = $["artist"];
+    albumDiv = $["album"];
   }
 
   void getAlbumArt() {
@@ -53,5 +59,33 @@ class CurrentSong extends PolymerElement {
       // Add wookiee image
       albumArt.src = "../img/wookie.jpg";
     }
+  }
+
+  void loadMetaData() {
+    HttpRequest.request("/current").then((HttpRequest request) {
+      JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      //print(request.responseText);
+
+      if(json.containsKey("Title"))
+        title = json["Title"];
+      else
+        title = "Unknown Title";
+
+      if(json.containsKey("Artist"))
+        artist = json["Artist"];
+      else
+        artist = "Unknown Artist";
+
+      if(json.containsKey("Album"))
+        album = json["Album"];
+      else
+        album = "Unknown Album";
+
+      titleDiv.setInnerHtml(title);
+      artistDiv.setInnerHtml(artist);
+      albumDiv.setInnerHtml(album);
+
+      getAlbumArt();
+    });
   }
 }

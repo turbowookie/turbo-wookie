@@ -38,7 +38,6 @@ class MediaBar extends PolymerElement {
 
     setupHotKeys();
     setupListeners();
-    loadMetaData();
 
     // Load local storage settings
     double vol = 0.5;
@@ -71,30 +70,12 @@ class MediaBar extends PolymerElement {
     });
   }
 
-  void loadMetaData() {
-    HttpRequest.request("/current").then((HttpRequest request) {
-      JsonObject json = new JsonObject.fromJsonString(request.responseText);
-      //print(request.responseText);
-
-      if(json.containsKey("Title"))
-        currentSong.title = json["Title"];
-
-      if(json.containsKey("Artist"))
-        currentSong.artist = json["Artist"];
-
-      if(json.containsKey("Album"))
-        currentSong.album = json["Album"];
-
-      currentSong.getAlbumArt();
-    });
-  }
-
   void setupListeners() {
     stream.onEmptied.listen((e) {
       stream.src = "/stream";
       stream.play();
       playlist.getPlaylist();
-      loadMetaData();
+      getCurrentSong().loadMetaData();
     });
 
     // Set the volume slider listeners.
@@ -149,6 +130,10 @@ class MediaBar extends PolymerElement {
 
   void setPlayList(PlayList playList) {
     this.playlist = playList;
-    this.currentSong = playList.currentSong;
+    getCurrentSong().loadMetaData();
+  }
+
+  CurrentSong getCurrentSong() {
+    return playlist.currentSong;
   }
 }
