@@ -27,23 +27,16 @@ class PlayList extends PolymerElement {
     HttpRequest.request("/upcoming")
     .then((HttpRequest request) {
       songList.children.clear();
+      songList.children.add(currentSong);
+      setCurrentSong(songList.children[0]);
 
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
-      List<JsonObject> jsonReverse = new List<JsonObject>();
 
       json.forEach((JsonObject song) {
-        jsonReverse.add(song);
-      });
-
-      jsonReverse.reversed.forEach((JsonObject song) {
         LIElement listElement = createListItem(song);
         songList.children.add(listElement);
       });
-      if(songList.children.isNotEmpty) {
-        songList.children.last.scrollIntoView();
-      }
 
-      songList.children.add(currentSong);
     });
   }
 
@@ -55,6 +48,12 @@ class PlayList extends PolymerElement {
     listElement.innerHtml = innerHtml;
 
     return listElement;
+  }
+
+  void setCurrentSong(CurrentSong currentSong) {
+    this.currentSong = currentSong;
+
+    print(this.currentSong);
   }
 
 }

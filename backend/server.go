@@ -16,6 +16,7 @@ import (
   "os/exec"
   "github.com/kylelemons/go-gypsy/yaml"
   //"time"
+ // "github.com/kylelemons/go-gypsy/yaml"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -26,25 +27,32 @@ var config *yaml.File
 
 func main() {	
 	//get yaml config file info
-	file, err := yaml.ReadFile("config.yaml")
+	/*file, err := yaml.ReadFile("config.yaml")
 	if err != nil {
     log.Fatal("Cannot read config.yaml")
   }
 
   config = file
+      log.Fatal("Cannot read config.yaml")
+      return
+   }
+   
+   //just pull out the mpd command from config.yaml
+   mpdCommand, err := file.Get("mpd_command")
+   if err != nil {
+      log.Fatal("could not get mpd command from config.yaml")
+      return
+   }
   
   c := make(chan bool, 1)
 
 	//start up MPD
 	go startMpd(c)
+	go startMpd(mpdCommand)*/
 
-  /*for b := <- c; !b; b = <- c {
-    time.Sleep(10)
-  }*/
-
-  /*if mpd_conn == nil {
-    log.Fatal("MPD Connection is nil!")
-  }*/
+  // setup our global MPD connection
+  mpd_conn = mpdConnect("localhost:6600")
+  defer mpd_conn.Close()
 
 
   // create a new mux router for our server.
@@ -64,7 +72,7 @@ func main() {
   r.HandleFunc("/upcoming", getUpcomingSongs)
   r.HandleFunc("/add", addSong)
 
-  // This MUST go last! It takes precidence over any after it, meaning
+  // This MUST go last! It takes precedence over any after it, meaning
   // the server will try to serve a file, which most likely doesn't exist,
   // and will 404.
   //

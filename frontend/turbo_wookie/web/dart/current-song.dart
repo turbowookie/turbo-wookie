@@ -9,9 +9,14 @@ class CurrentSong extends PolymerElement {
 
   ImageElement albumArt;
   MediaBar mediaBar;
-  @observable String title;
-  @observable String artist;
-  @observable String album;
+  DivElement titleDiv;
+  DivElement artistDiv;
+  DivElement albumDiv;
+  String title;
+  String artist;
+  String album;
+  bool isAlbum = true;
+  JsonObject image = null;
 
   CurrentSong.created()
       : super.created() {
@@ -19,10 +24,13 @@ class CurrentSong extends PolymerElement {
 
   void enteredView() {
     albumArt = $["albumArt"];
+    titleDiv = $["title"];
+    artistDiv = $["artist"];
+    albumDiv = $["album"];
   }
 
   void getAlbumArt() {
-    if(artist != null && album != null) {
+    if(artist != null && isAlbum) {
       HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
         .then((HttpRequest request) {
           // Last.FM gives us a a JSON object that has another JSON object
@@ -32,15 +40,21 @@ class CurrentSong extends PolymerElement {
           // some are 32px. So why not get a bigger one?
           JsonObject obj = new JsonObject.fromJsonString(request.responseText);
           JsonObject album = obj["album"];
-          List images = album["image"];
           int imageSize = 4;
-          JsonObject image = images[imageSize];
-
-          // Just in case Last.FM doesn't have a large image for us.
-          while(image == null && imageSize > 0) {
-            imageSize--;
-            image = images[imageSize];
+          if(album !=null)
+          {
+            List images = album["image"];
+            if(images.length > imageSize)
+              image = images[imageSize];
+            else
+            {
+              // Just in case Last.FM doesn't have a large image for us.
+             image = images[images.length-1];
+            }
           }
+          
+          if(image == null)
+            albumArt.src = "../img/wookie.jpg";
 
           String url = image["#text"];
           albumArt.src = url;
@@ -52,6 +66,38 @@ class CurrentSong extends PolymerElement {
     else {
       // Add wookiee image
       albumArt.src = "../img/wookie.jpg";
+      isAlbum = true;
     }
+  }
+
+  void loadMetaData() {
+    HttpRequest.request("/current").then((HttpRequest request) {
+      JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      //print(request.responseText);
+
+      if(json.containsKey("Title"))
+        title = json["Title"];
+      else
+        title = "Unknown Title";
+
+      if(json.containsKey("Artist"))
+        artist = json["Artist"];
+      else
+        artist = "Unknown Artist";
+
+      if(json.containsKey("Album"))
+        album = json["Album"];
+      else
+      {
+        album = "Unknown Album";
+        isAlbum = false;
+      }
+
+      titleDiv.setInnerHtml(title);
+      artistDiv.setInnerHtml(artist);
+      albumDiv.setInnerHtml(album);
+
+      getAlbumArt();
+    });
   }
 }
