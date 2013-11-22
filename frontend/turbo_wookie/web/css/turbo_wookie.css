@@ -27,7 +27,7 @@ h1 {
 
 #playlist {
   display: inline-block;
-  width: calc(73px + 25%);
+  width: calc(20%);
   height: calc(100% - 108px);
   overflow-y: auto;
   position: relative;
