@@ -15,6 +15,7 @@ class CurrentSong extends PolymerElement {
   String title;
   String artist;
   String album;
+  bool isAlbum = true;
 
   CurrentSong.created()
       : super.created() {
@@ -28,7 +29,7 @@ class CurrentSong extends PolymerElement {
   }
 
   void getAlbumArt() {
-    if(artist != null && album != null) {
+    if(artist != null && isAlbum) {
       HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
         .then((HttpRequest request) {
           // Last.FM gives us a a JSON object that has another JSON object
@@ -58,6 +59,7 @@ class CurrentSong extends PolymerElement {
     else {
       // Add wookiee image
       albumArt.src = "../img/wookie.jpg";
+      isAlbum = true;
     }
   }
 
@@ -79,7 +81,10 @@ class CurrentSong extends PolymerElement {
       if(json.containsKey("Album"))
         album = json["Album"];
       else
+      {
         album = "Unknown Album";
+        isAlbum = false;
+      }
 
       titleDiv.setInnerHtml(title);
       artistDiv.setInnerHtml(artist);
