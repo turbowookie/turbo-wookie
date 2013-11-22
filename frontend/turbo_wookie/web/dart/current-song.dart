@@ -52,7 +52,6 @@ class CurrentSong extends PolymerElement {
           String url = image["#text"];
           albumArt.src = url;
           } catch(exception, stackTrace) {
-            print(exception);
             albumArt.src = "../img/wookie.jpg";
           }
         });

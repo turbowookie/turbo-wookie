@@ -52,8 +52,6 @@ class PlayList extends PolymerElement {
 
   void setCurrentSong(CurrentSong currentSong) {
     this.currentSong = currentSong;
-
-    print(this.currentSong);
   }
 
 }
