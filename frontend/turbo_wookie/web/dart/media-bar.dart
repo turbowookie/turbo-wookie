@@ -78,6 +78,10 @@ class MediaBar extends PolymerElement {
       getCurrentSong().loadMetaData();
     });
 
+    toggleSoundButton.onFocus.listen((e) {
+      toggleSoundButton.blur();
+    });
+
     // Set the volume slider listeners.
     volumeSlider.$elmt.onChange.listen((CustomEvent e) {
       setVolume(e.detail["value"]);
