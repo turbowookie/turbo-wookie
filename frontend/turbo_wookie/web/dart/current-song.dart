@@ -16,6 +16,7 @@ class CurrentSong extends PolymerElement {
   String artist;
   String album;
   bool isAlbum = true;
+  JsonObject image = null;
 
   CurrentSong.created()
       : super.created() {
@@ -39,15 +40,21 @@ class CurrentSong extends PolymerElement {
           // some are 32px. So why not get a bigger one?
           JsonObject obj = new JsonObject.fromJsonString(request.responseText);
           JsonObject album = obj["album"];
-          List images = album["image"];
           int imageSize = 4;
-          JsonObject image = images[imageSize];
-
-          // Just in case Last.FM doesn't have a large image for us.
-          while(image == null && imageSize > 0) {
-            imageSize--;
-            image = images[imageSize];
+          if(album !=null)
+          {
+            List images = album["image"];
+            if(images.length > imageSize)
+              image = images[imageSize];
+            else
+            {
+              // Just in case Last.FM doesn't have a large image for us.
+             image = images[images.length-1];
+            }
           }
+          
+          if(image == null)
+            albumArt.src = "../img/wookie.jpg";
 
           String url = image["#text"];
           albumArt.src = url;
