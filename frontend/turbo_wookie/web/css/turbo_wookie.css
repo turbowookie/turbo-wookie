@@ -46,7 +46,7 @@ h1 {
 
 #library {
   float: right;
-  width: calc(100% - 300px);
+  width: calc(100% - 272px);
   max-height: calc(100% - 108px);
   overflow: auto;
 }
