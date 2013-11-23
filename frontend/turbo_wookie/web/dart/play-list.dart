@@ -30,13 +30,15 @@ class PlayList extends PolymerElement {
       songList.children.add(currentSong);
       setCurrentSong(songList.children[0]);
 
-      JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      try {
+        JsonObject json = new JsonObject.fromJsonString(request.responseText);
 
-      json.forEach((JsonObject song) {
-        LIElement listElement = createListItem(song);
-        songList.children.add(listElement);
-      });
-
+        json.forEach((JsonObject song) {
+          LIElement listElement = createListItem(song);
+          songList.children.add(listElement);
+        });
+      } catch(exception, stacktrace) {
+      }
     });
   }
 
