@@ -44,5 +44,7 @@ h1 {
   width: 100%;
 }
 
-#currentSong {
+#library {
+  float: right;
+  width: calc(100% - 300px);
 }

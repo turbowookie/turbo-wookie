@@ -6,6 +6,7 @@ class Song {
   String title;
   String artist;
   String album;
+  String filePath;
   Future<String> get albumArtUrl => getAlbumArtUrl();
 
   Future<String> getAlbumArtUrl() {
@@ -32,21 +33,22 @@ class Song {
           if(imageSize > -1)
             image = images[imageSize];
 
-          //return image["#text"].toString();
           completer.complete(image["#text"].toString());
 
           } catch(exception, stackTrace) {
-            //return "../img/wookie.jpg";
             completer.complete("../img/wookie.jpg");
           }
         });
     }
     else {
       // Add wookiee image
-      //return "../img/wookie.jpg";
       completer.complete("../img/wookie.jpg");
     }
     return completer.future;
+  }
+
+  void addToPlaylist() {
+    HttpRequest.request("add?song=$filePath");
   }
 
   @override
