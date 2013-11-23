@@ -61,6 +61,9 @@ class LibraryList extends PolymerElement {
       song.addToPlaylist();
       playlist.getPlaylist();
     });
+    button.onFocus.listen((e) {
+      button.blur();
+    });
 
     row.children.add(title);
     row.children.add(artist);
