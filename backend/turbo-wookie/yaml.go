@@ -16,6 +16,12 @@ func ReadConfig(filename string) (map[string]string, error) {
     "mpd_control_port",
     "turbo_wookie_directory",
     "mpd_subdirectory",
+    "mpd_music_directory",
+    "mpd_playlist_directory",
+    "mpd_db_file",
+    "mpd_log_file",
+    "mpd_state_file",
+    "mpd_sticker_file",
   }
 
   file, err := yaml.ReadFile(filename)

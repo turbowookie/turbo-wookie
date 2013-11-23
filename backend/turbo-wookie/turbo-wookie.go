@@ -8,3 +8,10 @@ type TBError struct {
 func (e *TBError) Error() string {
   return e.Msg + "\n\t" + e.Err.Error()
 }
+
+type TBErrorMsg struct {
+  Msg string
+}
+func (e *TBErrorMsg) Error() string {
+  return e.Msg
+}

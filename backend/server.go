@@ -2,10 +2,10 @@ package main
 
 import (
   "log"
-  "github.com/gorilla/mux"
+  //"github.com/gorilla/mux"
   "net/http"
-  "net/http/httputil"
-  "net/url"
+  //"net/http/httputil"
+  //"net/url"
   "github.com/fhs/gompd/mpd"
   "github.com/ascherkus/go-id3/src/id3"
   "os"
@@ -14,7 +14,7 @@ import (
   "strconv"
   "io"
   //"os/exec"
-  //"./turbo-wookie"
+  "./turbo-wookie"
 )
 
 // TODO: consider if global is really the best idea, or if we should 
@@ -24,6 +24,17 @@ var config *map[string]string
 
 
 func main() {
+  
+  h, err := turbowookie.NewTBHandler("config.yaml")
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  port := ":" + h.ServerConfig["server_port"]
+  log.Println("Starting server on " + port)
+  http.ListenAndServe(port, h)
+
+  /*
   // setup our global MPD connection
   mpd_conn = mpdConnect("localhost:6600")
   defer mpd_conn.Close()
@@ -57,6 +68,7 @@ func main() {
   // sit, waiting, like a hunter, spying on its prey.
   log.Println("Starting server on port 9000")
   http.ListenAndServe(":9000", r)
+  */
 }
 
 
@@ -110,7 +122,7 @@ func getCurrentSong(w http.ResponseWriter, r *http.Request) {
     currentSong, err = mpd_conn.CurrentSong()
 
     if err != nil {
-      error(w, "Couldn't get current song info for upcoming list", err)
+      error(w, "Couldn't get current song info", err)
       return
     }
   }
