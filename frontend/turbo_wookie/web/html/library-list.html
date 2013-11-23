@@ -2,10 +2,38 @@
   
   <template>
     <style>
+      img {
+        width: 25px;
+      }
       
+      button {
+        background: transparent;
+        border: none;
+      }
+      
+      table {
+        border-collapse: collapse;
+      }
+      
+      th {
+        text-align: left;
+      }
+      
+      tr {
+        border-bottom: 1px solid #666;
+      }
+      
+      td {
+        padding-right: 15px;
+      }
     </style>
     
-    <ul id="songs"></ul>
+    <table id="songs">
+      <th>Title</th>
+      <th>Artist</th>
+      <th>Album</th>
+      <th>Add</th>
+    </table>
     
   </template>
   

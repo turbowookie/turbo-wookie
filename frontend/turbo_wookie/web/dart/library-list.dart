@@ -9,7 +9,7 @@ import "song.dart";
 class LibraryList extends PolymerElement {
 
   List<Song> songs;
-  UListElement songsElement;
+  TableElement songsElement;
   PlayList playlist;
 
   LibraryList.created()
@@ -38,28 +38,34 @@ class LibraryList extends PolymerElement {
         ..filePath = filePath;
         songs.add(song);
 
-        LIElement listElement = createListElement(song);
-        songsElement.children.add(listElement);
+        TableRowElement row = songsElement.addRow();
+        createSongRow(row, song);
+        //songsElement.children.add(row);
       });
 
     });
   }
 
-  LIElement createListElement(Song song) {
-    LIElement listElement = new LIElement();
+  void createSongRow(TableRowElement row, Song song) {
+
+    TableCellElement title = new TableCellElement();
+    title.text = song.title;
+    TableCellElement artist = new TableCellElement();
+    artist.text = song.artist;
+    TableCellElement album = new TableCellElement();
+    album.text = song.album;
 
     ButtonElement button = new ButtonElement();
-    button.text = "Add Song";
+    button.innerHtml = "<img src='../img/add.svg'>";
     button.onClick.listen((Event e) {
       song.addToPlaylist();
       playlist.getPlaylist();
     });
 
-    listElement.innerHtml = """
-        ${song.title} ${song.artist} ${song.album}
-        """;
-    listElement.children.add(button);
-    return listElement;
+    row.children.add(title);
+    row.children.add(artist);
+    row.children.add(album);
+    row.children.add(button);
   }
 
   void addSongToPlaylist(String filePath) {
