@@ -31,14 +31,24 @@ class CurrentSong extends PolymerElement {
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
 
-      if(json.containsKey("Title"))
-        song.title = json["Title"];
+      if(json.isEmpty) {
+        song.title = "No Song Playing";
+        song.artist = "No Artist";
+        song.album = "No Album";
+        albumArt.src = "../img/wookie.jpg";
+      }
+      else {
+        if(json.containsKey("Title"))
+          song.title = json["Title"];
 
-      if(json.containsKey("Artist"))
-        song.artist = json["Artist"];
+        if(json.containsKey("Artist"))
+          song.artist = json["Artist"];
 
-      if(json.containsKey("Album"))
-        song.album = json["Album"];
+        if(json.containsKey("Album"))
+          song.album = json["Album"];
+
+        song.albumArtUrl.then((String url) => albumArt.src = url);
+      }
 
       if(title == null)
         titleDiv.setInnerHtml("Unknown Title");
@@ -54,8 +64,6 @@ class CurrentSong extends PolymerElement {
         albumDiv.setInnerHtml("Unknown Album");
       else
         albumDiv.setInnerHtml(song.album);
-
-      song.albumArtUrl.then((String url) => albumArt.src = url);
     });
   }
 }
