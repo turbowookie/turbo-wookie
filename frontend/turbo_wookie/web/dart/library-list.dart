@@ -34,14 +34,14 @@ class LibraryList extends PolymerElement {
         songs.add(song);
 
         TableRowElement row = songsElement.addRow();
-        createSongRow(row, song);
+        _createSongRow(row, song);
         //songsElement.children.add(row);
       });
 
     });
   }
 
-  void createSongRow(TableRowElement row, Song song) {
+  void _createSongRow(TableRowElement row, Song song) {
 
     TableCellElement title = new TableCellElement();
     title.text = song.title;
@@ -64,10 +64,5 @@ class LibraryList extends PolymerElement {
     row.children.add(artist);
     row.children.add(album);
     row.children.add(button);
-  }
-
-  void addSongToPlaylist(String filePath) {
-    HttpRequest.request("add?song=$filePath");
-    print("adding song: $filePath");
   }
 }

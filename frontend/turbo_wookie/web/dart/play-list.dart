@@ -16,10 +16,10 @@ class PlayList extends PolymerElement {
     songList = $["list"];
     currentSong = $["currentSong"];
     getPlaylist();
-    setupListeners();
+    _setupEvents();
   }
 
-  void setupListeners() {
+  void _setupEvents() {
     /*
     HttpRequest.request("/upcoming").asStream()
     .asBroadcastStream(onListen: (StreamSubscription<HttpRequest> request) {
@@ -33,11 +33,11 @@ class PlayList extends PolymerElement {
     try {
       songList.children.clear();
       songList.children.add(currentSong);
-      setCurrentSong(songList.children[0]);
+      _setCurrentSong(songList.children[0]);
 
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
       json.forEach((JsonObject song) {
-        LIElement listElement = createListItem(song);
+        LIElement listElement = _createListItem(song);
         songList.children.add(listElement);
       });
     } catch(exception, stacktrace) {
@@ -49,13 +49,13 @@ class PlayList extends PolymerElement {
     .then((HttpRequest request) {
       songList.children.clear();
       songList.children.add(currentSong);
-      setCurrentSong(songList.children[0]);
+      _setCurrentSong(songList.children[0]);
 
       try {
         JsonObject json = new JsonObject.fromJsonString(request.responseText);
 
         json.forEach((JsonObject song) {
-          LIElement listElement = createListItem(song);
+          LIElement listElement = _createListItem(song);
           songList.children.add(listElement);
         });
       } catch(exception, stacktrace) {
@@ -63,7 +63,7 @@ class PlayList extends PolymerElement {
     });
   }
 
-  LIElement createListItem(JsonObject song) {
+  LIElement _createListItem(JsonObject song) {
     LIElement listElement = new LIElement();
     String innerHtml = """<div class="title">${song["Title"]}</div>
                           <div class="artist">${song["Artist"]}</div>""";
@@ -73,7 +73,7 @@ class PlayList extends PolymerElement {
     return listElement;
   }
 
-  void setCurrentSong(CurrentSong currentSong) {
+  void _setCurrentSong(CurrentSong currentSong) {
     this.currentSong = currentSong;
   }
 

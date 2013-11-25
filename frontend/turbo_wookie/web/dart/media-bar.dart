@@ -32,8 +32,8 @@ class MediaBar extends PolymerElement {
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
-    setupHotKeys();
-    setupListeners();
+    _setupHotKeys();
+    _setupEvents();
 
     // Load local storage settings
     double vol = 0.5;
@@ -46,7 +46,7 @@ class MediaBar extends PolymerElement {
     play();
   }
 
-  void setupHotKeys() {
+  void _setupHotKeys() {
     window.onKeyPress.listen((KeyboardEvent e) {
       e.preventDefault();
 
@@ -66,7 +66,7 @@ class MediaBar extends PolymerElement {
     });
   }
 
-  void setupListeners() {
+  void _setupEvents() {
     stream.onEmptied.listen((e) {
       resetStream();
       stream.play();
