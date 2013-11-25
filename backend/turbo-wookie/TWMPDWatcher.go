@@ -4,13 +4,11 @@ import (
   "github.com/fhs/gompd/mpd"
   "log"
   "strconv"
-  "math/rand"
-  "time"
 )
 
 type MPDWatcher struct {
   w *mpd.Watcher
-  host string  
+  host string
 }
 
 
@@ -79,7 +77,3 @@ func (mw *MPDWatcher) queueSong() {
   client.Close()
 }
 
-func random(min, max int) int {
-    rand.Seed(time.Now().Unix())
-    return rand.Intn(max - min) + min
-}

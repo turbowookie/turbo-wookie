@@ -27,6 +27,12 @@ func NewTWHandler(filename string) (*TWHandler, error) {
 
   h.ServerConfig = config
   h.MpdClient = NewTWMPDClient(h.ServerConfig)
+
+  err = h.MpdClient.Startup()
+  if err != nil {
+    log.Fatal("Error running the TWMPDClient startup...\n", err)
+  }
+
   h.Router = mux.NewRouter()
   
   // Play MPD
@@ -60,7 +66,7 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 }
 
 func (h *TWHandler) ListenAndServe() {
-  WatchMPD(":" + h.ServerConfig["mpd_control_port"])
+  WatchMPD(h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_control_port"])
 
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
@@ -129,7 +135,7 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 ************************/
 
 func printError(w http.ResponseWriter, msg string, err error) {
-  log.Println("ERROR: ", err)
+  log.Println("ERROR:", err)
   log.Println("Sending to client:", msg)
   fmt.Fprintf(w, msg + "\n")
 }

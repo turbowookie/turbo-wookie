@@ -6,6 +6,7 @@ import (
   "os"
   "io"
   "strconv"
+  "log"
 )
 
 type TWMPDClient struct {
@@ -16,6 +17,7 @@ type TWMPDClient struct {
   //Watcher TWMPDWatcher
 }
 
+// Create a new TWMPDClient.
 func NewTWMPDClient(config map[string]string) (TWMPDClient) {
   c := TWMPDClient{}
   c.config = config
@@ -30,6 +32,11 @@ func NewTWMPDClient(config map[string]string) (TWMPDClient) {
   return c
 }
 
+
+/************************
+    HELPER FUNCTIONS
+************************/
+
 func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   client, err := mpd.Dial("tcp", c.toString())
   if err != nil {
@@ -39,9 +46,55 @@ func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   return client, nil
 }
 
+
 func (c TWMPDClient) toString() string {
   return c.Domain + ":" + c.Port
 }
+
+
+func (c TWMPDClient) Startup() error {
+  client, err := c.GetClient()
+  if err != nil {
+    return &TBError{Msg: "MPD isn't running.", Err: err}
+  }
+  defer client.Close()
+
+  // check if client is playing
+  attrs, err := client.Status()
+  if err != nil {
+    return &TBError{Msg: "Couldn't get status from client", Err: err}
+  }
+
+  // if we're not playing, play a random song
+  if attrs["state"] != "play" {
+    songs, err := client.GetFiles()
+    if err != nil {
+      return &TBError{Msg: "Couldn't get all files...", Err: err}
+    }
+
+    song := songs[random(0, len(songs))]
+    if client.Add(song) != nil {
+      return &TBErrorMsg{Msg: "Couldn't add song: "  + song}
+    }
+
+    plen, err := strconv.Atoi(attrs["playlistlength"])
+    if err != nil {
+      return &TBError{Msg: "Couldn't get playlistlength...", Err: err}
+    }
+
+    if client.Play(plen) != nil {
+      return &TBErrorMsg{Msg: "Couldn't play song"}
+    }
+  }
+
+  return nil
+}
+
+
+
+/*********************************
+    THINGS THE TWHandler WANTS
+*********************************/
 
 func (c TWMPDClient) GetFiles() ([]*TBFile, error) {
   client, err := c.GetClient()
@@ -71,6 +124,7 @@ func (c TWMPDClient) GetFiles() ([]*TBFile, error) {
   return files, nil
 }
 
+
 func (c TWMPDClient) CurrentSong() (map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
@@ -85,6 +139,7 @@ func (c TWMPDClient) CurrentSong() (map[string]string, error) {
 
   return currentSong, nil
 }
+
 
 func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
@@ -104,6 +159,7 @@ func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
 
   return playlist[pos + 1:], nil
 }
+
 
 func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   client, err := c.GetClient()
@@ -131,6 +187,7 @@ func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   return playlist, nil
 }
 
+
 func (c TWMPDClient) Add(uri string) error {
   client, err := c.GetClient()
   if err != nil {
@@ -138,7 +195,31 @@ func (c TWMPDClient) Add(uri string) error {
   }
   defer client.Close()
 
-  return client.Add(uri)
+  err = client.Add(uri)
+  if err != nil {
+    return err
+  }
+
+  attrs, err := client.Status()
+  if err != nil {
+    log.Println("Couldn't get MPD's status.")
+    return nil
+  }
+
+  if attrs["state"] != "play" {
+    plen, err := strconv.Atoi(attrs["playlistlength"])
+    if err != nil {
+      log.Println("Couldn't get playlistlength...", err)
+      return nil
+    }
+
+    if client.Play(plen - 1) != nil {
+      log.Println("Couldn't play song ", plen)
+      return nil
+    }
+  }
+
+  return nil
 }
 
 

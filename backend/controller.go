@@ -124,7 +124,10 @@ func upcoming(client *mpd.Client) {
 ///////////////////
 
 func testWatcher() {
-  w, _ := mpd.NewWatcher("tcp", ":6600", "")
+  w, err := mpd.NewWatcher("tcp", ":6600", "")
+  if err != nil {
+    log.Fatal("Couldn't start watching mpd...\n", err)
+  }
   defer w.Close()
 
   go logWatcherErrors(w)
@@ -144,6 +147,7 @@ func logWatcherEvents(w *mpd.Watcher) {
   for subsystem := range w.Event {
     log.Println("Changed subsystem:", subsystem)
 
+    /*
     if subsystem == "player" {
       client := clientConnect("localhost:6600")
       attrs, err := client.Status()
@@ -179,6 +183,7 @@ func logWatcherEvents(w *mpd.Watcher) {
 
       client.Close()
     }
+    */
   }
 }
 
