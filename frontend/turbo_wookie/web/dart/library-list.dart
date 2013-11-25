@@ -34,14 +34,14 @@ class LibraryList extends PolymerElement {
         songs.add(song);
 
         TableRowElement row = songsElement.addRow();
-        _createSongRow(row, song);
+        createSongRow(row, song);
         //songsElement.children.add(row);
       });
 
     });
   }
 
-  void _createSongRow(TableRowElement row, Song song) {
+  void createSongRow(TableRowElement row, Song song) {
 
     TableCellElement title = new TableCellElement();
     title.text = song.title;
