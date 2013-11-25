@@ -4,6 +4,7 @@ import "dart:html";
 import "package:range_slider/range_slider.dart";
 import "play-list.dart";
 import "current-song.dart";
+import "test.dart";
 
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
@@ -33,6 +34,7 @@ class MediaBar extends PolymerElement {
     toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
+    Test.printAllStreamListeners(stream);
 
 
     setupHotKeys();
