@@ -31,7 +31,7 @@ class PlayList extends PolymerElement {
       request.onData(updatePlaylist);
     });*/
 
-    new Timer(new Duration(seconds: 10), getPlaylist);
+    new Timer.periodic(new Duration(seconds: 10), (Timer timer) => getPlaylist());
   }
 
   void updatePlaylist(HttpRequest request) {
