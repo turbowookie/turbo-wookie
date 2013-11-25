@@ -1,9 +1,4 @@
-library CurrentSong;
-import "dart:html";
-import "package:polymer/polymer.dart";
-import "package:json_object/json_object.dart";
-import "media-bar.dart";
-import "song.dart";
+part of TurboWookie;
 
 @CustomTag('current-song')
 class CurrentSong extends PolymerElement {

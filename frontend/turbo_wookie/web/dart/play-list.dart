@@ -1,9 +1,4 @@
-library Playlist;
-import "dart:html";
-import "dart:async";
-import "package:polymer/polymer.dart";
-import "package:json_object/json_object.dart";
-import "current-song.dart";
+part of TurboWookie;
 
 @CustomTag("play-list")
 class PlayList extends PolymerElement {

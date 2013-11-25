@@ -1,9 +1,4 @@
-library LibraryList;
-import "dart:html";
-import "package:polymer/polymer.dart";
-import "package:json_object/json_object.dart";
-import "play-list.dart";
-import "song.dart";
+part of TurboWookie;
 
 @CustomTag('library-list')
 class LibraryList extends PolymerElement {

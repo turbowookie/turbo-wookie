@@ -1,11 +1,8 @@
-library MediaBar;
-import "package:polymer/polymer.dart";
-import "dart:html";
-import "package:range_slider/range_slider.dart";
-import "play-list.dart";
-import "current-song.dart";
-import "test.dart";
+part of TurboWookie;
 
+/**
+ * This class controls the audio stream.
+ */
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
 
