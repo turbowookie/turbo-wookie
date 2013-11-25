@@ -27,7 +27,6 @@ class CurrentSong extends PolymerElement {
     titleDiv = $["title"];
     artistDiv = $["artist"];
     albumDiv = $["album"];
-    song = new Song();
   }
 
   /**
@@ -39,25 +38,16 @@ class CurrentSong extends PolymerElement {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
 
       if(json.isEmpty) {
-        song.title = "No Song Playing";
-        song.artist = "No Artist";
-        song.album = "No Album";
+        song = new Song("No Song Playing", "No Artist", "No Album", "");
         albumArt.src = "../img/wookie.jpg";
       }
       else {
-        if(json.containsKey("Title"))
-          song.title = json["Title"];
-
-        if(json.containsKey("Artist"))
-          song.artist = json["Artist"];
-
-        if(json.containsKey("Album"))
-          song.album = json["Album"];
+        song = new Song.fromJson(json);
 
         song.albumArtUrl.then((String url) => albumArt.src = url);
       }
 
-      if(title == null)
+      if(song.title == null)
         titleDiv.setInnerHtml("Unknown Title");
       else
         titleDiv.setInnerHtml(song.title);

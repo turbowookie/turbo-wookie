@@ -33,20 +33,11 @@ class LibraryList extends PolymerElement {
     .then((HttpRequest request) {
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
       songsJson.forEach((JsonObject songJson) {
-        String title = songJson["Name"];
-        String artist = songJson["Artist"];
-        String album = songJson["Album"];
-        String filePath = songJson["FilePath"];
-        Song song = new Song()
-        ..title = title
-        ..artist = artist
-        ..album = album
-        ..filePath = filePath;
+        Song song = new Song.fromJson(songJson);
         songs.add(song);
 
         TableRowElement row = songsElement.addRow();
         createSongRow(row, song);
-        //songsElement.children.add(row);
       });
 
     });
@@ -66,7 +57,7 @@ class LibraryList extends PolymerElement {
 
     ButtonElement button = new ButtonElement();
     button.innerHtml = "<img src='../img/add.svg'>";
-    button.onClick.listen((Event e) {
+    button.onClick.listen((MouseEvent e) {
       song.addToPlaylist();
       playlist.getPlaylist();
     });
