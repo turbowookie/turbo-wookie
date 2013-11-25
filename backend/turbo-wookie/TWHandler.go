@@ -66,7 +66,7 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 }
 
 func (h *TWHandler) ListenAndServe() {
-  WatchMPD(":" + h.ServerConfig["mpd_control_port"])
+  WatchMPD(h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_control_port"])
 
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
