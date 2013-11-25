@@ -2,7 +2,6 @@ library MediaBar;
 import "package:polymer/polymer.dart";
 import "dart:html";
 import "package:range_slider/range_slider.dart";
-import "package:json_object/json_object.dart";
 import "play-list.dart";
 import "current-song.dart";
 
@@ -72,7 +71,7 @@ class MediaBar extends PolymerElement {
 
   void setupListeners() {
     stream.onEmptied.listen((e) {
-      stream.src = "/stream";
+      resetStream();
       stream.play();
       playlist.getPlaylist();
       getCurrentSong().loadMetaData();
@@ -139,5 +138,9 @@ class MediaBar extends PolymerElement {
 
   CurrentSong getCurrentSong() {
     return playlist.currentSong;
+  }
+
+  void resetStream() {
+    stream.src = "/stream";
   }
 }

@@ -1,6 +1,7 @@
 library Playlist;
-import "package:polymer/polymer.dart";
 import "dart:html";
+import "dart:async";
+import "package:polymer/polymer.dart";
 import "package:json_object/json_object.dart";
 import "current-song.dart";
 
@@ -9,7 +10,6 @@ class PlayList extends PolymerElement {
 
   UListElement songList;
   CurrentSong currentSong;
-
 
   PlayList.created()
     :super.created() {
@@ -21,6 +21,32 @@ class PlayList extends PolymerElement {
     songList = $["list"];
     currentSong = $["currentSong"];
     getPlaylist();
+    setupListeners();
+  }
+
+  void setupListeners() {
+    /*
+    HttpRequest.request("/upcoming").asStream()
+    .asBroadcastStream(onListen: (StreamSubscription<HttpRequest> request) {
+      request.onData(updatePlaylist);
+    });*/
+
+    new Timer(new Duration(seconds: 10), getPlaylist);
+  }
+
+  void updatePlaylist(HttpRequest request) {
+    try {
+      songList.children.clear();
+      songList.children.add(currentSong);
+      setCurrentSong(songList.children[0]);
+
+      JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      json.forEach((JsonObject song) {
+        LIElement listElement = createListItem(song);
+        songList.children.add(listElement);
+      });
+    } catch(exception, stacktrace) {
+    }
   }
 
   void getPlaylist() {
