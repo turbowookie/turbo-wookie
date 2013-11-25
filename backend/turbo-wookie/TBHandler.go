@@ -1,7 +1,6 @@
 package turbowookie
 
 import (
-  //"github.com/fhs/gompd/mpd"
   "github.com/gorilla/mux"
   "net/http"
   "net/http/httputil"
@@ -24,11 +23,9 @@ func NewTBHandler(filename string) (*TBHandler, error) {
     return nil, err
   }
 
+
   h.ServerConfig = config
-
   h.MpdClient = NewTBMPDClient(h.ServerConfig)
-
-
   h.Router = mux.NewRouter()
   
   // Play MPD
@@ -60,6 +57,18 @@ func (h *TBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *TBHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *http.Request)) *mux.Route {
   return h.Router.HandleFunc(path, f)
 }
+
+func (h *TBHandler) ListenAndServe() {
+  port := ":" + h.ServerConfig["server_port"]
+  log.Println("Starting server on " + port)
+  http.ListenAndServe(port, h)
+}
+
+
+
+/************************
+    HANDLER FUNCTIONS
+************************/
 
 func (h *TBHandler) listSongs(w http.ResponseWriter, r *http.Request) {
   files, err := h.MpdClient.GetFiles()
