@@ -8,7 +8,7 @@ import (
 
 type MPDWatcher struct {
   w *mpd.Watcher
-  host string  
+  host string
 }
 
 

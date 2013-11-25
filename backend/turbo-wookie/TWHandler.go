@@ -27,6 +27,12 @@ func NewTWHandler(filename string) (*TWHandler, error) {
 
   h.ServerConfig = config
   h.MpdClient = NewTWMPDClient(h.ServerConfig)
+
+  err = h.MpdClient.Startup()
+  if err != nil {
+    log.Fatal("Error running the TWMPDClient startup...\n", err)
+  }
+
   h.Router = mux.NewRouter()
   
   // Play MPD
