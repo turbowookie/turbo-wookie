@@ -176,6 +176,7 @@ func logWatcherEvents(w *mpd.Watcher) {
         }
       }
 
+      client.Close()
     }
   }
 }
