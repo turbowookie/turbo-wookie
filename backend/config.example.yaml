@@ -14,7 +14,8 @@ mpd_http_domain: localhost
 mpd_http_port: 8000
 mpd_control_port: 6600
 
-turbo_wookie_directory: ~/code/turbo-wookie
+# MUST BE ABSOLUTE!
+turbo_wookie_directory: /home/don/code/turbo-wookie
 mpd_subdirectory: /backend/mpd
 
 mpd_music_directory: music

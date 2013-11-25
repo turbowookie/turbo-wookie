@@ -12,6 +12,7 @@ import (
 
 type TWHandler struct {
   MpdClient TWMPDClient
+  //MpdWatcher TWMPDWatcher
   ServerConfig map[string]string
   Router *mux.Router
 }
@@ -59,6 +60,8 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 }
 
 func (h *TWHandler) ListenAndServe() {
+  WatchMPD(":" + h.ServerConfig["mpd_control_port"])
+
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
   http.ListenAndServe(port, h)

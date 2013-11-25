@@ -13,6 +13,7 @@ type TWMPDClient struct {
   Port string
   config map[string]string
   musicDir string
+  //Watcher TWMPDWatcher
 }
 
 func NewTWMPDClient(config map[string]string) (TWMPDClient) {
@@ -23,6 +24,8 @@ func NewTWMPDClient(config map[string]string) (TWMPDClient) {
 
   c.musicDir = c.config["turbo_wookie_directory"] + "/" + 
     c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
+
+  //c.Watcher = NewTWMPDWatcher(c.toString())
 
   return c
 }

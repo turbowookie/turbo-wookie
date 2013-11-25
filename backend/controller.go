@@ -131,6 +131,7 @@ func testWatcher() {
   go logWatcherEvents(w)
 
   time.Sleep(3 * time.Minute)
+  return
 }
 
 func logWatcherErrors(w *mpd.Watcher) {
