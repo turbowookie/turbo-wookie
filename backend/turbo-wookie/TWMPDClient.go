@@ -8,15 +8,15 @@ import (
   "strconv"
 )
 
-type TBMPDClient struct {
+type TWMPDClient struct {
   Domain string 
   Port string
   config map[string]string
   musicDir string
 }
 
-func NewTBMPDClient(config map[string]string) (TBMPDClient) {
-  c := TBMPDClient{}
+func NewTWMPDClient(config map[string]string) (TWMPDClient) {
+  c := TWMPDClient{}
   c.config = config
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
@@ -27,7 +27,7 @@ func NewTBMPDClient(config map[string]string) (TBMPDClient) {
   return c
 }
 
-func (c TBMPDClient) GetClient() (*mpd.Client, error) {
+func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   client, err := mpd.Dial("tcp", c.toString())
   if err != nil {
     return nil, &TBError{Msg: "Couldn't connect to " + c.toString(), Err: err}
@@ -36,11 +36,11 @@ func (c TBMPDClient) GetClient() (*mpd.Client, error) {
   return client, nil
 }
 
-func (c TBMPDClient) toString() string {
+func (c TWMPDClient) toString() string {
   return c.Domain + ":" + c.Port
 }
 
-func (c TBMPDClient) GetFiles() ([]*TBFile, error) {
+func (c TWMPDClient) GetFiles() ([]*TBFile, error) {
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -68,7 +68,7 @@ func (c TBMPDClient) GetFiles() ([]*TBFile, error) {
   return files, nil
 }
 
-func (c TBMPDClient) CurrentSong() (map[string]string, error) {
+func (c TWMPDClient) CurrentSong() (map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -83,7 +83,7 @@ func (c TBMPDClient) CurrentSong() (map[string]string, error) {
   return currentSong, nil
 }
 
-func (c TBMPDClient) GetUpcoming() ([]map[string]string, error) {
+func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
   if err != nil {
     return nil, &TBError{Msg: "Couldn't get current song info for upcoming list", Err: err}
@@ -102,7 +102,7 @@ func (c TBMPDClient) GetUpcoming() ([]map[string]string, error) {
   return playlist[pos + 1:], nil
 }
 
-func (c TBMPDClient) GetPlaylist() ([]map[string]string, error) {
+func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -128,7 +128,7 @@ func (c TBMPDClient) GetPlaylist() ([]map[string]string, error) {
   return playlist, nil
 }
 
-func (c TBMPDClient) Add(uri string) error {
+func (c TWMPDClient) Add(uri string) error {
   client, err := c.GetClient()
   if err != nil {
     return err

@@ -10,14 +10,14 @@ import (
   "encoding/json"
 )
 
-type TBHandler struct {
-  MpdClient TBMPDClient
+type TWHandler struct {
+  MpdClient TWMPDClient
   ServerConfig map[string]string
   Router *mux.Router
 }
 
-func NewTBHandler(filename string) (*TBHandler, error) {
-  h := TBHandler{}
+func NewTWHandler(filename string) (*TWHandler, error) {
+  h := TWHandler{}
   config, err := ReadConfig(filename)
   if err != nil {
     return nil, err
@@ -25,7 +25,7 @@ func NewTBHandler(filename string) (*TBHandler, error) {
 
 
   h.ServerConfig = config
-  h.MpdClient = NewTBMPDClient(h.ServerConfig)
+  h.MpdClient = NewTWMPDClient(h.ServerConfig)
   h.Router = mux.NewRouter()
   
   // Play MPD
@@ -48,17 +48,17 @@ func NewTBHandler(filename string) (*TBHandler, error) {
   return &h, nil
 }
 
-// Make TBHandler an HTTP.Handler
-func (h *TBHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// Make TWHandler an HTTP.Handler
+func (h *TWHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   h.Router.ServeHTTP(w, r)
 }
 
-// Make TBHandler extendible...
-func (h *TBHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *http.Request)) *mux.Route {
+// Make TWHandler extendible...
+func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *http.Request)) *mux.Route {
   return h.Router.HandleFunc(path, f)
 }
 
-func (h *TBHandler) ListenAndServe() {
+func (h *TWHandler) ListenAndServe() {
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
   http.ListenAndServe(port, h)
@@ -70,7 +70,7 @@ func (h *TBHandler) ListenAndServe() {
     HANDLER FUNCTIONS
 ************************/
 
-func (h *TBHandler) listSongs(w http.ResponseWriter, r *http.Request) {
+func (h *TWHandler) listSongs(w http.ResponseWriter, r *http.Request) {
   files, err := h.MpdClient.GetFiles()
   if err != nil {
     printError(w, "An error occured while processing your request", err)
@@ -80,7 +80,7 @@ func (h *TBHandler) listSongs(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(files))
 }
 
-func (h *TBHandler) getCurrentSong(w http.ResponseWriter, r *http.Request) {
+func (h *TWHandler) getCurrentSong(w http.ResponseWriter, r *http.Request) {
   currentSong, err := h.MpdClient.CurrentSong()
   if err != nil {
     printError(w, "Couldn't get current song info", err)
@@ -90,7 +90,7 @@ func (h *TBHandler) getCurrentSong(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(currentSong))
 }
 
-func (h *TBHandler) getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
+func (h *TWHandler) getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
   upcoming, err := h.MpdClient.GetUpcoming()
   if err != nil {
     printError(w, "Couldn't get upcoming playlist", err)
@@ -100,7 +100,7 @@ func (h *TBHandler) getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(upcoming))
 }
 
-func (h *TBHandler) addSong(w http.ResponseWriter, r *http.Request) {
+func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   r.ParseForm()
   song, ok := r.Form["song"]
   if !ok {

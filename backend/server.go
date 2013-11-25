@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-  h, err := turbowookie.NewTBHandler("config.yaml")
+  h, err := turbowookie.NewTWHandler("config.yaml")
   if err != nil {
     log.Fatal(err)
   }
