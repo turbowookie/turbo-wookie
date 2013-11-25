@@ -23,7 +23,7 @@ class Song {
           try {
           JsonObject obj = new JsonObject.fromJsonString(request.responseText);
           JsonObject albumJson = obj["album"];
-          int imageSize = 4;
+          int imageSize = 3;
 
           List images = albumJson["image"];
           while(imageSize >= images.length && imageSize != -1)
