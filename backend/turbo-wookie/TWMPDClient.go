@@ -6,6 +6,7 @@ import (
   "os"
   "io"
   "strconv"
+  "log"
 )
 
 type TWMPDClient struct {
@@ -138,7 +139,31 @@ func (c TWMPDClient) Add(uri string) error {
   }
   defer client.Close()
 
-  return client.Add(uri)
+  err = client.Add(uri)
+  if err != nil {
+    return err
+  }
+
+  attrs, err := client.Status()
+  if err != nil {
+    log.Println("Couldn't get MPD's status.")
+    return nil
+  }
+
+  if attrs["state"] != "play" {
+    plen, err := strconv.Atoi(attrs["playlistlength"])
+    if err != nil {
+      log.Println("Couldn't get playlistlength...", err)
+      return nil
+    }
+
+    if client.Play(plen - 1) != nil {
+      log.Println("Couldn't play song ", plen)
+      return nil
+    }
+  }
+
+  return nil
 }
 
 

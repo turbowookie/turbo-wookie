@@ -129,7 +129,7 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 ************************/
 
 func printError(w http.ResponseWriter, msg string, err error) {
-  log.Println("ERROR: ", err)
+  log.Println("ERROR:", err)
   log.Println("Sending to client:", msg)
   fmt.Fprintf(w, msg + "\n")
 }
