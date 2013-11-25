@@ -1,9 +1,12 @@
-import "package:polymer/polymer.dart";
 import "dart:html";
+import "package:polymer/polymer.dart";
 import "media-bar.dart";
 import "play-list.dart";
 import "library-list.dart";
 
+/**
+ * The main method that kicks everything off.
+ */
 void main() {
   initPolymer();
 

@@ -1,11 +1,13 @@
 library MediaBar;
-import "package:polymer/polymer.dart";
 import "dart:html";
+import "package:polymer/polymer.dart";
 import "package:range_slider/range_slider.dart";
-import "play-list.dart";
 import "current-song.dart";
-import "test.dart";
+import "play-list.dart";
 
+/**
+ * This class controls the audio stream.
+ */
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
 
@@ -36,7 +38,7 @@ class MediaBar extends PolymerElement {
     stream = $["audioElement"];
 
     setupHotKeys();
-    setupListeners();
+    setupEvents();
 
     // Load local storage settings
     double vol = 0.5;
@@ -49,6 +51,9 @@ class MediaBar extends PolymerElement {
     play();
   }
 
+  /**
+   * Sets up hotkeys so we can use keyboard shortcuts.
+   */
   void setupHotKeys() {
     window.onKeyPress.listen((KeyboardEvent e) {
       e.preventDefault();
@@ -69,7 +74,10 @@ class MediaBar extends PolymerElement {
     });
   }
 
-  void setupListeners() {
+  /**
+   * Sets up events for the stream/buttons/sliders/ect.
+   */
+  void setupEvents() {
     stream.onEmptied.listen((e) {
       resetStream();
       stream.play();
@@ -91,6 +99,11 @@ class MediaBar extends PolymerElement {
     });
   }
 
+  /**
+   * Toggles the sound.
+   *
+   * If the sound is on, it will pause. Otherwise it will play.
+   */
   void toggleSound(Event e) {
     if(isPlaying) {
       pause();
@@ -100,18 +113,30 @@ class MediaBar extends PolymerElement {
     }
   }
 
+  /**
+   * Play the stream.
+   */
   void play() {
     toggleSoundImage.src = "img/rest.svg";
     isPlaying = true;
     setVolume(volumeSlider.value);
   }
 
+  /**
+   * Pause the stream.
+   */
   void pause() {
     toggleSoundImage.src = "img/note.svg";
     isPlaying = false;
     setVolume(0.0);
   }
 
+  /**
+   * Set the volume of the stream.
+   *
+   * changeSlider - If this is true, it will change the volume of
+   * the slider and save the volume to localstorage.
+   */
   void setVolume(double vol, [bool changeSlider = false]) {
     if(vol > 1.0)
       vol = 1.0;
@@ -127,19 +152,31 @@ class MediaBar extends PolymerElement {
     }
   }
 
+  /**
+   * Return the volume of the stream.
+   */
   double getVolume() {
     return volumeSlider.value;
   }
 
+  /**
+   * Set the playlist so the media bar can interact with it.
+   */
   void setPlayList(PlayList playList) {
     this.playlist = playList;
     getCurrentSong().loadMetaData();
   }
 
+  /**
+   * Get the current song playing.
+   */
   CurrentSong getCurrentSong() {
     return playlist.currentSong;
   }
 
+  /**
+   * Reset the stream's source.
+   */
   void resetStream() {
     stream.src = "/stream";
   }
