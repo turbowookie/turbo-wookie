@@ -14,6 +14,7 @@ class LibraryList extends PolymerElement {
   List<Song> songs;
   TableElement songsElement;
   PlayList playlist;
+  InputElement search;
 
   LibraryList.created()
       : super.created() {
@@ -21,8 +22,16 @@ class LibraryList extends PolymerElement {
 
   void enteredView() {
     songs = new List<Song>();
-    songsElement = $["songs"];
+    songsElement = $["songsBody"];
+    search = $["search"];
     getAllSongs();
+    setupEvents();
+  }
+
+  void setupEvents() {
+    search.onInput.listen((Event e) {
+      filter(search.value);
+    });
   }
 
   /**
@@ -39,7 +48,6 @@ class LibraryList extends PolymerElement {
         TableRowElement row = songsElement.addRow();
         createSongRow(row, song);
       });
-
     });
   }
 
@@ -69,5 +77,21 @@ class LibraryList extends PolymerElement {
     row.children.add(artist);
     row.children.add(album);
     row.children.add(button);
+  }
+
+  void filter(String filter) {
+    List<TableRowElement> rows = songsElement.children;
+    for(TableRowElement row in rows) {
+      List<Element> children = row.children;
+      for(Element child in children) {
+        if(child.innerHtml.contains(filter)) {
+          row.hidden = false;
+          break;
+        }
+        else {
+          row.hidden = true;
+        }
+      }
+    }
   }
 }
