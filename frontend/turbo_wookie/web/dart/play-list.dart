@@ -1,4 +1,8 @@
-part of TurboWookie;
+library PlayList;
+import "dart:async";
+import "dart:html";
+import "package:polymer/polymer.dart";
+import "current-song.dart";
 
 @CustomTag("play-list")
 class PlayList extends PolymerElement {
@@ -19,6 +23,9 @@ class PlayList extends PolymerElement {
     setupEvents();
   }
 
+  /**
+   * Setup events for http/timers/etc.
+   */
   void setupEvents() {
     /*
     HttpRequest.request("/upcoming").asStream()
@@ -29,6 +36,17 @@ class PlayList extends PolymerElement {
     new Timer.periodic(new Duration(seconds: 10), (Timer timer) => getPlaylist());
   }
 
+  /**
+   * Request an update to the playlist
+   */
+  void getPlaylist() {
+    HttpRequest.request("/upcoming")
+    .then(updatePlaylist);
+  }
+
+  /**
+   * Should be called by an HttpRequest callback to update the playlist.
+   */
   void updatePlaylist(HttpRequest request) {
     try {
       songList.children.clear();
@@ -42,25 +60,6 @@ class PlayList extends PolymerElement {
       });
     } catch(exception, stacktrace) {
     }
-  }
-
-  void getPlaylist() {
-    HttpRequest.request("/upcoming")
-    .then((HttpRequest request) {
-      songList.children.clear();
-      songList.children.add(currentSong);
-      setCurrentSong(songList.children[0]);
-
-      try {
-        JsonObject json = new JsonObject.fromJsonString(request.responseText);
-
-        json.forEach((JsonObject song) {
-          LIElement listElement = createListItem(song);
-          songList.children.add(listElement);
-        });
-      } catch(exception, stacktrace) {
-      }
-    });
   }
 
   LIElement createListItem(JsonObject song) {

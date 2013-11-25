@@ -1,5 +1,13 @@
-part of TurboWookie;
+library LibraryList;
+import "dart:html";
+import "package:polymer/polymer.dart";
+import "package:json_object/json_object.dart";
+import "play-list.dart";
+import "song.dart";
 
+/**
+ * Displays every some in the library.
+ */
 @CustomTag('library-list')
 class LibraryList extends PolymerElement {
 
@@ -17,6 +25,9 @@ class LibraryList extends PolymerElement {
     getAllSongs();
   }
 
+  /**
+   * Get all the songs in the library and add them to the page.
+   */
   void getAllSongs() {
     HttpRequest.request("/songs")
     .then((HttpRequest request) {
@@ -41,6 +52,9 @@ class LibraryList extends PolymerElement {
     });
   }
 
+  /**
+   * Helper method for creating a row in the song table.
+   */
   void createSongRow(TableRowElement row, Song song) {
 
     TableCellElement title = new TableCellElement();

@@ -1,5 +1,13 @@
-part of TurboWookie;
+library CurrentSong;
+import "dart:html";
+import "package:polymer/polymer.dart";
+import "package:json_object/json_object.dart";
+import "media-bar.dart";
+import "song.dart";
 
+/**
+ * This class displays the currently playing song.
+ */
 @CustomTag('current-song')
 class CurrentSong extends PolymerElement {
 
@@ -22,6 +30,10 @@ class CurrentSong extends PolymerElement {
     song = new Song();
   }
 
+  /**
+   * Grabs the meta data of this song from the server using the
+   * http GET request "/current".
+   */
   void loadMetaData() {
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
