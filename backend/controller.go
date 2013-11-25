@@ -9,8 +9,9 @@ import (
   "fmt"
   "strconv"
   "time"
-  "github.com/kylelemons/go-gypsy/yaml"
-  "os/exec"
+  //"github.com/kylelemons/go-gypsy/yaml"
+  //"os/exec"
+  "math/rand"
 )
 
 type MusicFile struct {
@@ -21,8 +22,9 @@ type MusicFile struct {
 
 func main() {
   //testClient()
-  //testWatcher()
+  testWatcher()
 
+  /*
   config, err := yaml.ReadFile("config.yaml")
   if err != nil {
     log.Fatal("Cannot read config file")
@@ -50,6 +52,7 @@ func main() {
   }
 
   //defer stopMPD(cmd.Process)
+  */
 
 }
 
@@ -139,5 +142,46 @@ func logWatcherErrors(w *mpd.Watcher) {
 func logWatcherEvents(w *mpd.Watcher) {
   for subsystem := range w.Event {
     log.Println("Changed subsystem:", subsystem)
+
+    if subsystem == "player" {
+      client := clientConnect("localhost:6600")
+      attrs, err := client.Status()
+      if err != nil {
+        log.Fatal("Couldn't get status...", err)
+      }
+
+
+      if attrs["state"] != "play" {
+        for k, v := range attrs {
+          fmt.Println("attrs[" + k + "] = " + v)
+        }
+
+        songs, err := client.GetFiles()
+        if err != nil {
+          log.Fatal("Couldn't get files...", err)
+        }
+
+        song := songs[random(0, len(songs))]
+        if client.Add(song) != nil {
+          log.Fatal("Couldn't add song:", song)
+        }
+
+        plen, err := strconv.Atoi(attrs["playlistlength"])
+        if err != nil {
+          log.Fatal("Couldn't get playlistlength...", err)
+        }
+
+        if client.Play(plen) != nil {
+          log.Fatal("Couldn't play song")
+        }
+      }
+
+    }
   }
+}
+
+
+func random(min, max int) int {
+    rand.Seed(time.Now().Unix())
+    return rand.Intn(max - min) + min
 }
