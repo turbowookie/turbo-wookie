@@ -144,6 +144,7 @@ func logWatcherEvents(w *mpd.Watcher) {
   for subsystem := range w.Event {
     log.Println("Changed subsystem:", subsystem)
 
+    /*
     if subsystem == "player" {
       client := clientConnect("localhost:6600")
       attrs, err := client.Status()
@@ -179,6 +180,7 @@ func logWatcherEvents(w *mpd.Watcher) {
 
       client.Close()
     }
+    */
   }
 }
 
