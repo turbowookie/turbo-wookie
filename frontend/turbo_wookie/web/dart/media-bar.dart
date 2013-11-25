@@ -34,8 +34,6 @@ class MediaBar extends PolymerElement {
     toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
-    Test.printAllStreamListeners(stream);
-
 
     setupHotKeys();
     setupListeners();
