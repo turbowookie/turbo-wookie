@@ -57,4 +57,8 @@ h1 {
   float: right;
   width: calc(100% - 282px);
   margin: 5px;
+  background-color: transparent;
+  color: #aaa;
+  border-color: #bbb;
+  font-size: 14px;
 }
