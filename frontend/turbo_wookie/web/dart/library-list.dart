@@ -84,7 +84,7 @@ class LibraryList extends PolymerElement {
     for(TableRowElement row in rows) {
       List<Element> children = row.children;
       for(Element child in children) {
-        if(child.innerHtml.contains(filter)) {
+        if(child.innerHtml.toLowerCase().contains(filter.toLowerCase())) {
           row.hidden = false;
           break;
         }
