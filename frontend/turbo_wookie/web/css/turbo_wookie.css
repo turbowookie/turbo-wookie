@@ -53,7 +53,6 @@ h1 {
 }
 
 #search {
-  z-index: 1;
   float: right;
   width: calc(100% - 282px);
   margin: 5px;
