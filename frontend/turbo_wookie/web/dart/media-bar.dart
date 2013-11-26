@@ -55,23 +55,28 @@ class MediaBar extends PolymerElement {
    * Sets up hotkeys so we can use keyboard shortcuts.
    */
   void setupHotKeys() {
-    window.onKeyPress.listen((KeyboardEvent e) {
-      e.preventDefault();
+    window.onKeyPress
+      // Be sure we are not on an input element before we do anything.
+      .where((KeyboardEvent e) {
+        return document.activeElement.tagName != "INPUT";
+    })
+      .listen((KeyboardEvent e) {
+        e.preventDefault();
 
-      // Pause/Play
-      if(e.keyCode == KeyCode.SPACE) {
-        toggleSound(e);
-      }
+        // Pause/Play
+        if(e.keyCode == KeyCode.SPACE) {
+          toggleSound(e);
+        }
 
-      // Change volume
-      else if(e.keyCode == 44) {
-        setVolume(getVolume() - 0.05, true);
-      }
-      else if(e.keyCode == 46) {
-        setVolume(getVolume() + 0.05, true);
-      }
+        // Change volume
+        else if(e.keyCode == 44) {
+          setVolume(getVolume() - 0.05, true);
+        }
+        else if(e.keyCode == 46) {
+          setVolume(getVolume() + 0.05, true);
+        }
 
-    });
+      });
   }
 
   /**
