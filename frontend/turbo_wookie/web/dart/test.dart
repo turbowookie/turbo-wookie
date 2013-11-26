@@ -16,7 +16,7 @@ class Test {
    * This will print all stream events of an AudioElement.
    *
    * annoyingEvents - These are the events that will basically spam
-   * your console with prints (onTimeUpdate and onProgress).
+   * your console with prints (onTimeUpdate, onProgress, etc).
    * You probably don't want this to be true, but it's here if you want to.
    */
   static void printAllStreamEvents(AudioElement a, [bool annoyingEvents = false]) {
@@ -71,9 +71,6 @@ class Test {
     a.onSuspend.listen((e) {
       print("onSuspend");
     });
-    a.onVolumeChange.listen((e) {
-      print("onVolumeChange");
-    });
     a.onWaiting.listen((e) {
       print("onWaiting");
     });
@@ -84,6 +81,9 @@ class Test {
       });
       a.onProgress.listen((e) {
         print("onProgress");
+      });
+      a.onVolumeChange.listen((e) {
+        print("onVolumeChange");
       });
     }
   }
