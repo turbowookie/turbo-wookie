@@ -1,9 +1,11 @@
 library MediaBar;
+import "dart:async";
 import "dart:html";
 import "package:polymer/polymer.dart";
 import "package:range_slider/range_slider.dart";
 import "current-song.dart";
 import "play-list.dart";
+import "test.dart";
 
 /**
  * This class controls the audio stream.
@@ -21,10 +23,12 @@ class MediaBar extends PolymerElement {
   String artist;
   String album;
   CurrentSong currentSong;
+  bool preventOnEmptied;
 
   MediaBar.created()
     : super.created() {
     isPlaying = false;
+    preventOnEmptied = false;
   }
 
   void enteredView() {
@@ -55,36 +59,56 @@ class MediaBar extends PolymerElement {
    * Sets up hotkeys so we can use keyboard shortcuts.
    */
   void setupHotKeys() {
-    window.onKeyPress.listen((KeyboardEvent e) {
-      e.preventDefault();
+    window.onKeyPress
+      // Be sure we are not on an input element before we do anything.
+      .where((KeyboardEvent e) {
+        return document.activeElement.tagName != "INPUT";
+    })
+      .listen((KeyboardEvent e) {
+        e.preventDefault();
 
-      // Pause/Play
-      if(e.keyCode == KeyCode.SPACE) {
-        toggleSound(e);
-      }
+        // Pause/Play
+        if(e.keyCode == KeyCode.SPACE) {
+          toggleSound(e);
+        }
 
-      // Change volume
-      else if(e.keyCode == 44) {
-        setVolume(getVolume() - 0.05, true);
-      }
-      else if(e.keyCode == 46) {
-        setVolume(getVolume() + 0.05, true);
-      }
+        // Change volume
+        else if(e.keyCode == 44) {
+          setVolume(getVolume() - 0.05, true);
+        }
+        else if(e.keyCode == 46) {
+          setVolume(getVolume() + 0.05, true);
+        }
 
-    });
+      });
   }
 
   /**
    * Sets up events for the stream/buttons/sliders/ect.
    */
   void setupEvents() {
+    // When the song changes to the next song normally.
     stream.onEmptied.listen((e) {
-      resetStream();
-      stream.play();
-      playlist.getPlaylist();
-      getCurrentSong().loadMetaData();
+      if(!preventOnEmptied) {
+        resetStream();
+      }
     });
 
+    // When the song changes to the next song after the playlist is empty.
+    // We have to prevent the normal changing then before the next song,
+    // we have to allow that again.
+    stream.onSuspend.listen((e) {
+      new Timer(new Duration(milliseconds: 100), () {
+        resetStream();
+        preventOnEmptied = true;
+        new Timer(new Duration(milliseconds: 100), () {
+          preventOnEmptied = false;
+        });
+
+      });
+    });
+
+    // Don't allow focus on the pause/play button.
     toggleSoundButton.onFocus.listen((e) {
       toggleSoundButton.blur();
     });
@@ -175,9 +199,12 @@ class MediaBar extends PolymerElement {
   }
 
   /**
-   * Reset the stream's source.
+   * Reset the stream.
    */
   void resetStream() {
     stream.src = "/stream";
+    stream.play();
+    playlist.getPlaylist();
+    getCurrentSong().loadMetaData();
   }
 }

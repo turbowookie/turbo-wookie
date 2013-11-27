@@ -13,6 +13,8 @@ void main() {
   MediaBar mediaBar = querySelector("#mediaBar");
   PlayList playlist = querySelector("#playlist");
   LibraryList library = querySelector("#library");
+  TextInputElement search = querySelector("#search");
   mediaBar.setPlayList(playlist);
   library.playlist = playlist;
+  search.onInput.listen((Event e) => library.filter(search.value));
 }
