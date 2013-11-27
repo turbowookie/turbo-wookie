@@ -4,3 +4,6 @@ dependencies:
   json_object: any
   polymer: any
   range_slider: any
+transformers:
+- polymer:
+    entry_points: web/index.html
