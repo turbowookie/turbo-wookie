@@ -203,8 +203,7 @@ class MediaBar extends PolymerElement {
    */
   void resetStream() {
     stream.src = "/stream";
-    if(isPlaying)
-      stream.play();
+    stream.play();
     playlist.getPlaylist();
     getCurrentSong().loadMetaData();
   }
