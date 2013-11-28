@@ -1,8 +1,8 @@
 package main
 
 import (
-  "log"
   "./turbo-wookie"
+  "log"
 )
 
 func main() {
