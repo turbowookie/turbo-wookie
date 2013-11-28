@@ -4,7 +4,8 @@ import (
   "encoding/json"
   "fmt"
   "github.com/ascherkus/go-id3/src/id3"
-  "github.com/fhs/gompd/mpd"
+  //"github.com/fhs/gompd/mpd"
+  "github.com/dkuntz2/gompd/mpd"
   "log"
   "os"
   "strconv"
@@ -21,8 +22,8 @@ type MusicFile struct {
 }
 
 func main() {
-  //testClient()
-  testWatcher()
+  testClient()
+  //testWatcher()
 
   /*
     config, err := yaml.ReadFile("config.yaml")
@@ -65,7 +66,7 @@ func testClient() {
   client := clientConnect("localhost:6600")
   defer client.Close()
 
-  upcoming(client)
+  move(client, 1, 4)
 
 }
 
@@ -76,6 +77,13 @@ func clientConnect(addr string) *mpd.Client {
   }
 
   return client
+}
+
+func move(c *mpd.Client, id, pos int) {
+	err := c.Move(id, pos)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func listSongs(client *mpd.Client) {
