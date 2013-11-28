@@ -5,6 +5,9 @@ import "package:json_object/json_object.dart";
 import "media-bar.dart";
 import "song.dart";
 
+/**
+ * This class displays the currently playing song.
+ */
 @CustomTag('current-song')
 class CurrentSong extends PolymerElement {
 
@@ -24,33 +27,27 @@ class CurrentSong extends PolymerElement {
     titleDiv = $["title"];
     artistDiv = $["artist"];
     albumDiv = $["album"];
-    song = new Song();
   }
 
+  /**
+   * Grabs the meta data of this song from the server using the
+   * http GET request "/current".
+   */
   void loadMetaData() {
     HttpRequest.request("/current").then((HttpRequest request) {
       JsonObject json = new JsonObject.fromJsonString(request.responseText);
 
       if(json.isEmpty) {
-        song.title = "No Song Playing";
-        song.artist = "No Artist";
-        song.album = "No Album";
+        song = new Song("No Song Playing", "No Artist", "No Album", "");
         albumArt.src = "../img/wookie.jpg";
       }
       else {
-        if(json.containsKey("Title"))
-          song.title = json["Title"];
-
-        if(json.containsKey("Artist"))
-          song.artist = json["Artist"];
-
-        if(json.containsKey("Album"))
-          song.album = json["Album"];
+        song = new Song.fromJson(json);
 
         song.albumArtUrl.then((String url) => albumArt.src = url);
       }
 
-      if(title == null)
+      if(song.title == null)
         titleDiv.setInnerHtml("Unknown Title");
       else
         titleDiv.setInnerHtml(song.title);

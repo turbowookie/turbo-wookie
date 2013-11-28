@@ -33,6 +33,7 @@ h1 {
   height: calc(100% - 108px);
   overflow-y: auto;
   position: relative;
+  top: -32px;
   border-right: 1px solid #bbb;
 }
 
@@ -47,6 +48,16 @@ h1 {
 #library {
   float: right;
   width: calc(100% - 272px);
-  max-height: calc(100% - 108px);
+  max-height: calc(100% - 140px);
   overflow: auto;
+}
+
+#search {
+  float: right;
+  width: calc(100% - 282px);
+  margin: 5px;
+  background-color: transparent;
+  color: #aaa;
+  border-color: #bbb;
+  font-size: 14px;
 }

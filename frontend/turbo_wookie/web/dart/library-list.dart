@@ -5,47 +5,73 @@ import "package:json_object/json_object.dart";
 import "play-list.dart";
 import "song.dart";
 
+/**
+ * Displays every some in the library.
+ */
 @CustomTag('library-list')
 class LibraryList extends PolymerElement {
 
   List<Song> songs;
-  TableElement songsElement;
+  TableElement table;
+  TableElement tableBody;
   PlayList playlist;
+  InputElement search;
+  bool titleSort;
+  bool artistSort;
+  bool albumSort;
 
   LibraryList.created()
       : super.created() {
+    titleSort = false;
+    artistSort = false;
+    albumSort = false;
   }
 
   void enteredView() {
     songs = new List<Song>();
-    songsElement = $["songs"];
+    table = $["songs"];
+    tableBody = $["songsBody"];
+    search = $["search"];
     getAllSongs();
+    setupEvents();
   }
 
+  void setupEvents() {
+    TableSectionElement head = table.tHead;
+    TableRowElement row = head.children[0];
+    row.children.forEach((TableCellElement cell) {
+      if(cell.innerHtml != "Add") {
+        cell.onClick.listen((MouseEvent e) {
+          sort(cell.innerHtml);
+        });
+      }
+    });
+
+    search.onInput.listen((Event e) {
+      filter(search.value);
+    });
+  }
+
+  /**
+   * Get all the songs in the library and add them to the page.
+   */
   void getAllSongs() {
     HttpRequest.request("/songs")
     .then((HttpRequest request) {
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
       songsJson.forEach((JsonObject songJson) {
-        String title = songJson["Name"];
-        String artist = songJson["Artist"];
-        String album = songJson["Album"];
-        String filePath = songJson["FilePath"];
-        Song song = new Song()
-        ..title = title
-        ..artist = artist
-        ..album = album
-        ..filePath = filePath;
+        Song song = new Song.fromJson(songJson);
         songs.add(song);
 
-        TableRowElement row = songsElement.addRow();
+        TableRowElement row = tableBody.addRow();
         createSongRow(row, song);
-        //songsElement.children.add(row);
       });
-
     });
   }
 
+  /**
+   * Helper method for creating a row in the song table.
+   */
   void createSongRow(TableRowElement row, Song song) {
 
     TableCellElement title = new TableCellElement();
@@ -57,7 +83,7 @@ class LibraryList extends PolymerElement {
 
     ButtonElement button = new ButtonElement();
     button.innerHtml = "<img src='../img/add.svg'>";
-    button.onClick.listen((Event e) {
+    button.onClick.listen((MouseEvent e) {
       song.addToPlaylist();
       playlist.getPlaylist();
     });
@@ -71,8 +97,58 @@ class LibraryList extends PolymerElement {
     row.children.add(button);
   }
 
-  void addSongToPlaylist(String filePath) {
-    HttpRequest.request("add?song=$filePath");
-    print("adding song: $filePath");
+  void filter(String filter) {
+    List<TableRowElement> rows = tableBody.children;
+    for(TableRowElement row in rows) {
+      List<Element> children = row.children;
+      for(Element child in children) {
+        if(child.innerHtml.toLowerCase().contains(filter.toLowerCase())) {
+          row.hidden = false;
+          break;
+        }
+        else {
+          row.hidden = true;
+        }
+      }
+    }
+  }
+
+  void sort(String sortBy) {
+    if(sortBy == "Title") {
+      songs.sort((a, b) => a.title.compareTo(b.title));
+      if(titleSort) {
+        songs = songs.reversed.toList();
+        titleSort = true;
+      }
+      titleSort = !titleSort;
+      artistSort = false;
+      albumSort = false;
+    }
+    else if(sortBy == "Artist") {
+      songs.sort((a, b) => a.artist.compareTo(b.artist));
+      if(artistSort) {
+        songs = songs.reversed.toList();
+        artistSort = true;
+      }
+      artistSort = !artistSort;
+      titleSort = false;
+      albumSort = false;
+    }
+    else if(sortBy == "Album") {
+      songs.sort((a, b) => a.album.compareTo(b.album));
+      if(albumSort) {
+        songs = songs.reversed.toList();
+        albumSort = true;
+      }
+      albumSort = !albumSort;
+      titleSort = false;
+      artistSort = false;
+    }
+
+    tableBody.children.clear();
+    songs.forEach((Song song) {
+      TableRowElement row = tableBody.addRow();
+      createSongRow(row, song);
+    });
   }
 }

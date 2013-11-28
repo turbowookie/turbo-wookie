@@ -1,6 +1,6 @@
-import "package:json_object/json_object.dart";
-import "dart:html";
 import "dart:async";
+import "dart:html";
+import "package:json_object/json_object.dart";
 
 class Song {
   String title;
@@ -8,6 +8,22 @@ class Song {
   String album;
   String filePath;
   Future<String> get albumArtUrl => getAlbumArtUrl();
+
+  Song(this.title, this.artist, this.album, this.filePath);
+
+  Song.fromJson(JsonObject json) {
+    if(json.containsKey("Name"))
+      title = json["Name"];
+    else if(json.containsKey("Title"))
+      title = json["Title"];
+
+    if(json.containsKey("Artist"))
+      artist = json["Artist"];
+    if(json.containsKey("Album"))
+      album = json["Album"];
+    if(json.containsKey("FilePath"))
+      filePath = json["FilePath"];
+  }
 
   Future<String> getAlbumArtUrl() {
     Completer<String> completer = new Completer<String>();
