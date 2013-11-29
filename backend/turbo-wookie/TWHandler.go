@@ -1,20 +1,20 @@
 package turbowookie
 
 import (
+  "encoding/json"
+  "fmt"
   "github.com/gorilla/mux"
+  "log"
   "net/http"
   "net/http/httputil"
   "net/url"
-  "log"
-  "fmt"
-  "encoding/json"
 )
 
 type TWHandler struct {
   MpdClient TWMPDClient
   //MpdWatcher TWMPDWatcher
   ServerConfig map[string]string
-  Router *mux.Router
+  Router       *mux.Router
 }
 
 func NewTWHandler(filename string) (*TWHandler, error) {
@@ -23,7 +23,6 @@ func NewTWHandler(filename string) (*TWHandler, error) {
   if err != nil {
     return nil, err
   }
-
 
   h.ServerConfig = config
   h.MpdClient = NewTWMPDClient(h.ServerConfig)
@@ -34,20 +33,19 @@ func NewTWHandler(filename string) (*TWHandler, error) {
   }
 
   h.Router = mux.NewRouter()
-  
+
   // Play MPD
   h.Router.HandleFunc("/stream", httputil.NewSingleHostReverseProxy(
     &url.URL{
       Scheme: "http",
-      Host: h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_http_port"],
-      Path: "/",
+      Host:   h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_http_port"],
+      Path:   "/",
     }).ServeHTTP)
 
   h.Router.HandleFunc("/songs", h.listSongs)
   h.Router.HandleFunc("/current", h.getCurrentSong)
   h.Router.HandleFunc("/upcoming", h.getUpcomingSongs)
   h.Router.HandleFunc("/add", h.addSong)
-
 
   h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/web")))
 
@@ -72,8 +70,6 @@ func (h *TWHandler) ListenAndServe() {
   log.Println("Starting server on " + port)
   http.ListenAndServe(port, h)
 }
-
-
 
 /************************
     HANDLER FUNCTIONS
@@ -128,8 +124,6 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(m))
 }
 
-
-
 /************************
     HELPER FUNCTIONS
 ************************/
@@ -137,10 +131,10 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 func printError(w http.ResponseWriter, msg string, err error) {
   log.Println("ERROR:", err)
   log.Println("Sending to client:", msg)
-  fmt.Fprintf(w, msg + "\n")
+  fmt.Fprintf(w, msg+"\n")
 }
 
-func jsoniffy(v interface {}) string {
+func jsoniffy(v interface{}) string {
   obj, err := json.MarshalIndent(v, "", "  ")
   if err != nil {
     log.Print("Couldn't turn something into JSON: ", v)

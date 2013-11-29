@@ -1,12 +1,12 @@
 package main
 
 import (
-  "github.com/fhs/gompd/mpd"
-  "github.com/ascherkus/go-id3/src/id3"
-  "os"
-  "log"
   "encoding/json"
   "fmt"
+  "github.com/ascherkus/go-id3/src/id3"
+  "github.com/fhs/gompd/mpd"
+  "log"
+  "os"
   "strconv"
   "time"
   //"github.com/kylelemons/go-gypsy/yaml"
@@ -15,9 +15,9 @@ import (
 )
 
 type MusicFile struct {
-  Name string
+  Name   string
   Artist string
-  Album string
+  Album  string
 }
 
 func main() {
@@ -25,44 +25,41 @@ func main() {
   testWatcher()
 
   /*
-  config, err := yaml.ReadFile("config.yaml")
-  if err != nil {
-    log.Fatal("Cannot read config file")
-  }
+    config, err := yaml.ReadFile("config.yaml")
+    if err != nil {
+      log.Fatal("Cannot read config file")
+    }
 
-  tbdir, err := config.Get("turbo_wookie_directory")
-  if err != nil {
-    log.Fatal("No key 'turbo_wookie_directory'.", err)
-  }
+    tbdir, err := config.Get("turbo_wookie_directory")
+    if err != nil {
+      log.Fatal("No key 'turbo_wookie_directory'.", err)
+    }
 
-  mpddir, err := config.Get("mpd_subdirectory")
-  if err != nil {
-    log.Fatal("No key 'mpd_subdirectory'.", err)
-  }
+    mpddir, err := config.Get("mpd_subdirectory")
+    if err != nil {
+      log.Fatal("No key 'mpd_subdirectory'.", err)
+    }
 
-  log.Println("MPD Starting!")
-  cmd := exec.Command("mpd", tbdir + mpddir + "/mpd.conf")
+    log.Println("MPD Starting!")
+    cmd := exec.Command("mpd", tbdir + mpddir + "/mpd.conf")
 
-  err = cmd.Run()
+    err = cmd.Run()
 
-  time.Sleep(3 * time.Minute)
+    time.Sleep(3 * time.Minute)
 
-  if err != nil {
-    log.Fatal("Could not start MPD Server!\n", err)
-  }
+    if err != nil {
+      log.Fatal("Could not start MPD Server!\n", err)
+    }
 
-  //defer stopMPD(cmd.Process)
+    //defer stopMPD(cmd.Process)
   */
 
 }
 
-
-func jsoniffy(v interface {}) string {
+func jsoniffy(v interface{}) string {
   obj, _ := json.MarshalIndent(v, "", "  ")
   return string(obj)
 }
-
-
 
 func testClient() {
   client := clientConnect("localhost:6600")
@@ -79,14 +76,14 @@ func clientConnect(addr string) *mpd.Client {
   }
 
   return client
-} 
+}
 
 func listSongs(client *mpd.Client) {
   files, _ := client.GetFiles()
 
   // TODO: grab this from a config.yaml file
   const music_dir string = "mpd/music/"
-  
+
   for _, song := range files {
     f, err := os.Open(music_dir + song)
     if err != nil {
@@ -120,7 +117,6 @@ func upcoming(client *mpd.Client) {
   fmt.Print(jsoniffy(upcoming))
 }
 
-
 ///////////////////
 
 func testWatcher() {
@@ -148,47 +144,46 @@ func logWatcherEvents(w *mpd.Watcher) {
     log.Println("Changed subsystem:", subsystem)
 
     /*
-    if subsystem == "player" {
-      client := clientConnect("localhost:6600")
-      attrs, err := client.Status()
-      if err != nil {
-        log.Fatal("Couldn't get status...", err)
-      }
+       if subsystem == "player" {
+         client := clientConnect("localhost:6600")
+         attrs, err := client.Status()
+         if err != nil {
+           log.Fatal("Couldn't get status...", err)
+         }
 
 
-      if attrs["state"] != "play" {
-        for k, v := range attrs {
-          fmt.Println("attrs[" + k + "] = " + v)
-        }
+         if attrs["state"] != "play" {
+           for k, v := range attrs {
+             fmt.Println("attrs[" + k + "] = " + v)
+           }
 
-        songs, err := client.GetFiles()
-        if err != nil {
-          log.Fatal("Couldn't get files...", err)
-        }
+           songs, err := client.GetFiles()
+           if err != nil {
+             log.Fatal("Couldn't get files...", err)
+           }
 
-        song := songs[random(0, len(songs))]
-        if client.Add(song) != nil {
-          log.Fatal("Couldn't add song:", song)
-        }
+           song := songs[random(0, len(songs))]
+           if client.Add(song) != nil {
+             log.Fatal("Couldn't add song:", song)
+           }
 
-        plen, err := strconv.Atoi(attrs["playlistlength"])
-        if err != nil {
-          log.Fatal("Couldn't get playlistlength...", err)
-        }
+           plen, err := strconv.Atoi(attrs["playlistlength"])
+           if err != nil {
+             log.Fatal("Couldn't get playlistlength...", err)
+           }
 
-        if client.Play(plen) != nil {
-          log.Fatal("Couldn't play song")
-        }
-      }
+           if client.Play(plen) != nil {
+             log.Fatal("Couldn't play song")
+           }
+         }
 
-      client.Close()
-    }
+         client.Close()
+       }
     */
   }
 }
 
-
 func random(min, max int) int {
-    rand.Seed(time.Now().Unix())
-    return rand.Intn(max - min) + min
+  rand.Seed(time.Now().Unix())
+  return rand.Intn(max-min) + min
 }

@@ -1,37 +1,36 @@
 package turbowookie
 
 import (
-  "github.com/fhs/gompd/mpd"
   "github.com/ascherkus/go-id3/src/id3"
-  "os"
+  "github.com/fhs/gompd/mpd"
   "io"
-  "strconv"
   "log"
+  "os"
+  "strconv"
 )
 
 type TWMPDClient struct {
-  Domain string 
-  Port string
-  config map[string]string
+  Domain   string
+  Port     string
+  config   map[string]string
   musicDir string
   //Watcher TWMPDWatcher
 }
 
 // Create a new TWMPDClient.
-func NewTWMPDClient(config map[string]string) (TWMPDClient) {
+func NewTWMPDClient(config map[string]string) TWMPDClient {
   c := TWMPDClient{}
   c.config = config
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
 
-  c.musicDir = c.config["turbo_wookie_directory"] + "/" + 
+  c.musicDir = c.config["turbo_wookie_directory"] + "/" +
     c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
 
   //c.Watcher = NewTWMPDWatcher(c.toString())
 
   return c
 }
-
 
 /************************
     HELPER FUNCTIONS
@@ -46,11 +45,9 @@ func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   return client, nil
 }
 
-
 func (c TWMPDClient) toString() string {
   return c.Domain + ":" + c.Port
 }
-
 
 func (c TWMPDClient) Startup() error {
   client, err := c.GetClient()
@@ -74,7 +71,7 @@ func (c TWMPDClient) Startup() error {
 
     song := songs[random(0, len(songs))]
     if client.Add(song) != nil {
-      return &TBErrorMsg{Msg: "Couldn't add song: "  + song}
+      return &TBErrorMsg{Msg: "Couldn't add song: " + song}
     }
 
     plen, err := strconv.Atoi(attrs["playlistlength"])
@@ -89,8 +86,6 @@ func (c TWMPDClient) Startup() error {
 
   return nil
 }
-
-
 
 /*********************************
     THINGS THE TWHandler WANTS
@@ -124,7 +119,6 @@ func (c TWMPDClient) GetFiles() ([]*TBFile, error) {
   return files, nil
 }
 
-
 func (c TWMPDClient) CurrentSong() (map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
@@ -139,7 +133,6 @@ func (c TWMPDClient) CurrentSong() (map[string]string, error) {
 
   return currentSong, nil
 }
-
 
 func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
@@ -157,9 +150,8 @@ func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
     return nil, err
   }
 
-  return playlist[pos + 1:], nil
+  return playlist[pos+1:], nil
 }
-
 
 func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   client, err := c.GetClient()
@@ -176,7 +168,7 @@ func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   playlist := make([]map[string]string, 0)
   for _, li := range playlistAsAttrs {
     song := make(map[string]string)
-    
+
     for k, v := range li {
       song[k] = v
     }
@@ -186,7 +178,6 @@ func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
 
   return playlist, nil
 }
-
 
 func (c TWMPDClient) Add(uri string) error {
   client, err := c.GetClient()
@@ -213,7 +204,7 @@ func (c TWMPDClient) Add(uri string) error {
       return nil
     }
 
-    if client.Play(plen - 1) != nil {
+    if client.Play(plen-1) != nil {
       log.Println("Couldn't play song ", plen)
       return nil
     }
@@ -222,13 +213,15 @@ func (c TWMPDClient) Add(uri string) error {
   return nil
 }
 
-
-
 // TBFiles are used sparingly...
-type TBFile struct { id3.File; FilePath string; }
+type TBFile struct {
+  id3.File
+  FilePath string
+}
+
 func tbFileRead(reader io.Reader, filePath string) *TBFile {
   id3File := id3.Read(reader)
-  
+
   file := new(TBFile)
   file.Header = id3File.Header
   file.Name = id3File.Name

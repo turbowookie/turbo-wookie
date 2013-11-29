@@ -7,10 +7,9 @@ import (
 )
 
 type MPDWatcher struct {
-  w *mpd.Watcher
+  w    *mpd.Watcher
   host string
 }
-
 
 func WatchMPD(host string) {
   w, err := mpd.NewWatcher("tcp", host, "")
@@ -76,4 +75,3 @@ func (mw *MPDWatcher) queueSong() {
 
   client.Close()
 }
-
