@@ -12,17 +12,18 @@ class Song {
   Song(this.title, this.artist, this.album, this.filePath);
 
   Song.fromJson(JsonObject json) {
-    if(json.containsKey("Name"))
-      title = json["Name"];
-    else if(json.containsKey("Title"))
+
+    if(json.containsKey("Title"))
       title = json["Title"];
+    else
+      print(json);
 
     if(json.containsKey("Artist"))
       artist = json["Artist"];
     if(json.containsKey("Album"))
       album = json["Album"];
-    if(json.containsKey("FilePath"))
-      filePath = json["FilePath"];
+    if(json.containsKey("file"))
+      filePath = json["file"];
   }
 
   Future<String> getAlbumArtUrl() {

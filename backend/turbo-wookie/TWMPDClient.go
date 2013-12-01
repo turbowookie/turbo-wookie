@@ -2,10 +2,11 @@ package turbowookie
 
 import (
   "github.com/ascherkus/go-id3/src/id3"
-  "github.com/fhs/gompd/mpd"
+  //"github.com/fhs/gompd/mpd"
+  "github.com/dkuntz2/gompd/mpd"
   "io"
   "log"
-  "os"
+  //"os"
   "strconv"
 )
 
@@ -87,11 +88,38 @@ func (c TWMPDClient) Startup() error {
   return nil
 }
 
+func attrsToMap(attrs []mpd.Attrs) []map[string]string {
+  out := make([]map[string]string,0)
+  for i := 0; i < len(attrs); i++ {
+    m := make(map[string]string)
+    for k, v := range attrs[i] {
+      m[k] = v
+    }
+    out = append(out, m)
+  }
+
+  return out
+}
+
 /*********************************
     THINGS THE TWHandler WANTS
 *********************************/
 
-func (c TWMPDClient) GetFiles() ([]*TBFile, error) {
+func (c TWMPDClient) GetFiles() ([]map[string]string, error) {
+  client, err := c.GetClient()
+  if err != nil {
+    return nil, err
+  }
+  defer client.Close()
+
+  mpdFiles, err := client.ListAllInfo("/")
+  if err != nil {
+    return nil, &TBError{Msg: "Couldn't listallinfo from MPD", Err: err}
+  }
+
+  return attrsToMap(mpdFiles), nil
+
+  /*
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -117,6 +145,7 @@ func (c TWMPDClient) GetFiles() ([]*TBFile, error) {
   }
 
   return files, nil
+  */
 }
 
 func (c TWMPDClient) CurrentSong() (map[string]string, error) {
@@ -221,9 +250,13 @@ type TBFile struct {
 
 func tbFileRead(reader io.Reader, filePath string) *TBFile {
   id3File := id3.Read(reader)
+  if id3File == nil {
+    log.Println("Couldn't read file", filePath)
+    return nil
+  }
 
   file := new(TBFile)
-  file.Header = id3File.Header
+  //file.Header = id3File.Header
   file.Name = id3File.Name
   file.Artist = id3File.Artist
   file.Album = id3File.Album

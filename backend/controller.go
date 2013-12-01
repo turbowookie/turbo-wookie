@@ -4,7 +4,9 @@ import (
   "encoding/json"
   "fmt"
   "github.com/ascherkus/go-id3/src/id3"
-  "github.com/fhs/gompd/mpd"
+  //"github.com/fhs/gompd/mpd"
+  "github.com/dkuntz2/gompd/mpd"
+  //"../../gompd/mpd"
   "log"
   "os"
   "strconv"
@@ -21,39 +23,8 @@ type MusicFile struct {
 }
 
 func main() {
-  //testClient()
-  testWatcher()
-
-  /*
-    config, err := yaml.ReadFile("config.yaml")
-    if err != nil {
-      log.Fatal("Cannot read config file")
-    }
-
-    tbdir, err := config.Get("turbo_wookie_directory")
-    if err != nil {
-      log.Fatal("No key 'turbo_wookie_directory'.", err)
-    }
-
-    mpddir, err := config.Get("mpd_subdirectory")
-    if err != nil {
-      log.Fatal("No key 'mpd_subdirectory'.", err)
-    }
-
-    log.Println("MPD Starting!")
-    cmd := exec.Command("mpd", tbdir + mpddir + "/mpd.conf")
-
-    err = cmd.Run()
-
-    time.Sleep(3 * time.Minute)
-
-    if err != nil {
-      log.Fatal("Could not start MPD Server!\n", err)
-    }
-
-    //defer stopMPD(cmd.Process)
-  */
-
+  testClient()
+  //testWatcher()
 }
 
 func jsoniffy(v interface{}) string {
@@ -65,8 +36,8 @@ func testClient() {
   client := clientConnect("localhost:6600")
   defer client.Close()
 
-  upcoming(client)
-
+  plinfo(client)
+  //move(client, 1, 4)
 }
 
 func clientConnect(addr string) *mpd.Client {
@@ -76,6 +47,13 @@ func clientConnect(addr string) *mpd.Client {
   }
 
   return client
+}
+
+func move(c *mpd.Client, id, pos int) {
+	err := c.Move(id, -1, pos)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func listSongs(client *mpd.Client) {
@@ -115,6 +93,18 @@ func upcoming(client *mpd.Client) {
   upcoming := playlist[pos:]
 
   fmt.Print(jsoniffy(upcoming))
+}
+
+func plinfo(client *mpd.Client) {
+  /*attrs, _ := client.PlaylistInfo(-1, -1)
+  for _, song := range attrs {
+    fmt.Println(song)
+  }*/
+
+  attrs, _ := client.ListAllInfo("/")
+  for _, song := range attrs {
+    fmt.Println(song, "\n")
+  }
 }
 
 ///////////////////
@@ -187,3 +177,41 @@ func random(min, max int) int {
   rand.Seed(time.Now().Unix())
   return rand.Intn(max-min) + min
 }
+
+
+
+
+
+
+// PlaylistInfo returns attributes for songs in the current playlist. If
+// both start and end are negative, it does this for all songs in
+// playlist. If end is negative but start is positive, it does it for the
+// song at position start. If both start and end are positive, it does it
+// for positions in range [start, end).
+/*
+func (c *Client) PlaylistInfo(start, end int) (pls []Attrs, err error) {
+  if start < 0 && end >= 0 {
+    return nil, errors.New("negative start index")
+  }
+  if start >= 0 && end < 0 {
+    id, err := c.cmd("playlistinfo %d", start)
+    if err != nil {
+      return nil, err
+    }
+    c.text.StartResponse(id)
+    defer c.text.EndResponse(id)
+    return c.readAttrsList("file")
+  }
+  id, err := c.cmd("playlistinfo")
+  if err != nil {
+    return nil, err
+  }
+  c.text.StartResponse(id)
+  defer c.text.EndResponse(id)
+  pls, err = c.readAttrsList("file")
+  if err != nil || start < 0 || end < 0 {
+    return
+  }
+  return pls[start:end], nil
+}
+*/
