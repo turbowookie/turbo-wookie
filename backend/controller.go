@@ -5,8 +5,8 @@ import (
   "fmt"
   "github.com/ascherkus/go-id3/src/id3"
   //"github.com/fhs/gompd/mpd"
-  "github.com/dkuntz2/gompd/mpd"
-  //"../../gompd/mpd"
+  //"github.com/dkuntz2/gompd/mpd"
+  "../../gompd/mpd"
   "log"
   "os"
   "strconv"
@@ -35,6 +35,8 @@ func jsoniffy(v interface{}) string {
 func testClient() {
   client := clientConnect("localhost:6600")
   defer client.Close()
+
+
 
   plinfo(client)
   //move(client, 1, 4)
