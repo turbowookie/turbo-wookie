@@ -2,7 +2,6 @@ library LibraryList;
 import "dart:html";
 import "package:polymer/polymer.dart";
 import "package:json_object/json_object.dart";
-import "play-list.dart";
 import "song.dart";
 
 /**
@@ -14,7 +13,6 @@ class LibraryList extends PolymerElement {
   List<Song> songs;
   TableElement table;
   TableElement tableBody;
-  PlayList playlist;
   InputElement search;
   bool titleSort;
   bool artistSort;
@@ -86,7 +84,6 @@ class LibraryList extends PolymerElement {
     button.innerHtml = "<img src='../img/add.svg'>";
     button.onClick.listen((MouseEvent e) {
       song.addToPlaylist();
-      playlist.getPlaylist();
     });
     button.onFocus.listen((e) {
       button.blur();

@@ -18,6 +18,5 @@ void main() {
   new Observer(playlist, library);
 
   mediaBar.setPlayList(playlist);
-  library.playlist = playlist;
   search.onInput.listen((Event e) => library.filter(search.value));
 }
