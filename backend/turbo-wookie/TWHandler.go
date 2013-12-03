@@ -12,7 +12,7 @@ import (
 )
 
 type TWHandler struct {
-  MpdClient     TWMPDClient
+  MpdClient TWMPDClient
   //MpdWatcher  TWMPDWatcher
   ServerConfig  map[string]string
   Router        *mux.Router
@@ -52,7 +52,6 @@ func NewTWHandler(filename string) (*TWHandler, error) {
   h.Router.HandleFunc("/polar", h.bear)
 
   h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/web")))
-
 
   h.updater = make(chan string)
   h.pollerClients = 0
@@ -147,15 +146,15 @@ func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
   }()
 
   select {
-  case msg := <- h.updater:
+  case msg := <-h.updater:
     fmt.Fprintf(w, msg)
     if h.pollerClients > 1 {
       h.updater <- msg
     }
-  case <- timeout:
+  case <-timeout:
     m := make(map[string]string)
     m["changed"] = "nothing"
-    
+
     fmt.Fprintf(w, jsoniffy(m))
   }
 }

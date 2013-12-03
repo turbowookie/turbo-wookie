@@ -6,8 +6,9 @@ import (
   "github.com/dkuntz2/gompd/mpd"
   "io"
   "log"
-   "os/exec"
+  "os/exec"
   "strconv"
+  "time"
 )
 
 type TWMPDClient struct {
@@ -16,6 +17,7 @@ type TWMPDClient struct {
   config   map[string]string
   musicDir string
   //Watcher TWMPDWatcher
+  mpdCmd *exec.Cmd
 }
 
 // Create a new TWMPDClient.
@@ -25,9 +27,15 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
   c.musicDir = c.config["turbo_wookie_directory"] + "/" +
-	c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
-  
-  go startMPD(c)  
+    c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
+
+  //blocker := make(chan bool)
+  c.startMPD()
+
+  //log.Println("waiting for blocker to be released")
+  //<- blocker
+  //log.Println("Blocker released")
+
   //c.Watcher = NewTWMPDWatcher(c.toString())
 
   return c
@@ -37,16 +45,28 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
     HELPER FUNCTIONS
 ************************/
 
-func startMPD(c TWMPDClient) {
-	log.Println("Starting MPD")
-	mpdCommand := c.config["mpd_command"]
-	mpdArgs := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
-	log.Println(mpdArgs)
-	cmd := exec.Command(mpdCommand, mpdArgs)
-	err := cmd.Run()
-	if(err != nil) {
-		log.Println("Error running MPD command")
-	}
+func (c TWMPDClient) startMPD() {
+  log.Println("Starting MPD")
+  mpdCommand := c.config["mpd_command"]
+  mpdArgs := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
+  log.Println(mpdArgs)
+  cmd := exec.Command(mpdCommand, mpdArgs)
+
+  err := cmd.Run()
+  if err != nil {
+    log.Fatal("Error running MPD command")
+  }
+
+  time.Sleep(5000)
+
+  //log.Println("Releasing blocker")
+  //blocker <- true
+
+  c.mpdCmd = cmd
+}
+
+func (c TWMPDClient) KillMpd() {
+  c.mpdCmd.Process.Kill()
 }
 
 func (c TWMPDClient) GetClient() (*mpd.Client, error) {
@@ -65,6 +85,7 @@ func (c TWMPDClient) toString() string {
 func (c TWMPDClient) Startup() error {
   client, err := c.GetClient()
   if err != nil {
+    //return nil
     return &TBError{Msg: "MPD isn't running.", Err: err}
   }
   defer client.Close()
@@ -101,7 +122,7 @@ func (c TWMPDClient) Startup() error {
 }
 
 func attrsToMap(attrs []mpd.Attrs) []map[string]string {
-  out := make([]map[string]string,0)
+  out := make([]map[string]string, 0)
   for i := 0; i < len(attrs); i++ {
     m := make(map[string]string)
     for k, v := range attrs[i] {
@@ -132,31 +153,31 @@ func (c TWMPDClient) GetFiles() ([]map[string]string, error) {
   return attrsToMap(mpdFiles), nil
 
   /*
-  client, err := c.GetClient()
-  if err != nil {
-    return nil, err
-  }
-  defer client.Close()
-
-  mpdFiles, err := client.GetFiles()
-
-  if err != nil {
-    return nil, &TBError{Msg: "Couldn't get files.", Err: err}
-  }
-
-  files := make([]*TBFile, 0)
-
-  for _, song := range mpdFiles {
-    file, err := os.Open(c.musicDir + song)
+    client, err := c.GetClient()
     if err != nil {
-      return nil, &TBError{Msg: "Couldn't open file: " + song, Err: err}
+      return nil, err
+    }
+    defer client.Close()
+
+    mpdFiles, err := client.GetFiles()
+
+    if err != nil {
+      return nil, &TBError{Msg: "Couldn't get files.", Err: err}
     }
 
-    tbFile := tbFileRead(file, song)
-    files = append(files, tbFile)
-  }
+    files := make([]*TBFile, 0)
 
-  return files, nil
+    for _, song := range mpdFiles {
+      file, err := os.Open(c.musicDir + song)
+      if err != nil {
+        return nil, &TBError{Msg: "Couldn't open file: " + song, Err: err}
+      }
+
+      tbFile := tbFileRead(file, song)
+      files = append(files, tbFile)
+    }
+
+    return files, nil
   */
 }
 

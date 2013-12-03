@@ -11,5 +11,7 @@ func main() {
     log.Fatal(err)
   }
 
+  defer h.MpdClient.KillMpd()
+
   h.ListenAndServe()
 }
