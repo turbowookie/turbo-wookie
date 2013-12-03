@@ -7,10 +7,13 @@
 
 #Don't use quotes in the config.yaml
 
+#the only argument needed to start MPD is the path to the log file
 mpd_command: mpd
+mpd_arguments: C:\Users\ADAM\AppData\Local\mpd\
 server_port: 9000
 server_domain: localhost
 mpd_http_domain: localhost
+mpd_domain: localhost
 mpd_http_port: 8000
 mpd_control_port: 6600
 

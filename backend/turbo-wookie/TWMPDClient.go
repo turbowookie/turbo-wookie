@@ -6,7 +6,7 @@ import (
   "github.com/dkuntz2/gompd/mpd"
   "io"
   "log"
-  //"os"
+   "os/exec"
   "strconv"
 )
 
@@ -24,10 +24,10 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
   c.config = config
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
-
   c.musicDir = c.config["turbo_wookie_directory"] + "/" +
-    c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
-
+	c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
+  
+  go startMPD(c)  
   //c.Watcher = NewTWMPDWatcher(c.toString())
 
   return c
@@ -36,6 +36,17 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
 /************************
     HELPER FUNCTIONS
 ************************/
+
+func startMPD(c TWMPDClient) {
+	log.Println("Starting MPD")
+	mpdCommand := c.config["mpd_command"]
+	mpdArgs := c.config["mpd_arguments"] + "mpd.conf"
+	cmd := exec.Command(mpdCommand, mpdArgs)
+	err := cmd.Run()
+	if(err != nil) {
+		log.Println("Error running MPD command")
+	}
+}
 
 func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   client, err := mpd.Dial("tcp", c.toString())

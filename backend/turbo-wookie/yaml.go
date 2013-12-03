@@ -8,7 +8,7 @@ import (
 func ReadConfig(filename string) (map[string]string, error) {
   tb_keys := [...]string{
     "mpd_command",
-    //"mpd_arguments",
+    "mpd_arguments",
     "server_port",
     "server_domain",
     "mpd_domain",
