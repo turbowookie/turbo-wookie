@@ -18,7 +18,7 @@ class Observer {
     .then((HttpRequest request) {
       requestUpdate();
 
-      JsonObject obj = JsonObject.fromJsonString(request.responseText);
+      JsonObject obj = new JsonObject.fromJsonString(request.responseText);
       String changed = obj["changed"];
       if(changed == "playlist")
         updatePlaylist();
