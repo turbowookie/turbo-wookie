@@ -8,6 +8,7 @@ import (
   "net/http"
   "net/http/httputil"
   "net/url"
+  "time"
 )
 
 type TWHandler struct {
@@ -135,15 +136,15 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   h.updater <- jsoniffy(m2)
 }
 
-func (h *TWHandler) bear(w http.ResponseWriter, r *.http.Request) {
+func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
   timeout := make(chan bool)
   h.pollerClients += 1
-  defer h.pollerClients -= 1
+  defer func() { h.pollerClients -= 1 }()
 
   go func() {
     time.Sleep(30e9)
     timeout <- true
-  }
+  }()
 
   select {
   case msg := <- h.updater:
@@ -151,7 +152,7 @@ func (h *TWHandler) bear(w http.ResponseWriter, r *.http.Request) {
     if h.pollerClients > 1 {
       h.updater <- msg
     }
-  case stop := <- timeout:
+  case <- timeout:
     return
   }
 }
