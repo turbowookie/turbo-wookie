@@ -58,6 +58,7 @@ class LibraryList extends PolymerElement {
   void getAllSongs() {
     HttpRequest.request("/songs")
     .then((HttpRequest request) {
+      tableBody.children.clear();
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
       songsJson.forEach((JsonObject songJson) {
         Song song = new Song.fromJson(songJson);
