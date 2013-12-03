@@ -142,7 +142,7 @@ func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
   defer func() { h.pollerClients -= 1 }()
 
   go func() {
-    time.Sleep(30e9)
+    time.Sleep(5 * time.Minute)
     timeout <- true
   }()
 
@@ -153,7 +153,10 @@ func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
       h.updater <- msg
     }
   case <- timeout:
-    return
+    m := make(map[string]string)
+    m["changed"] = "nothing"
+    
+    fmt.Fprintf(w, jsoniffy(m))
   }
 }
 
