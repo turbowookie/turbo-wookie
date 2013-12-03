@@ -1,3 +1,4 @@
+library Song;
 import "dart:async";
 import "dart:html";
 import "package:json_object/json_object.dart";

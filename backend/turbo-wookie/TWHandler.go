@@ -8,13 +8,16 @@ import (
   "net/http"
   "net/http/httputil"
   "net/url"
+  "time"
 )
 
 type TWHandler struct {
-  MpdClient TWMPDClient
-  //MpdWatcher TWMPDWatcher
-  ServerConfig map[string]string
-  Router       *mux.Router
+  MpdClient     TWMPDClient
+  //MpdWatcher  TWMPDWatcher
+  ServerConfig  map[string]string
+  Router        *mux.Router
+  updater       chan string
+  pollerClients int
 }
 
 func NewTWHandler(filename string) (*TWHandler, error) {
@@ -46,8 +49,13 @@ func NewTWHandler(filename string) (*TWHandler, error) {
   h.Router.HandleFunc("/current", h.getCurrentSong)
   h.Router.HandleFunc("/upcoming", h.getUpcomingSongs)
   h.Router.HandleFunc("/add", h.addSong)
+  h.Router.HandleFunc("/polar", h.bear)
 
   h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/web")))
+
+
+  h.updater = make(chan string)
+  h.pollerClients = 0
 
   // TODO make work
   return &h, nil
@@ -122,6 +130,31 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   m := make(map[string]string)
   m["note"] = "Added song: " + song[0]
   fmt.Fprintf(w, jsoniffy(m))
+
+  m2 := make(map[string]string)
+  m2["changed"] = "playlist"
+  h.updater <- jsoniffy(m2)
+}
+
+func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
+  timeout := make(chan bool)
+  h.pollerClients += 1
+  defer func() { h.pollerClients -= 1 }()
+
+  go func() {
+    time.Sleep(30e9)
+    timeout <- true
+  }()
+
+  select {
+  case msg := <- h.updater:
+    fmt.Fprintf(w, msg)
+    if h.pollerClients > 1 {
+      h.updater <- msg
+    }
+  case <- timeout:
+    return
+  }
 }
 
 /************************
