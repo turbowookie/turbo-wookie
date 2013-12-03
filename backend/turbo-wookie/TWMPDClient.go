@@ -40,7 +40,8 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
 func startMPD(c TWMPDClient) {
 	log.Println("Starting MPD")
 	mpdCommand := c.config["mpd_command"]
-	mpdArgs := c.config["mpd_arguments"] + "mpd.conf"
+	mpdArgs := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
+	log.Println(mpdArgs)
 	cmd := exec.Command(mpdCommand, mpdArgs)
 	err := cmd.Run()
 	if(err != nil) {
