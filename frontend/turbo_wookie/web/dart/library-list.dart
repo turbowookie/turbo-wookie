@@ -5,7 +5,7 @@ import "package:json_object/json_object.dart";
 import "song.dart";
 
 /**
- * Displays every some in the library.
+ * Displays every song in the library.
  */
 @CustomTag('library-list')
 class LibraryList extends PolymerElement {
@@ -26,11 +26,17 @@ class LibraryList extends PolymerElement {
   }
 
   void enteredView() {
+    print("hello1");
     songs = new List<Song>();
+    print("hello2");
     table = $["songs"];
+    print("hello3");
     tableBody = $["songsBody"];
+    print("hello4");
     search = $["search"];
+    print("hello?");
     getAllSongs();
+    print("you suck");
     setupEvents();
   }
 
@@ -58,6 +64,8 @@ class LibraryList extends PolymerElement {
     .then((HttpRequest request) {
       tableBody.children.clear();
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
+      print("hello?");
+      print(request.responseText);
       songsJson.forEach((JsonObject songJson) {
         Song song = new Song.fromJson(songJson);
         songs.add(song);
