@@ -74,8 +74,15 @@ class LibraryList extends PolymerElement {
     TableCellElement album = new TableCellElement();
     album.text = song.album;
 
-    ButtonElement button = new ButtonElement();
-    button.innerHtml = "<img src='../img/add.svg'>";
+    ImageElement add = new ImageElement(src: "../img/add.svg")
+    ..setAttribute("class", "addImg");
+    ImageElement addHover = new ImageElement(src: "../img/add-hover.svg")
+    ..setAttribute("class", "addHoverImg");
+
+    ButtonElement button = new ButtonElement()
+    ..children.add(add)
+    ..children.add(addHover);
+
     button.onClick.listen((MouseEvent e) {
       song.addToPlaylist();
     });

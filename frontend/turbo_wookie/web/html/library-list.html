@@ -9,6 +9,23 @@
       button {
         background: transparent;
         border: none;
+        cursor: pointer;
+      }
+      
+      button .addHoverImg {
+        display: none;
+      }
+      
+      button .addImg {
+        display: block;
+      }
+      
+      button:hover .addImg {
+        display: none;
+      }
+      
+      button:hover .addHoverImg {
+        display: block;
       }
       
       table {
@@ -38,22 +55,7 @@
       
       td {
         padding: 0 15px;
-      }
-      
-      button {
-        cursor: pointer;
-      }
-      
-      img {  
-        -webkit-animation: adjustHue 1s alternate infinite;
-      }
-      
-      @-webkit-keyframes adjustHue {
-        0% { -webkit-filter: hue-rotate(30deg); }
-        50% { -webkit-filter: hue-rotate(60deg); }
-        100% { -webkit-filter: hue-rotate(90deg); }
-      }  
-            
+      }          
     </style>
     
     <table id="songs">
