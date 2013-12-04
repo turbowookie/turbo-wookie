@@ -90,7 +90,7 @@ class LibraryList extends PolymerElement {
   }
 
   void filter(String filter) {
-    List<TableRowElement> rows = tableBody.children;
+    List<Element> rows = tableBody.children.toList();
     for(TableRowElement row in rows) {
       List<Element> children = row.children;
       for(Element child in children) {
