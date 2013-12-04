@@ -23,6 +23,8 @@ class Song {
       artist = json["Artist"];
     if(json.containsKey("Album"))
       album = json["Album"];
+    else
+      album = " ";
     if(json.containsKey("file"))
       filePath = json["file"];
   }
