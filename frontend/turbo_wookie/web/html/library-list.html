@@ -9,6 +9,23 @@
       button {
         background: transparent;
         border: none;
+        cursor: pointer;
+      }
+      
+      button .addHoverImg {
+        display: none;
+      }
+      
+      button .addImg {
+        display: block;
+      }
+      
+      button:hover .addImg {
+        display: none;
+      }
+      
+      button:hover .addHoverImg {
+        display: block;
       }
       
       table {
@@ -38,12 +55,7 @@
       
       td {
         padding: 0 15px;
-      }
-      
-      button {
-        cursor: pointer;
-      }
-            
+      }          
     </style>
     
     <table id="songs">
@@ -55,7 +67,7 @@
           <th>Add</th>
         </tr>
       </thead>
-      <tbody id="songsBody">
+      <tbody>
       </tbody>
     </table>
     
