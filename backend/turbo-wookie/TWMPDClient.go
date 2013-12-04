@@ -1,10 +1,8 @@
 package turbowookie
 
 import (
-  "github.com/ascherkus/go-id3/src/id3"
   //"github.com/fhs/gompd/mpd"
   "github.com/dkuntz2/gompd/mpd"
-  "io"
   "log"
   "os/exec"
   "strconv"
