@@ -5,7 +5,7 @@ import "package:json_object/json_object.dart";
 import "song.dart";
 
 /**
- * Displays every some in the library.
+ * Displays every song in the library.
  */
 @CustomTag('library-list')
 class LibraryList extends PolymerElement {
@@ -13,7 +13,6 @@ class LibraryList extends PolymerElement {
   List<Song> songs;
   TableElement table;
   TableElement tableBody;
-  InputElement search;
   bool titleSort;
   bool artistSort;
   bool albumSort;
@@ -29,7 +28,6 @@ class LibraryList extends PolymerElement {
     songs = new List<Song>();
     table = $["songs"];
     tableBody = $["songsBody"];
-    search = $["search"];
     getAllSongs();
     setupEvents();
   }
@@ -44,10 +42,6 @@ class LibraryList extends PolymerElement {
         });
       }
     });
-
-    search.onInput.listen((Event e) {
-      filter(search.value);
-    });
   }
 
   /**
@@ -58,6 +52,8 @@ class LibraryList extends PolymerElement {
     .then((HttpRequest request) {
       tableBody.children.clear();
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
+      print("hello?");
+      print(request.responseText);
       songsJson.forEach((JsonObject songJson) {
         Song song = new Song.fromJson(songJson);
         songs.add(song);

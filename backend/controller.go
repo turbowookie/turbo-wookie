@@ -110,7 +110,7 @@ func plinfo(client *mpd.Client) {
 ///////////////////
 
 func testWatcher() {
-  w, err := mpd.NewWatcher("tcp", ":6600", "")
+  w, err := mpd.NewWatcher("tcp", "localhost:6600", "")
   if err != nil {
     log.Fatal("Couldn't start watching mpd...\n", err)
   }
