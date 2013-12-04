@@ -6,13 +6,23 @@ import (
   "github.com/dkuntz2/gompd/mpd"
   "io"
   "log"
-  //"os"
+  "os/exec"
   "strconv"
+  "time"
 )
 
+// Simpler layer over a gompd/mpd.Client.
 type TWMPDClient struct {
-  Domain   string
-  Port     string
+  // Domain MPD's running on
+  Domain string
+
+  // Port MPD's running on
+  Port string
+
+  // Underlying command running MPD
+  MpdCmd *exec.Cmd
+
+  // configuration stuff
   config   map[string]string
   musicDir string
   //Watcher TWMPDWatcher
@@ -24,11 +34,10 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
   c.config = config
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
-
   c.musicDir = c.config["turbo_wookie_directory"] + "/" +
     c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
 
-  //c.Watcher = NewTWMPDWatcher(c.toString())
+  c.MpdCmd = c.startMPD()
 
   return c
 }
@@ -37,6 +46,35 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
     HELPER FUNCTIONS
 ************************/
 
+// Start an MPD instance
+func (c TWMPDClient) startMPD() *exec.Cmd {
+  //log.Println("Starting MPD")
+  mpdCommand := c.config["mpd_command"]
+  mpdConf := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
+
+  // --no-daemon is for Linux, it tells MPD to run in the foreground, and keeps
+  // it attached to cmd's underlying Process. Useful, so we can kill it later.
+  cmd := exec.Command(mpdCommand, "--no-daemon", mpdConf)
+
+  // Run the command in the backround
+  err := cmd.Start()
+  if err != nil {
+    log.Fatal("Error running MPD command")
+  }
+
+  // Wait 1 second. Otherwise MPD hasn't started completely and we'll get some
+  // Fatals saying we couldn't connect to MPD.
+  time.Sleep(time.Second)
+  return cmd
+}
+
+// Kill the underlying MPD process.
+func (c TWMPDClient) KillMpd() {
+  c.MpdCmd.Process.Kill()
+}
+
+// Connect to MPD.
+// It just means there's slightly less typing involved.
 func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   client, err := mpd.Dial("tcp", c.toString())
   if err != nil {
@@ -46,10 +84,14 @@ func (c TWMPDClient) GetClient() (*mpd.Client, error) {
   return client, nil
 }
 
+// simple toString of an MPD Client. Exits to make life easier in
+// some small aspects.
 func (c TWMPDClient) toString() string {
   return c.Domain + ":" + c.Port
 }
 
+// Startup routine. Makes sure we can connect to MPD and that there's something
+// playing.
 func (c TWMPDClient) Startup() error {
   client, err := c.GetClient()
   if err != nil {
@@ -88,8 +130,11 @@ func (c TWMPDClient) Startup() error {
   return nil
 }
 
+// convert []mpd.Attrs to standard []map[string]string, because dealing with
+// non typical types is annoying if you're outside that library, and Go doesn't
+// consider types to be aliases, even if they are.
 func attrsToMap(attrs []mpd.Attrs) []map[string]string {
-  out := make([]map[string]string,0)
+  out := make([]map[string]string, 0)
   for i := 0; i < len(attrs); i++ {
     m := make(map[string]string)
     for k, v := range attrs[i] {
@@ -105,6 +150,7 @@ func attrsToMap(attrs []mpd.Attrs) []map[string]string {
     THINGS THE TWHandler WANTS
 *********************************/
 
+// Return a all songs in the library, and their information (artist, album, etc).
 func (c TWMPDClient) GetFiles() ([]map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
@@ -118,36 +164,9 @@ func (c TWMPDClient) GetFiles() ([]map[string]string, error) {
   }
 
   return attrsToMap(mpdFiles), nil
-
-  /*
-  client, err := c.GetClient()
-  if err != nil {
-    return nil, err
-  }
-  defer client.Close()
-
-  mpdFiles, err := client.GetFiles()
-
-  if err != nil {
-    return nil, &TBError{Msg: "Couldn't get files.", Err: err}
-  }
-
-  files := make([]*TBFile, 0)
-
-  for _, song := range mpdFiles {
-    file, err := os.Open(c.musicDir + song)
-    if err != nil {
-      return nil, &TBError{Msg: "Couldn't open file: " + song, Err: err}
-    }
-
-    tbFile := tbFileRead(file, song)
-    files = append(files, tbFile)
-  }
-
-  return files, nil
-  */
 }
 
+// Return's information about the current song
 func (c TWMPDClient) CurrentSong() (map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
@@ -163,6 +182,7 @@ func (c TWMPDClient) CurrentSong() (map[string]string, error) {
   return currentSong, nil
 }
 
+// Returns all upcoming songs in the playlist, and their information.
 func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
   if err != nil {
@@ -182,6 +202,7 @@ func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   return playlist[pos+1:], nil
 }
 
+// Returns the entire playlist, played and unplayed.
 func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
@@ -208,6 +229,8 @@ func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   return playlist, nil
 }
 
+// Add the specified uri to the playlist. uri can be a directory or file.
+// uri must be relative to MPD's music directory.
 func (c TWMPDClient) Add(uri string) error {
   client, err := c.GetClient()
   if err != nil {
@@ -220,6 +243,7 @@ func (c TWMPDClient) Add(uri string) error {
     return err
   }
 
+  // try to automatically start playing if we aren't currently.
   attrs, err := client.Status()
   if err != nil {
     log.Println("Couldn't get MPD's status.")
@@ -240,28 +264,4 @@ func (c TWMPDClient) Add(uri string) error {
   }
 
   return nil
-}
-
-// TBFiles are used sparingly...
-type TBFile struct {
-  id3.File
-  FilePath string
-}
-
-func tbFileRead(reader io.Reader, filePath string) *TBFile {
-  id3File := id3.Read(reader)
-  if id3File == nil {
-    log.Println("Couldn't read file", filePath)
-    return nil
-  }
-
-  file := new(TBFile)
-  //file.Header = id3File.Header
-  file.Name = id3File.Name
-  file.Artist = id3File.Artist
-  file.Album = id3File.Album
-  file.Year = id3File.Year
-  file.FilePath = filePath
-
-  return file
 }

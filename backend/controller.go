@@ -36,8 +36,6 @@ func testClient() {
   client := clientConnect("localhost:6600")
   defer client.Close()
 
-
-
   plinfo(client)
   //move(client, 1, 4)
 }
@@ -52,10 +50,10 @@ func clientConnect(addr string) *mpd.Client {
 }
 
 func move(c *mpd.Client, id, pos int) {
-	err := c.Move(id, -1, pos)
-	if err != nil {
-		log.Println(err)
-	}
+  err := c.Move(id, -1, pos)
+  if err != nil {
+    log.Println(err)
+  }
 }
 
 func listSongs(client *mpd.Client) {
@@ -99,9 +97,9 @@ func upcoming(client *mpd.Client) {
 
 func plinfo(client *mpd.Client) {
   /*attrs, _ := client.PlaylistInfo(-1, -1)
-  for _, song := range attrs {
-    fmt.Println(song)
-  }*/
+    for _, song := range attrs {
+      fmt.Println(song)
+    }*/
 
   attrs, _ := client.ListAllInfo("/")
   for _, song := range attrs {
@@ -179,11 +177,6 @@ func random(min, max int) int {
   rand.Seed(time.Now().Unix())
   return rand.Intn(max-min) + min
 }
-
-
-
-
-
 
 // PlaylistInfo returns attributes for songs in the current playlist. If
 // both start and end are negative, it does this for all songs in
