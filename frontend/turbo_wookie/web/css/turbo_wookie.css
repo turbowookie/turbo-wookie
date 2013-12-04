@@ -19,13 +19,15 @@ body {
 header {
   background-color: #1a1a1a;
   line-height: 50px;
+  max-height: 50px;
 }
 
 h1 {
-  text-align: center;
   color: #33B5E5;
   margin: 0;
+  display: inline-flex;
 }
+
 
 #playlist {
   display: inline-block;
