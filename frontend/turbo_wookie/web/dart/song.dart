@@ -17,14 +17,15 @@ class Song {
     if(json.containsKey("Title"))
       title = json["Title"];
     else
-      print(json);
-
+      title = "";
     if(json.containsKey("Artist"))
       artist = json["Artist"];
+    else
+      album = "";
     if(json.containsKey("Album"))
       album = json["Album"];
     else
-      album = " ";
+      album = "";
     if(json.containsKey("file"))
       filePath = json["file"];
   }
@@ -32,7 +33,7 @@ class Song {
   Future<String> getAlbumArtUrl() {
     Completer<String> completer = new Completer<String>();
 
-    if(artist != null && album != null) {
+    if(artist != "" && album != "") {
       HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&album=${album}&format=json")
         .then((HttpRequest request) {
           // Last.FM gives us a a JSON object that has another JSON object
