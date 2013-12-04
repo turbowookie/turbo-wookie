@@ -174,7 +174,7 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(m))
 
   // tell long pollers that the playlist changed.
-  polarChanged("playlist")
+  h.polarChanged("playlist")
 }
 
 // Our long poller. Accessed through `/polar`.
@@ -234,7 +234,7 @@ func jsoniffy(v interface{}) string {
   return string(obj)
 }
 
-func polarChanged(element string) {
+func (h *TWHandler) polarChanged(element string) {
   m2 := make(map[string]string)
   m2["changed"] = element
   h.updater <- jsoniffy(m2)
