@@ -27,7 +27,7 @@ class LibraryList extends PolymerElement {
   void enteredView() {
     songs = new List<Song>();
     table = $["songs"];
-    tableBody = $["songsBody"];
+    tableBody = table.tBodies[0];
     getAllSongs();
     setupEvents();
   }
