@@ -51,7 +51,7 @@ func NewTWHandler(filename string) (*TWHandler, error) {
   h.Router.HandleFunc("/add", h.addSong)
   h.Router.HandleFunc("/polar", h.bear)
 
-  h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/web")))
+  h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/build")))
 
 
   h.updater = make(chan string)

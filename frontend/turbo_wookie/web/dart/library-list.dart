@@ -13,7 +13,6 @@ class LibraryList extends PolymerElement {
   List<Song> songs;
   TableElement table;
   TableElement tableBody;
-  InputElement search;
   bool titleSort;
   bool artistSort;
   bool albumSort;
@@ -29,7 +28,6 @@ class LibraryList extends PolymerElement {
     songs = new List<Song>();
     table = $["songs"];
     tableBody = $["songsBody"];
-    search = $["search"];
     getAllSongs();
     setupEvents();
   }
@@ -43,10 +41,6 @@ class LibraryList extends PolymerElement {
           sort(cell.innerHtml);
         });
       }
-    });
-
-    search.onInput.listen((Event e) {
-      filter(search.value);
     });
   }
 
