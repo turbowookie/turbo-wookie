@@ -12,7 +12,7 @@ class LibraryList extends PolymerElement {
 
   List<Song> songs;
   TableElement table;
-  TableElement tableBody;
+  TableSectionElement tableBody;
   bool titleSort;
   bool artistSort;
   bool albumSort;
@@ -52,8 +52,6 @@ class LibraryList extends PolymerElement {
     .then((HttpRequest request) {
       tableBody.children.clear();
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
-      print("hello?");
-      print(request.responseText);
       songsJson.forEach((JsonObject songJson) {
         Song song = new Song.fromJson(songJson);
         songs.add(song);
