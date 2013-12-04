@@ -25,15 +25,10 @@ class LibraryList extends PolymerElement {
   }
 
   void enteredView() {
-    print("hello1");
     songs = new List<Song>();
-    print("hello2");
     table = $["songs"];
-    print("hello3");
     tableBody = $["songsBody"];
-
     getAllSongs();
-    print("you suck");
     setupEvents();
   }
 
