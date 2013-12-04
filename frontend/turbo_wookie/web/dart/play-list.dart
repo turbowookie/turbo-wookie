@@ -68,6 +68,7 @@ class PlayList extends PolymerElement {
   LIElement createListItem(Song song) {
     LIElement listElement = new LIElement();
 
+    /*
     ButtonElement up = new ButtonElement()
     ..children.add(new ImageElement(src: "../img/thumbs-up.svg")
       ..setAttribute("class", "up")
@@ -92,6 +93,7 @@ class PlayList extends PolymerElement {
     DivElement thumbsWrapper = new DivElement()
     ..children.add(thumbs)
     ..setAttribute("class", "thumbsWrapper");
+    */
 
     DivElement title = new DivElement()
     ..innerHtml = "${song.title}"
@@ -106,7 +108,7 @@ class PlayList extends PolymerElement {
     ..setAttribute("class", "songInfo");
 
     listElement.children.add(songInfo);
-    listElement.children.add(thumbsWrapper);
+    //listElement.children.add(thumbsWrapper);
 
     return listElement;
   }
