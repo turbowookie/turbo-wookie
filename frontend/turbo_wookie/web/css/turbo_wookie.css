@@ -20,6 +20,7 @@ header {
   background-color: #111;
   line-height: 50px;
   max-height: 50px;
+  padding: 0;
 }
 
 h1 {
@@ -28,12 +29,17 @@ h1 {
   display: inline-flex;
 }
 
+h1 img {
+  height: 40px;
+  padding: 5px;
+}
+
 
 #playlist {
   display: inline-block;
   float: left;
   width: 268px;
-  height: calc(100% - 105px);
+  height: calc(100% - 100px);
   overflow-y: auto;
   position: relative;
 }
@@ -44,23 +50,41 @@ h1 {
   left: 0px;
   bottom: 0px;
   width: 100%;
+  height: 50px;
 }
 
 #library {
   float: right;
   width: calc(100% - 268px);
-  max-height: calc(100% - 140px);
+  max-height: calc(100% - 142px);
   overflow: auto;
 }
 
 #search {
-  float: right;
-  width: calc(100% - 282px);
-  margin: 5px;
-  background-color: transparent;
-  color: #aaa;
-  border-color: #bbb;
   font-size: 14px;
+  font-family: Roboto, "Open Sans", "Droid Sans", sans-serif;
+  float: right;
+  width: calc(100% - 328px);
+  border: 0px solid #555;
+  border-bottom: 1px solid #777;
+  height: 1.5em;
+  line-height: 1.5em;
+  padding: 10px 30px;
+  margin: 0;
+  background-color: #444;
+
+  color: #ccc;
+}
+
+/* TODO: duplicate for other browsers */
+#search::-webkit-input-placeholder {
+  color: #aaa;
+}
+
+#search:focus {
+  outline: none;
+  color: #fff;
+  background-color: #4a4a4a;
 }
 
 
@@ -76,9 +100,8 @@ h1 {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: rgba(51, 181, 229, 0.8);
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  background: rgba(51, 181, 229, 0.8);
 }
 ::-webkit-scrollbar-thumb:window-inactive {
-  background: rgba(51, 181, 229, 0.4); 
+  background: rgba(51, 181, 229, 0.6); 
 }
