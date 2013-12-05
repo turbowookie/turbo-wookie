@@ -9,7 +9,7 @@
 
 #the only argument needed to start MPD is the path to the log file
 mpd_command: mpd
-mpd_arguments: C:\Users\ADAM\AppData\Local\mpd\
+mpd_arguments: required
 server_port: 9000
 server_domain: localhost
 mpd_http_domain: localhost

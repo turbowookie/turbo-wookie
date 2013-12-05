@@ -1,7 +1,7 @@
 package turbowookie
 
 import (
-  "github.com/fhs/gompd/mpd"
+  "github.com/dkuntz2/gompd/mpd"
   "log"
   "strconv"
 )
