@@ -12,7 +12,7 @@ class LibraryList extends PolymerElement {
 
   List<Song> songs;
   TableElement table;
-  TableElement tableBody;
+  TableSectionElement tableBody;
   bool titleSort;
   bool artistSort;
   bool albumSort;
@@ -27,7 +27,7 @@ class LibraryList extends PolymerElement {
   void enteredView() {
     songs = new List<Song>();
     table = $["songs"];
-    tableBody = $["songsBody"];
+    tableBody = table.tBodies[0];
     getAllSongs();
     setupEvents();
   }
@@ -52,8 +52,6 @@ class LibraryList extends PolymerElement {
     .then((HttpRequest request) {
       tableBody.children.clear();
       JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
-      print("hello?");
-      print(request.responseText);
       songsJson.forEach((JsonObject songJson) {
         Song song = new Song.fromJson(songJson);
         songs.add(song);
@@ -76,8 +74,15 @@ class LibraryList extends PolymerElement {
     TableCellElement album = new TableCellElement();
     album.text = song.album;
 
-    ButtonElement button = new ButtonElement();
-    button.innerHtml = "<img src='../img/add.svg'>";
+    ImageElement add = new ImageElement(src: "../img/add.svg")
+    ..setAttribute("class", "addImg");
+    ImageElement addHover = new ImageElement(src: "../img/add-hover.svg")
+    ..setAttribute("class", "addHoverImg");
+
+    ButtonElement button = new ButtonElement()
+    ..children.add(add)
+    ..children.add(addHover);
+
     button.onClick.listen((MouseEvent e) {
       song.addToPlaylist();
     });
@@ -92,7 +97,7 @@ class LibraryList extends PolymerElement {
   }
 
   void filter(String filter) {
-    List<TableRowElement> rows = tableBody.children;
+    List<Element> rows = tableBody.children.toList();
     for(TableRowElement row in rows) {
       List<Element> children = row.children;
       for(Element child in children) {
