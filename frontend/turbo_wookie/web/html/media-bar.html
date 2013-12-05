@@ -7,7 +7,7 @@
         border: none;
         background: none;
         padding: 0;
-        margin: 0;
+        margin: 0 5px 0 0;
         cursor: pointer;
       }
       
@@ -19,15 +19,16 @@
       img {
         border: none;
         background: none;
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
+        padding: 5px;
       }
       
       #volumeSlider {
         width: calc(100% - 160px);
         float: right;
         margin-right: 25px;
-        top: 25px;
+        top: 20px;
       }
       
     </style>
@@ -38,7 +39,7 @@
       </audio>
       
       <button id="toggleSound" on-click="{{toggleSound}}"><img src="img/rest.svg"></button>
-      <img src="img/volume.svg">
+      <img src="img/volume.svg" id="volume">
       <div id="volumeSlider" slider_color="#33B5E5" value="0.5" min="0" max="1.0"></div>
     </div>
     

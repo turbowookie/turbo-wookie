@@ -14,7 +14,7 @@
       }
       
       #list li {
-        border-bottom: 1px solid #222;
+        border-bottom: 1px solid #333;
         padding: 10px 10px;
         margin: 0 15px;
       }
@@ -29,7 +29,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        width: 248px;
+        width: 208px;
       }
       
       #list li .artist {
@@ -38,7 +38,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        width: 248px;
+        width: 208px;
       }
 
       
@@ -71,6 +71,24 @@
         float: right;
         position: relative;
         bottom: 37px;
+      }
+
+      /* Scrollbar Stuffs */
+      ::-webkit-scrollbar {
+          width: 12px;
+      }
+       
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.15);
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: rgba(51, 181, 229, 0.8);
+      }
+      ::-webkit-scrollbar-thumb:window-inactive {
+        background: rgba(51, 181, 229, 0.6); 
       }
       
     </style>
