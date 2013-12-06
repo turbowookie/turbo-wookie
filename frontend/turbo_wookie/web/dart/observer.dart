@@ -1,6 +1,6 @@
 library Observer;
+import "dart:convert";
 import "dart:html";
-import "package:json_object/json_object.dart";
 import "play-list.dart";
 import "library-list.dart";
 
@@ -18,7 +18,7 @@ class Observer {
     .then((HttpRequest request) {
       requestUpdate();
 
-      JsonObject obj = new JsonObject.fromJsonString(request.responseText);
+      Map obj = JSON.decode(request.responseText);
       String changed = obj["changed"];
       if(changed == "playlist")
         updatePlaylist();

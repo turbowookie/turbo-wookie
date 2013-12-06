@@ -1,7 +1,7 @@
 library PlayList;
 import "dart:async";
+import "dart:convert";
 import "dart:html";
-import "package:json_object/json_object.dart";
 import "package:polymer/polymer.dart";
 import "current-song.dart";
 import "song.dart";
@@ -22,20 +22,6 @@ class PlayList extends PolymerElement {
     songList = $["list"];
     currentSong = $["currentSong"];
     getPlaylist();
-    setupEvents();
-  }
-
-  /**
-   * Setup events for http/timers/etc.
-   */
-  void setupEvents() {
-    /*
-    HttpRequest.request("/upcoming").asStream()
-    .asBroadcastStream(onListen: (StreamSubscription<HttpRequest> request) {
-      request.onData(updatePlaylist);
-    });*/
-
-    //new Timer.periodic(new Duration(seconds: 10), (Timer timer) => getPlaylist());
   }
 
   /**
@@ -55,8 +41,8 @@ class PlayList extends PolymerElement {
       songList.children.add(currentSong);
       setCurrentSong(songList.children[0]);
 
-      JsonObject json = new JsonObject.fromJsonString(request.responseText);
-      json.forEach((JsonObject songJson) {
+      List json = JSON.decode(request.responseText);
+      json.forEach((Map songJson) {
         Song song = new Song.fromJson(songJson);
         LIElement listElement = createListItem(song);
         songList.children.add(listElement);

@@ -1,7 +1,7 @@
 library LibraryList;
+import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
-import "package:json_object/json_object.dart";
 import "song.dart";
 
 /**
@@ -49,17 +49,18 @@ class LibraryList extends PolymerElement {
    */
   void getAllSongs() {
     HttpRequest.request("/songs")
-    .then((HttpRequest request) {
-      tableBody.children.clear();
-      JsonObject songsJson = new JsonObject.fromJsonString(request.responseText);
-      songsJson.forEach((JsonObject songJson) {
-        Song song = new Song.fromJson(songJson);
-        songs.add(song);
+      .then((HttpRequest request) {
 
-        TableRowElement row = tableBody.addRow();
-        createSongRow(row, song);
+        List songsJson = JSON.decode(request.responseText);
+        songsJson.forEach((Map json) {
+          Song song = new Song.fromJson(json);
+          songs.add(song);
+
+          TableRowElement row = tableBody.addRow();
+          createSongRow(row, song);
+        });
+
       });
-    });
   }
 
   /**
@@ -67,11 +68,11 @@ class LibraryList extends PolymerElement {
    */
   void createSongRow(TableRowElement row, Song song) {
 
-    TableCellElement title = new TableCellElement();
+    TableCellElement title = row.addCell();
     title.text = song.title;
-    TableCellElement artist = new TableCellElement();
+    TableCellElement artist = row.addCell();
     artist.text = song.artist;
-    TableCellElement album = new TableCellElement();
+    TableCellElement album = row.addCell();
     album.text = song.album;
 
     ImageElement add = new ImageElement(src: "../img/add.svg")
@@ -80,20 +81,23 @@ class LibraryList extends PolymerElement {
     ..setAttribute("class", "addHoverImg");
 
     ButtonElement button = new ButtonElement()
-    ..children.add(add)
-    ..children.add(addHover);
+    ..append(add)
+    ..append(addHover);
+
+    TableCellElement buttonCol = row.addCell();
+    buttonCol.classes.add("button");
+    buttonCol.appendHtml("${button.innerHtml}"); //TODO Listeners don't work like this...
+    buttonCol.onClick.listen((MouseEvent e) {
+      song.addToPlaylist();
+    });
 
     button.onClick.listen((MouseEvent e) {
       song.addToPlaylist();
+      print(song);
     });
     button.onFocus.listen((e) {
       button.blur();
     });
-
-    row.children.add(title);
-    row.children.add(artist);
-    row.children.add(album);
-    row.children.add(button);
   }
 
   void filter(String filter) {

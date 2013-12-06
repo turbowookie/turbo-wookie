@@ -2,10 +2,7 @@ library MediaBar;
 import "dart:async";
 import "dart:html";
 import "package:polymer/polymer.dart";
-import "package:range_slider/range_slider.dart";
-import "current-song.dart";
 import "play-list.dart";
-import "test.dart";
 
 /**
  * This class controls the audio stream.
@@ -15,15 +12,13 @@ class MediaBar extends PolymerElement {
 
 
   ButtonElement toggleSoundButton;
-  RangeSlider volumeSlider;
   bool isPlaying;
   AudioElement stream;
   ImageElement toggleSoundImage;
-  PlayList playlist;
   String artist;
   String album;
-  CurrentSong currentSong;
   bool preventOnEmptied;
+  PlayList playlist;
 
   MediaBar.created()
     : super.created() {
@@ -38,7 +33,6 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     toggleSoundImage = toggleSoundButton.children.first;
-    volumeSlider = new RangeSlider($["volumeSlider"]);
     stream = $["audioElement"];
 
     setupHotKeys();
@@ -113,14 +107,7 @@ class MediaBar extends PolymerElement {
       toggleSoundButton.blur();
     });
 
-    // Set the volume slider listeners.
-    volumeSlider.$elmt.onChange.listen((CustomEvent e) {
-      setVolume(e.detail["value"]);
-    });
-    volumeSlider.$elmt.onDragEnd.listen((MouseEvent e) {
-      setVolume(volumeSlider.value);
-      window.localStorage["volume"] = volumeSlider.value.toString();
-    });
+
   }
 
   /**
@@ -141,16 +128,15 @@ class MediaBar extends PolymerElement {
    * Play the stream.
    */
   void play() {
-    toggleSoundImage.src = "img/rest.svg";
+    toggleSoundImage.src = "../img/rest.svg";
     isPlaying = true;
-    setVolume(volumeSlider.value);
   }
 
   /**
    * Pause the stream.
    */
   void pause() {
-    toggleSoundImage.src = "img/note.svg";
+    toggleSoundImage.src = "../img/note.svg";
     isPlaying = false;
     setVolume(0.0);
   }
@@ -171,8 +157,6 @@ class MediaBar extends PolymerElement {
       stream.volume = vol;
 
     if(changeSlider) {
-      volumeSlider.value = vol;
-      window.localStorage["volume"] = volumeSlider.value.toString();
     }
   }
 
@@ -180,22 +164,15 @@ class MediaBar extends PolymerElement {
    * Return the volume of the stream.
    */
   double getVolume() {
-    return volumeSlider.value;
+    return 0.5;
   }
 
   /**
    * Set the playlist so the media bar can interact with it.
    */
-  void setPlayList(PlayList playList) {
-    this.playlist = playList;
-    getCurrentSong().loadMetaData();
-  }
-
-  /**
-   * Get the current song playing.
-   */
-  CurrentSong getCurrentSong() {
-    return playlist.currentSong;
+  void setPlaylist(PlayList playlist) {
+    this.playlist = playlist;
+    playlist.currentSong.loadMetaData();
   }
 
   /**
@@ -204,7 +181,9 @@ class MediaBar extends PolymerElement {
   void resetStream() {
     stream.src = "/stream";
     stream.play();
-    playlist.getPlaylist();
-    getCurrentSong().loadMetaData();
+    if(playlist != null) {
+      playlist.getPlaylist();
+      playlist.currentSong.loadMetaData();
+    }
   }
 }

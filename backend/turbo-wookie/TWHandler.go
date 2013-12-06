@@ -76,7 +76,7 @@ func NewTWHandler(filename string) (*TWHandler, error) {
 
   // This needs to be last, otherwise it'll override all routes after it
   // because we're matching EVERYTHING.
-  h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/web")))
+  h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/build")))
 
   // setup our poller/polar stuff.
   h.updater = make(chan string)

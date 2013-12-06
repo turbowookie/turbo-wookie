@@ -1,7 +1,7 @@
 library CurrentSong;
+import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
-import "package:json_object/json_object.dart";
 import "media-bar.dart";
 import "song.dart";
 
@@ -35,7 +35,7 @@ class CurrentSong extends PolymerElement {
    */
   void loadMetaData() {
     HttpRequest.request("/current").then((HttpRequest request) {
-      JsonObject json = new JsonObject.fromJsonString(request.responseText);
+      Map json = JSON.decode(request.responseText);
 
       if(json.isEmpty) {
         song = new Song("No Song Playing", "No Artist", "No Album", "");

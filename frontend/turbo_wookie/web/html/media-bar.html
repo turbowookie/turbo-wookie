@@ -5,7 +5,7 @@
       
       button {
         border: none;
-        background: none;
+        background: transparent;
         padding: 0;
         margin: 0 5px 0 0;
         cursor: pointer;
@@ -31,22 +31,6 @@
         top: 20px;
       }
       
-      #toggleSound #restHoverImg {
-        display: none;
-      }
-      
-      #toggleSound #restImg {
-        display: block;
-      }
-      
-      #toggleSound:hover #restHoverImg {
-        display: block;
-      }
-      
-      #toggleSound:hover #restImg {
-        display: none;
-      }
-      
     </style>
     
     <div>
@@ -55,10 +39,9 @@
       </audio>
       
       <button id="toggleSound" on-click="{{toggleSound}}">
-        <img id="restImg" src="img/rest.svg">
-        <img id="restHoverImg" src="img/rest-hover.svg">
+        <img id="restImg" src="../img/rest.svg">
       </button>
-      <img src="img/volume.svg" id="volume">
+      <img src="../img/volume.svg" id="volume">
       <div id="volumeSlider" slider_color="#33B5E5" value="0.5" min="0" max="1.0"></div>
     </div>
     

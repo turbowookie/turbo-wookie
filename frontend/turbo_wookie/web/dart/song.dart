@@ -1,7 +1,7 @@
 library Song;
 import "dart:async";
+import "dart:convert";
 import "dart:html";
-import "package:json_object/json_object.dart";
 
 class Song {
   String title;
@@ -12,22 +12,21 @@ class Song {
 
   Song(this.title, this.artist, this.album, this.filePath);
 
-  Song.fromJson(JsonObject json) {
-
-    if(json.containsKey("Title"))
-      title = json["Title"];
+  Song.fromJson(Map map) {
+    if(map.containsKey("Title"))
+      title = map["Title"];
     else
       title = "";
-    if(json.containsKey("Artist"))
-      artist = json["Artist"];
+    if(map.containsKey("Artist"))
+      artist = map["Artist"];
     else
       album = "";
-    if(json.containsKey("Album"))
-      album = json["Album"];
+    if(map.containsKey("Album"))
+      album = map["Album"];
     else
       album = "";
-    if(json.containsKey("file"))
-      filePath = json["file"];
+    if(map.containsKey("file"))
+      filePath = map["file"];
   }
 
   Future<String> getAlbumArtUrl() {
@@ -42,19 +41,18 @@ class Song {
           // the image sizes are very ununiform. Some small images are 200px,
           // some are 32px. So why not get a bigger one?
           try {
-          JsonObject obj = new JsonObject.fromJsonString(request.responseText);
-          JsonObject albumJson = obj["album"];
-          int imageSize = 3;
+            Map obj = JSON.decode(request.responseText);
+            Map albumJson = obj["album"];
+            int imageSize = 3;
+            List images = albumJson["image"];
+            while(imageSize >= images.length && imageSize != -1)
+              imageSize --;
 
-          List images = albumJson["image"];
-          while(imageSize >= images.length && imageSize != -1)
-            imageSize --;
+            Map image;
+            if(imageSize > -1)
+              image = images[imageSize];
 
-          JsonObject image;
-          if(imageSize > -1)
-            image = images[imageSize];
-
-          completer.complete(image["#text"].toString());
+            completer.complete(image["#text"].toString());
 
           } catch(exception, stackTrace) {
             completer.complete("../img/wookie.jpg");
