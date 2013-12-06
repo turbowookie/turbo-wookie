@@ -2,6 +2,7 @@ library MediaBar;
 import "dart:async";
 import "dart:html";
 import "package:polymer/polymer.dart";
+import "current-song.dart";
 import "play-list.dart";
 
 /**
@@ -12,6 +13,7 @@ class MediaBar extends PolymerElement {
 
 
   ButtonElement toggleSoundButton;
+  RangeInputElement volumeSlider;
   bool isPlaying;
   AudioElement stream;
   ImageElement toggleSoundImage;
@@ -33,6 +35,7 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     toggleSoundImage = toggleSoundButton.children.first;
+    volumeSlider = $["volumeSlider"];
     stream = $["audioElement"];
 
     setupHotKeys();
@@ -107,7 +110,10 @@ class MediaBar extends PolymerElement {
       toggleSoundButton.blur();
     });
 
-
+    // Set the volume slider listeners.
+    volumeSlider.onChange.listen((Event e) {
+      setVolume(double.parse(volumeSlider.value));
+    });
   }
 
   /**
@@ -130,6 +136,8 @@ class MediaBar extends PolymerElement {
   void play() {
     toggleSoundImage.src = "../img/rest.svg";
     isPlaying = true;
+
+    setVolume(double.parse(volumeSlider.value));
   }
 
   /**
@@ -153,10 +161,13 @@ class MediaBar extends PolymerElement {
     else if(vol < 0.0)
       vol = 0.0;
 
+    window.localStorage["volume"] = vol.toString();
+
     if(isPlaying || vol == 0.0)
       stream.volume = vol;
 
     if(changeSlider) {
+      volumeSlider.value = vol.toString();
     }
   }
 
@@ -164,7 +175,7 @@ class MediaBar extends PolymerElement {
    * Return the volume of the stream.
    */
   double getVolume() {
-    return 0.5;
+    return double.parse(volumeSlider.value);
   }
 
   /**

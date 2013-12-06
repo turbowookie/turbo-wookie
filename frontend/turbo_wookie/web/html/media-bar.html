@@ -28,7 +28,21 @@
         width: calc(100% - 160px);
         float: right;
         margin-right: 25px;
-        top: 20px;
+        margin-top: 20px;
+
+        height: 10px;
+        -webkit-appearance: none;
+        background-color: #4a4a4a;
+        
+      }
+      #volumeSlider:focus {
+        outline: none;
+      }
+      #volumeSlider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 12px;
+        width: 12px;
+        background: rgb(51, 181, 229);
       }
       
     </style>
@@ -42,7 +56,7 @@
         <img id="restImg" src="../img/rest.svg">
       </button>
       <img src="../img/volume.svg" id="volume">
-      <div id="volumeSlider" slider_color="#33B5E5" value="0.5" min="0" max="1.0"></div>
+      <input type="range" min="0" max="1" step="0.0001" value="0.5" id="volumeSlider" />
     </div>
     
   </template>
