@@ -2,10 +2,8 @@ library MediaBar;
 import "dart:async";
 import "dart:html";
 import "package:polymer/polymer.dart";
-import "package:range_slider/range_slider.dart";
 import "current-song.dart";
 import "play-list.dart";
-import "test.dart";
 
 /**
  * This class controls the audio stream.
@@ -15,7 +13,7 @@ class MediaBar extends PolymerElement {
 
 
   ButtonElement toggleSoundButton;
-  RangeSlider volumeSlider;
+  RangeInputElement volumeSlider;
   bool isPlaying;
   AudioElement stream;
   ImageElement toggleSoundImage;
@@ -38,7 +36,8 @@ class MediaBar extends PolymerElement {
 
     toggleSoundButton = $["toggleSound"];
     toggleSoundImage = toggleSoundButton.children.first;
-    volumeSlider = new RangeSlider($["volumeSlider"]);
+    volumeSlider = $["volumeSlider"];
+    //print(volumeSlider);
     stream = $["audioElement"];
 
     setupHotKeys();
@@ -112,14 +111,10 @@ class MediaBar extends PolymerElement {
     toggleSoundButton.onFocus.listen((e) {
       toggleSoundButton.blur();
     });
-
+    
     // Set the volume slider listeners.
-    volumeSlider.$elmt.onChange.listen((CustomEvent e) {
-      setVolume(e.detail["value"]);
-    });
-    volumeSlider.$elmt.onDragEnd.listen((MouseEvent e) {
-      setVolume(volumeSlider.value);
-      window.localStorage["volume"] = volumeSlider.value.toString();
+    volumeSlider.onChange.listen((Event e) {
+      setVolume(double.parse(volumeSlider.value));
     });
   }
 
@@ -143,7 +138,7 @@ class MediaBar extends PolymerElement {
   void play() {
     toggleSoundImage.src = "img/rest.svg";
     isPlaying = true;
-    setVolume(volumeSlider.value);
+    setVolume(double.parse(volumeSlider.value));
   }
 
   /**
@@ -167,12 +162,13 @@ class MediaBar extends PolymerElement {
     else if(vol < 0.0)
       vol = 0.0;
 
+    window.localStorage["volume"] = vol.toString();
+    
     if(isPlaying || vol == 0.0)
       stream.volume = vol;
 
     if(changeSlider) {
-      volumeSlider.value = vol;
-      window.localStorage["volume"] = volumeSlider.value.toString();
+      volumeSlider.value = vol.toString();
     }
   }
 
@@ -180,7 +176,7 @@ class MediaBar extends PolymerElement {
    * Return the volume of the stream.
    */
   double getVolume() {
-    return volumeSlider.value;
+    return double.parse(volumeSlider.value);
   }
 
   /**

@@ -28,7 +28,11 @@
         width: calc(100% - 160px);
         float: right;
         margin-right: 25px;
-        top: 20px;
+        margin-top: 15px;
+      }
+
+      #volumeSlider:focus {
+        outline: none;
       }
       
       #toggleSound #restHoverImg {
@@ -59,7 +63,8 @@
         <img id="restHoverImg" src="img/rest-hover.svg">
       </button>
       <img src="img/volume.svg" id="volume">
-      <div id="volumeSlider" slider_color="#33B5E5" value="0.5" min="0" max="1.0"></div>
+      <!-- <div id="volumeSlider" slider_color="#33B5E5" value="0.5" min="0" max="1.0"></div> -->
+      <input type="range" min="0" max="1" step="0.01" value="0.5" id="volumeSlider" />
     </div>
     
   </template>
