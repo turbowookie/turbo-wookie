@@ -28,11 +28,21 @@
         width: calc(100% - 160px);
         float: right;
         margin-right: 25px;
-        margin-top: 15px;
-      }
+        margin-top: 20px;
 
+        height: 10px;
+        -webkit-appearance: none;
+        background-color: #4a4a4a;
+        
+      }
       #volumeSlider:focus {
         outline: none;
+      }
+      #volumeSlider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 12px;
+        width: 12px;
+        background: rgb(51, 181, 229);
       }
       
       #toggleSound #restHoverImg {
