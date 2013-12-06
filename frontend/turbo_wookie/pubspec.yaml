@@ -2,7 +2,6 @@ name: turbo_wookie
 description: A sample Polymer application
 dependencies:
   browser: any
-  json_object: any
   polymer: any
 transformers:
 - polymer:
