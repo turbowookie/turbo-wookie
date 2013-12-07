@@ -4,6 +4,7 @@ import "dart:html";
 import "package:polymer/polymer.dart";
 import "current-song.dart";
 import "play-list.dart";
+import "song.dart";
 
 /**
  * This class controls the audio stream.
@@ -12,6 +13,7 @@ import "play-list.dart";
 class MediaBar extends PolymerElement {
   ButtonElement toggleSoundButton;
   RangeInputElement volumeSlider;
+  RangeInputElement progressSlider;
   bool isPlaying;
   AudioElement stream;
   ImageElement toggleSoundImage;
@@ -35,10 +37,12 @@ class MediaBar extends PolymerElement {
     toggleSoundButton = $["toggleSound"];
     toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = $["volumeSlider"];
+    progressSlider = $["progressSlider"];
     stream = $["audioElement"];
 
     setupHotKeys();
     setupEvents();
+    progressSlider.disabled = true;
 
     // Load local storage settings
     double vol = 0.5;
@@ -113,6 +117,10 @@ class MediaBar extends PolymerElement {
     volumeSlider.onChange.listen((Event e) {
       setVolume(double.parse(volumeSlider.value));
     });
+
+    stream.onTimeUpdate.listen((Event e) {
+      progressSlider.value = stream.currentTime.toString();
+    });
   }
 
   /**
@@ -182,7 +190,8 @@ class MediaBar extends PolymerElement {
    */
   void setPlaylist(PlayList playlist) {
     this.playlist = playlist;
-    playlist.currentSong.loadMetaData();
+    playlist.currentSong.loadMetaData()
+      .then((var nothing) => updateProgressSlider());
   }
 
   /**
@@ -193,7 +202,15 @@ class MediaBar extends PolymerElement {
     stream.play();
     if(playlist != null) {
       playlist.getPlaylist();
-      playlist.currentSong.loadMetaData();
+      playlist.currentSong.loadMetaData()
+        .then((var nothing) => updateProgressSlider());
     }
+  }
+
+  /**
+   * Update the progress slider's values
+   */
+  void updateProgressSlider() {
+    progressSlider.max = "${playlist.currentSong.song.length}";
   }
 }

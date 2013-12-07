@@ -7,6 +7,7 @@ class Song {
   String title;
   String artist;
   String album;
+  int length;
   String filePath;
   Future<String> get albumArtUrl => getAlbumArtUrl();
 
@@ -19,14 +20,22 @@ class Song {
       title = map["Title"];
     else
       title = "";
+
     if(map.containsKey("Artist"))
       artist = map["Artist"];
     else
-      album = "";
+      artist = "";
+
     if(map.containsKey("Album"))
       album = map["Album"];
     else
       album = "";
+
+    if(map.containsKey("Time"))
+      length = map["Time"];
+    else
+      length = 0;
+
     if(map.containsKey("file"))
       filePath = map["file"];
   }

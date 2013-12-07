@@ -67,12 +67,58 @@
         border-radius: 0px;
         border: none;
       }
+      
+      #progressSlider {
+        display: block;
+        padding: 7px 0;
+        margin: 0;
+        height: 3px;
+        padding: 0;
+        width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #4a4a4a;
+        border: none;
+      }
+      #progressSlider::-moz-range-track {
+        display: block;
+        padding: 7px 0;
+        margin: 0;
+        height: 3px;
+        padding: 0;
+        width: 100%;
+        border-top: 1px solid green;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #4a4a4a;
+        border: none;
+      }
+      #progressSlider:focus {
+        outline: none;
+      }      
+      #progressSlider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 5px;
+        width: 5px;
+        background: rgb(51, 181, 229);
+      }
+      #progressSlider::-moz-range-thumb {
+        -moz-appearance: none;
+        height: 5px;
+        width: 5px;
+        background: rgb(51, 181, 229);
+      }
+      
     </style>
     
     <div>
       <audio id="audioElement" autoplay loop>
         <source src="/stream" type="audio/ogg">
       </audio>
+      
+      <input type="range" min="0" step="0.0001" id="progressSlider" />
       
       <button id="toggleSound" on-click="{{toggleSound}}">
         <img id="restImg" src="../img/rest.svg">

@@ -1,4 +1,5 @@
 library CurrentSong;
+import "dart:async";
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
@@ -35,7 +36,8 @@ class CurrentSong extends PolymerElement {
    * Grabs the meta data of this song from the server using the
    * http GET request "/current".
    */
-  void loadMetaData() {
+  Future loadMetaData() {
+    Completer completer = new Completer();
     HttpRequest.request("/current").then((HttpRequest request) {
       Map json = JSON.decode(request.responseText);
 
@@ -63,6 +65,10 @@ class CurrentSong extends PolymerElement {
         albumDiv.setInnerHtml("Unknown Album");
       else
         albumDiv.setInnerHtml(song.album);
+
+      completer.complete();
     });
+
+    return completer.future;
   }
 }
