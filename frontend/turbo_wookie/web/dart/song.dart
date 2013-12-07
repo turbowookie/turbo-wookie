@@ -52,7 +52,12 @@ class Song {
             if(imageSize > -1)
               image = images[imageSize];
 
-            completer.complete(image["#text"].toString());
+            String url = image["#text"];
+
+            if(url.length == 0)
+              throw new Exception("");
+
+            completer.complete(url);
 
           } catch(exception, stackTrace) {
             completer.complete("../img/wookie.jpg");
