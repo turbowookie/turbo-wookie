@@ -21,22 +21,24 @@ def find(name, path):
 		if name in files:
 			return root
 
-# Find if a file or directory has been changed in the previous head.
-def changed(dir):
-	diff = os.popen("git diff --name-only  HEAD@{1} HEAD " + dir).read()
-	return len(diff) != 0
+# Get the diff of your state vs the state you are pulling.
+def diff(dir):
+	return os.popen("git diff --name-only  HEAD@{1} HEAD " + dir).read()
 
-# If the frontend is changed, call necessary commands
-if changed("frontend"):
+# Get the diff
+diff = diff("frontend")
+
+# If frontend is in the diff:
+if len(diff) != 0:
 	# Move to the pubspec's folder.
 	os.chdir(find("pubspec.yaml", os.getcwd()))
 
 	# If the pubspec file has been changed, call pub get/upgrade
-	if changed("frontend/turbo_wookie/pubspec.yaml"):
+	if "pubspec.yaml" in diff:
 		print("Running Pub Get")
 		call(["pub", "get"])
 		print("Running Pub Upgrade")
-		call(["pub"], "upgrade")
+		call(["pub", "upgrade"])
 
 	# Call pub build
 	print("Running Pub Build")
