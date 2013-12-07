@@ -15,19 +15,32 @@ before it works for you.
 from subprocess import call
 import os
 
+# Find the location of a file within a directory.
 def find(name, path):
 	for root, dirs, files in os.walk(path):
 		if name in files:
 			return root
 
+# Find if a file or directory has been changed in the previous head.
 def changed(dir):
-	#print(call(["git", "diff", "--name-only", "frontend", ""]))
 	diff = os.popen("git diff --name-only  HEAD@{1} HEAD " + dir).read()
 	return len(diff) != 0
 
+# If the frontend is changed, call necessary commands
 if changed("frontend"):
+	# Move to the pubspec's folder.
 	os.chdir(find("pubspec.yaml", os.getcwd()))
+
+	# If the pubspec file has been changed, call pub get/upgrade
+	if changed("frontend/turbo_wookie/pubspec.yaml"):
+		print("Running Pub Get")
+		call(["pub", "get"])
+		print("Running Pub Upgrade")
+		call(["pub"], "upgrade")
+
+	# Call pub build
 	print("Running Pub Build")
 	call(["pub", "build"])
+
 else:
 	print("No Frontend Change")
