@@ -78,7 +78,7 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        background-color: #4a4a4a;
+        background-color: #333;
         border: none;
       }
       #progressSlider::-moz-range-track {
@@ -88,10 +88,8 @@
         height: 3px;
         padding: 0;
         width: 100%;
-        border-top: 1px solid green;
+        //border-top: 1px solid green;
         -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
         background-color: #4a4a4a;
         border: none;
       }
@@ -103,12 +101,14 @@
         height: 5px;
         width: 5px;
         background: rgb(51, 181, 229);
+        border-radius: 50%;
       }
       #progressSlider::-moz-range-thumb {
         -moz-appearance: none;
         height: 5px;
         width: 5px;
         background: rgb(51, 181, 229);
+        border-radius: 50%;
       }
       
     </style>
@@ -118,7 +118,7 @@
         <source src="/stream" type="audio/ogg">
       </audio>
       
-      <input type="range" min="0" step="0.0001" id="progressSlider" />
+      <input type="range" min="0" step="0.0001" id="progressSlider" value="0" />
       
       <button id="toggleSound" on-click="{{toggleSound}}">
         <img id="restImg" src="../img/rest.svg">
