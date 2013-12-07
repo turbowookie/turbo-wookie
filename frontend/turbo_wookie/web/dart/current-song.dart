@@ -18,6 +18,8 @@ class CurrentSong extends PolymerElement {
   DivElement albumDiv;
   Song song;
 
+  get applyAuthorStyles => true;
+
   CurrentSong.created()
       : super.created() {
   }

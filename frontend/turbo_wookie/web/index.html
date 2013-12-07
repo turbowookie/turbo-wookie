@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <title>Turbo Wookie</title>
     <link rel="stylesheet" href="css/turbo_wookie.css">
-    <!-- <link rel="stylesheet" href="packages/range_slider/range_slider.css"> -->
     
     <!-- Import our polymer things -->
     <link rel="import" href="html/media-bar.html">
@@ -19,9 +18,10 @@
   <body>
     <header class="index">
       <h1 id="title" title="Turbo Wookie"><img id="jetpack" src="../img/wookiejetpack.png">Turbo Wookie</h1>
+      
+      <input type="text" id="search" placeholder="Search music">
     </header>
     
-    <input type="text" id="search" placeholder="Search music">
     <media-bar id="mediaBar"></media-bar>
     <play-list id="playlist"></play-list>
     <library-list id="library"></library-list>

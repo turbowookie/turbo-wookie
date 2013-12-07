@@ -10,8 +10,6 @@ import "play-list.dart";
  */
 @CustomTag('media-bar')
 class MediaBar extends PolymerElement {
-
-
   ButtonElement toggleSoundButton;
   RangeInputElement volumeSlider;
   bool isPlaying;
@@ -21,6 +19,7 @@ class MediaBar extends PolymerElement {
   String album;
   bool preventOnEmptied;
   PlayList playlist;
+
 
   MediaBar.created()
     : super.created() {

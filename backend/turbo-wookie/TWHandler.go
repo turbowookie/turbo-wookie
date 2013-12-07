@@ -36,7 +36,7 @@ type TWHandler struct {
 
 // Create a new TWHandler, using the passed in filename as a yaml file
 // containing the server's configuation settings.
-func NewTWHandler(filename string) (*TWHandler, error) {
+func NewTWHandler(filename string, serveDart, startMPD bool) (*TWHandler, error) {
   // make us a handler.
   h := TWHandler{}
 
@@ -47,7 +47,7 @@ func NewTWHandler(filename string) (*TWHandler, error) {
   }
 
   h.ServerConfig = config
-  h.MpdClient = NewTWMPDClient(h.ServerConfig) // see TWMPDClient.go
+  h.MpdClient = NewTWMPDClient(h.ServerConfig, startMPD) // see TWMPDClient.go
 
   // Make sure there's a server to connect to, and run some other startup
   // commands (like making sure there's music playing...).
@@ -76,7 +76,13 @@ func NewTWHandler(filename string) (*TWHandler, error) {
 
   // This needs to be last, otherwise it'll override all routes after it
   // because we're matching EVERYTHING.
-  h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie/build")))
+  fileDir := h.ServerConfig["turbo_wookie_directory"] + "/frontend/turbo_wookie"
+  if serveDart {
+    fileDir += "/web"
+  } else {
+    fileDir += "/build"
+  }
+  h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(fileDir)))
 
   // setup our poller/polar stuff.
   h.updater = make(chan string)

@@ -27,7 +27,7 @@ type TWMPDClient struct {
 }
 
 // Create a new TWMPDClient.
-func NewTWMPDClient(config map[string]string) TWMPDClient {
+func NewTWMPDClient(config map[string]string, startMPD bool) TWMPDClient {
   c := TWMPDClient{}
   c.config = config
   c.Domain = c.config["mpd_domain"]
@@ -35,7 +35,9 @@ func NewTWMPDClient(config map[string]string) TWMPDClient {
   c.musicDir = c.config["turbo_wookie_directory"] + "/" +
     c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
 
-  c.MpdCmd = c.startMPD()
+  if !startMPD {
+    c.MpdCmd = c.startMPD()
+  }
 
   return c
 }

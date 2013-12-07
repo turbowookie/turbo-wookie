@@ -5,10 +5,15 @@ import (
   "log"
   "os"
   "os/signal"
+  "flag"
 )
 
 func main() {
-  h, err := turbowookie.NewTWHandler("config.yaml")
+  serveDart := flag.Bool("dart", false, "Include to serve dart code.")
+  startMPD := flag.Bool("nompd", false, "Include to not start MPD.")
+  flag.Parse()
+
+  h, err := turbowookie.NewTWHandler("config.yaml", *serveDart, *startMPD)
   if err != nil {
     log.Fatal(err)
   }

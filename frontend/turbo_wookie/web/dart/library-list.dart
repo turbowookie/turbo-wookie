@@ -16,6 +16,8 @@ class LibraryList extends PolymerElement {
   bool titleSort;
   bool artistSort;
   bool albumSort;
+  
+  get applyAuthorStyles => true;
 
   LibraryList.created()
       : super.created() {

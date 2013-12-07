@@ -12,6 +12,8 @@ class Song {
 
   Song(this.title, this.artist, this.album, this.filePath);
 
+  get applyAuthorStyles => true;
+
   Song.fromJson(Map map) {
     if(map.containsKey("Title"))
       title = map["Title"];

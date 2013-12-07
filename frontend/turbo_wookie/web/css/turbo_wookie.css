@@ -18,8 +18,8 @@ body {
 
 header {
   background-color: #111;
-  line-height: 50px;
-  max-height: 50px;
+  line-height: 60px;
+  max-height: 60px;
   padding: 0;
 }
 
@@ -30,7 +30,7 @@ h1 {
 }
 
 h1 img {
-  height: 40px;
+  height: 50px;
   padding: 5px;
 }
 
@@ -39,7 +39,7 @@ h1 img {
   display: inline-block;
   float: left;
   width: 268px;
-  height: calc(100% - 100px);
+  height: calc(100% - 110px);
   overflow-y: auto;
   position: relative;
 }
@@ -56,7 +56,7 @@ h1 img {
 #library {
   float: right;
   width: calc(100% - 268px);
-  max-height: calc(100% - 142px);
+  max-height: calc(100% - 110px);
   overflow: auto;
 }
 
@@ -64,14 +64,13 @@ h1 img {
   font-size: 14px;
   font-family: Roboto, "Open Sans", "Droid Sans", sans-serif;
   float: right;
-  width: calc(100% - 328px);
-  border: 0px solid #555;
-  border-bottom: 1px solid #777;
-  height: 1.5em;
-  line-height: 1.5em;
-  padding: 10px 30px;
-  margin: 0;
-  background-color: #444;
+  width: calc(100% - 350px);
+  border: 1px solid #444;
+  height: 20px;
+  line-height: 20px;
+  padding: 8px 28px;
+  margin: 10px 20px 10px 0;
+  background-color: #2a2a2a;
 
   color: #ccc;
 }
