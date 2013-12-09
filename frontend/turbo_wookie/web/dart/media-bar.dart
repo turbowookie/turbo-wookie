@@ -39,6 +39,7 @@ class MediaBar extends PolymerElement {
     volumeSlider = $["volumeSlider"];
     progressSlider = $["progressSlider"];
     stream = $["audioElement"];
+    stream.src = "/stream";
 
     setupHotKeys();
     setupEvents();
