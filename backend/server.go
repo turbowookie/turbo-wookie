@@ -21,7 +21,7 @@ func main() {
   // This waits for SIGINT (Signal Interrupt) to come in, when a SIGINT is
   // received (typically through CTRL+C) we tell our MPDClient to kill the
   // MPD instance we started up, and we exit the program, status 1 ("A-OK!").
-  if (noStartMPD) {
+  if (*noStartMPD) {
     c := make(chan os.Signal, 1)
     signal.Notify(c, os.Interrupt)
     go func() {
