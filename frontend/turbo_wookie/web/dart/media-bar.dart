@@ -118,6 +118,9 @@ class MediaBar extends PolymerElement {
     volumeSlider.onChange.listen((Event e) {
       setVolume(double.parse(volumeSlider.value));
     });
+    volumeSlider.onFocus.listen((Event e) {
+      volumeSlider.blur();
+    });
 
     stream.onTimeUpdate.listen((Event e) {
       progressSlider.value = stream.currentTime.toString();
