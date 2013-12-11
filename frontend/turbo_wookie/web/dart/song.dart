@@ -13,8 +13,6 @@ class Song {
 
   Song(this.title, this.artist, this.album, this.filePath);
 
-  get applyAuthorStyles => true;
-
   Song.fromJson(Map map) {
     if (!(map.containsKey("Title") && map.containsKey("Artist") && map.containsKey("Album"))) {
       print(map["file"]);
@@ -27,7 +25,7 @@ class Song {
 
     if(map.containsKey("Artist"))
       artist = map["Artist"];
-    else 
+    else
       artist = "";
 
     if(map.containsKey("Album"))
