@@ -1,70 +1,7 @@
 <polymer-element name="library-list">
   
   <template>
-    <style>
-      img {
-        width: 25px;
-      }
-      
-      .button {
-        cursor: pointer;
-      }
-      
-      .button .addHoverImg {
-        display: none;
-      }
-      
-      .button .addImg {
-        display: block;
-      }
-      
-      .button:hover .addImg {
-        display: none;
-      }
-      
-      .button:hover .addHoverImg {
-        display: block;
-      }
-      
-      table {
-        width: calc(100% - 40px);
-        height: calc(100% - 40px);
-        border-collapse: collapse;
-        margin: 20px;
-      }
-      
-      tbody tr:hover {
-        background-color: rgba(0, 0, 0, 0.05)
-      }      
-      
-      th {
-        text-align: left;
-        padding: 0 10px 5px;
-        font-size: 1.2em;
-        color: white;
-      }
-      
-      .clickable {
-        cursor: pointer;
-      }
-      
-      tr {
-        border-bottom: 1px solid #555;
-      }
-      
-      thead tr {
-        border-bottom: none;
-      }
-      
-      td {
-        padding: 2px 10px;
-      }
-      
-      td:nth-child(-n+3) {
-        width: 32%;
-      }
-    </style>
-    
+    <link rel="stylesheet" href="../css/library-list.css">
     <table id="songs">
       <thead>
         <tr>

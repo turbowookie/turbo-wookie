@@ -21,5 +21,6 @@ void main() {
 
   Polymer.onReady.whenComplete((){
     mediaBar.setPlaylist(playlist);
+    library.style.setProperty("background", library.style.backgroundColor);
   });
 }

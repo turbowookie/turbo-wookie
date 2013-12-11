@@ -31,8 +31,6 @@ class MediaBar extends PolymerElement {
 
   void enteredView() {
     super.enteredView();
-    // Allows us to link external css files in index.html.
-    getShadowRoot("media-bar").applyAuthorStyles = true;
 
     toggleSoundButton = $["toggleSound"];
     toggleSoundImage = toggleSoundButton.children.first;

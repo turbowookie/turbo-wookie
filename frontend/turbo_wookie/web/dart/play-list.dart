@@ -11,8 +11,6 @@ class PlayList extends PolymerElement {
 
   UListElement songList;
   CurrentSong currentSong;
-  
-  get applyAuthorStyles => true;
 
   PlayList.created()
     :super.created() {
