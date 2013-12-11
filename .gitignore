@@ -26,3 +26,6 @@ backend/mpd/sticker.sql
 
 #yaml config file
 backend/config.yaml
+
+# website
+turbowookie.github.io

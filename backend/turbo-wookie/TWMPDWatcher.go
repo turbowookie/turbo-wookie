@@ -9,9 +9,10 @@ import (
 type MPDWatcher struct {
   w    *mpd.Watcher
   host string
+  h    *TWHandler
 }
 
-func WatchMPD(host string) {
+func WatchMPD(host string, handler *TWHandler) {
   w, err := mpd.NewWatcher("tcp", host, "")
   if err != nil {
     log.Fatal("Couldn't start watching MPD")
@@ -20,6 +21,8 @@ func WatchMPD(host string) {
   mw := new(MPDWatcher)
   mw.w = w
   mw.host = host
+  mw.h = handler
+
 
   log.Println("Staring MPDWatcher for", host)
 
@@ -27,11 +30,15 @@ func WatchMPD(host string) {
   go mw.logWatcherErrors()
 }
 
+
+
 func (mw *MPDWatcher) logWatcherEvents() {
   for subsystem := range mw.w.Event {
     if subsystem == "player" {
       mw.queueSong()
     }
+
+    mw.h.PolarChanged(subsystem)
   }
 }
 

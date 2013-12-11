@@ -22,20 +22,21 @@ type TWMPDClient struct {
 
   // configuration stuff
   config   map[string]string
-  musicDir string
-  //Watcher TWMPDWatcher
 }
 
 // Create a new TWMPDClient.
-func NewTWMPDClient(config map[string]string, startMPD bool) TWMPDClient {
-  c := TWMPDClient{}
+// Takes in a config map (which is just a bunch of key/value pairs typically
+// retreived from a config.yaml file), and a noStartMPD bool (which, if true
+// will NOT start MPD . If it's false (and it should default to false), it will
+// start MPD as expected).
+func NewTWMPDClient(config map[string]string, noStartMPD bool) *TWMPDClient {
+  c := new(TWMPDClient)
   c.config = config
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
-  c.musicDir = c.config["turbo_wookie_directory"] + "/" +
-    c.config["mpd_subdirectory"] + "/" + c.config["mpd_music_directory"] + "/"
 
-  if !startMPD {
+  // Don't start MPD if `noStartMPD` is true.
+  if !noStartMPD {
     c.MpdCmd = c.startMPD()
   }
 
@@ -46,9 +47,8 @@ func NewTWMPDClient(config map[string]string, startMPD bool) TWMPDClient {
     HELPER FUNCTIONS
 ************************/
 
-// Start an MPD instance
-func (c TWMPDClient) startMPD() *exec.Cmd {
-  //log.Println("Starting MPD")
+// Start an MPD instance, assuming MPD is in your system path.
+func (c *TWMPDClient) startMPD() *exec.Cmd {
   mpdCommand := c.config["mpd_command"]
   mpdConf := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
 
@@ -69,13 +69,13 @@ func (c TWMPDClient) startMPD() *exec.Cmd {
 }
 
 // Kill the underlying MPD process.
-func (c TWMPDClient) KillMpd() {
+func (c *TWMPDClient) KillMpd() {
   c.MpdCmd.Process.Kill()
 }
 
 // Connect to MPD.
 // It just means there's slightly less typing involved.
-func (c TWMPDClient) GetClient() (*mpd.Client, error) {
+func (c *TWMPDClient) GetClient() (*mpd.Client, error) {
   client, err := mpd.Dial("tcp", c.toString())
   if err != nil {
     return nil, &TBError{Msg: "Couldn't connect to " + c.toString(), Err: err}
@@ -86,13 +86,13 @@ func (c TWMPDClient) GetClient() (*mpd.Client, error) {
 
 // simple toString of an MPD Client. Exits to make life easier in
 // some small aspects.
-func (c TWMPDClient) toString() string {
+func (c *TWMPDClient) toString() string {
   return c.Domain + ":" + c.Port
 }
 
 // Startup routine. Makes sure we can connect to MPD and that there's something
 // playing.
-func (c TWMPDClient) Startup() error {
+func (c *TWMPDClient) Startup() error {
   client, err := c.GetClient()
   if err != nil {
     return &TBError{Msg: "MPD isn't running.", Err: err}
@@ -151,7 +151,7 @@ func attrsToMap(attrs []mpd.Attrs) []map[string]string {
 *********************************/
 
 // Return a all songs in the library, and their information (artist, album, etc).
-func (c TWMPDClient) GetFiles() ([]map[string]string, error) {
+func (c *TWMPDClient) GetFiles() ([]map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -167,7 +167,7 @@ func (c TWMPDClient) GetFiles() ([]map[string]string, error) {
 }
 
 // Return's information about the current song
-func (c TWMPDClient) CurrentSong() (map[string]string, error) {
+func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -183,7 +183,7 @@ func (c TWMPDClient) CurrentSong() (map[string]string, error) {
 }
 
 // Returns all upcoming songs in the playlist, and their information.
-func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
+func (c *TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
   if err != nil {
     return nil, &TBError{Msg: "Couldn't get current song info for upcoming list", Err: err}
@@ -203,7 +203,7 @@ func (c TWMPDClient) GetUpcoming() ([]map[string]string, error) {
 }
 
 // Returns the entire playlist, played and unplayed.
-func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
+func (c *TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   client, err := c.GetClient()
   if err != nil {
     return nil, err
@@ -231,7 +231,7 @@ func (c TWMPDClient) GetPlaylist() ([]map[string]string, error) {
 
 // Add the specified uri to the playlist. uri can be a directory or file.
 // uri must be relative to MPD's music directory.
-func (c TWMPDClient) Add(uri string) error {
+func (c *TWMPDClient) Add(uri string) error {
   client, err := c.GetClient()
   if err != nil {
     return err

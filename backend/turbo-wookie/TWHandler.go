@@ -15,7 +15,7 @@ import (
 type TWHandler struct {
   // MpdClient is our MPD Client, used to tell MPD to do things. Important
   // things.
-  MpdClient TWMPDClient
+  MpdClient *TWMPDClient
 
   // ServerConfig is a map of configuration key/values found in
   // a config.yaml file.
@@ -108,7 +108,7 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 // to the stream. Because things sometimes happen to the stream.
 func (h *TWHandler) ListenAndServe() {
   // Setup a watcher.
-  WatchMPD(h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_control_port"])
+  WatchMPD(h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_control_port"], h)
 
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
@@ -180,7 +180,7 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, jsoniffy(m))
 
   // tell long pollers that the playlist changed.
-  h.polarChanged("playlist")
+  h.PolarChanged("playlist")
 }
 
 // Our long poller. Accessed through `/polar`.
@@ -240,7 +240,7 @@ func jsoniffy(v interface{}) string {
   return string(obj)
 }
 
-func (h *TWHandler) polarChanged(element string) {
+func (h *TWHandler) PolarChanged(element string) {
   m2 := make(map[string]string)
   m2["changed"] = element
   h.updater <- jsoniffy(m2)
