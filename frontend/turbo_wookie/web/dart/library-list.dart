@@ -32,10 +32,16 @@ class LibraryList extends PolymerElement {
     setupEvents();
   }
 
+  /**
+   * Setup all event listeners.
+   */
   void setupEvents() {
+    // Get the table rows.
     TableSectionElement head = table.tHead;
     TableRowElement row = head.children[0];
+    // For each row:
     row.children.forEach((TableCellElement cell) {
+      // If the row is not the add row, add a click event to sort the table.
       if(cell.innerHtml != "Add") {
         cell.onClick.listen((MouseEvent e) {
           sort(cell.innerHtml);
@@ -45,17 +51,21 @@ class LibraryList extends PolymerElement {
   }
 
   /**
-   * Get all the songs in the library and add them to the page.
+   * Get all the [Song]s in the library and add them to the page.
    */
   void getAllSongs() {
     HttpRequest.request("/songs")
       .then((HttpRequest request) {
 
+        // The songs come in a list of json data.
         List songsJson = JSON.decode(request.responseText);
+        // For every song:
         songsJson.forEach((Map json) {
+          // Create the new song from json and add it to our list.
           Song song = new Song.fromJson(json);
           songs.add(song);
 
+          // Now add our song to the table.
           TableRowElement row = tableBody.addRow();
           createSongRow(row, song);
         });
@@ -67,7 +77,7 @@ class LibraryList extends PolymerElement {
    * Helper method for creating a row in the song table.
    */
   void createSongRow(TableRowElement row, Song song) {
-
+    // Create the text cells and set the values.
     TableCellElement title = row.addCell();
     title.text = song.title;
     TableCellElement artist = row.addCell();
@@ -75,40 +85,42 @@ class LibraryList extends PolymerElement {
     TableCellElement album = row.addCell();
     album.text = song.album;
 
+    // Create the add image element for the button cell.
     ImageElement add = new ImageElement(src: "../img/add.svg")
     ..setAttribute("class", "addImg");
     ImageElement addHover = new ImageElement(src: "../img/add-hover.svg")
     ..setAttribute("class", "addHoverImg");
 
-    ButtonElement button = new ButtonElement()
+    // Create the add button and add it's images.
+    DivElement addDiv = new DivElement()
     ..append(add)
     ..append(addHover);
 
-    TableCellElement buttonCol = row.addCell();
-    buttonCol.classes.add("button");
-    buttonCol.appendHtml("${button.innerHtml}"); //TODO Listeners don't work like this...
-    buttonCol.onClick.listen((MouseEvent e) {
-      song.addToPlaylist();
-    });
-
-    button.onClick.listen((MouseEvent e) {
-      song.addToPlaylist();
-      print(song);
-    });
-    button.onFocus.listen((e) {
-      button.blur();
-    });
+    // Create the cell for the button and set it up.
+    TableCellElement addCol = row.addCell()
+      ..classes.add("button")
+      ..appendHtml(addDiv.innerHtml)
+      ..onClick.listen((MouseEvent e) {
+        song.addToPlaylist();
+      });
   }
 
+  /**
+   * Filter or search the table by a [String].
+   */
   void filter(String filter) {
+    // Get all the rows in the able and iterate over them.
     List<Element> rows = tableBody.children.toList();
     for(TableRowElement row in rows) {
+      // Get all the children in the row and iterate over them.
       List<Element> children = row.children;
       for(Element child in children) {
+        // If the child contains our filter, we show it.
         if(child.innerHtml.toLowerCase().contains(filter.toLowerCase())) {
           row.hidden = false;
           break;
         }
+        // If the child does not contain our filter, we hide it.
         else {
           row.hidden = true;
         }
@@ -116,38 +128,56 @@ class LibraryList extends PolymerElement {
     }
   }
 
+  /**
+   * Sort the table by Title, Artist, or Album
+   */
   void sort(String sortBy) {
+    // Sort by title.
     if(sortBy == "Title") {
-      songs.sort((a, b) => a.title.compareTo(b.title));
+      // If we already sorted by title, reverse it.
       if(titleSort) {
         songs = songs.reversed.toList();
         titleSort = true;
       }
+      else {
+        // Use the sort function to sort our list by the title variable in songs.
+        songs.sort((a, b) => a.title.compareTo(b.title));
+      }
+      // Make sure we know what the table is sorted by now.
       titleSort = !titleSort;
       artistSort = false;
       albumSort = false;
     }
+
+    // Sort by artist.
     else if(sortBy == "Artist") {
-      songs.sort((a, b) => a.artist.compareTo(b.artist));
       if(artistSort) {
         songs = songs.reversed.toList();
         artistSort = true;
+      }
+      else {
+        songs.sort((a, b) => a.artist.compareTo(b.artist));
       }
       artistSort = !artistSort;
       titleSort = false;
       albumSort = false;
     }
+
+    // Sort by album.
     else if(sortBy == "Album") {
-      songs.sort((a, b) => a.album.compareTo(b.album));
       if(albumSort) {
         songs = songs.reversed.toList();
         albumSort = true;
+      }
+      else {
+        songs.sort((a, b) => a.album.compareTo(b.album));
       }
       albumSort = !albumSort;
       titleSort = false;
       artistSort = false;
     }
 
+    // Recreate our table using our songs list.
     tableBody.children.clear();
     songs.forEach((Song song) {
       TableRowElement row = tableBody.addRow();

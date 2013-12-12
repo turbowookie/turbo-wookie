@@ -6,6 +6,9 @@ import "package:polymer/polymer.dart";
 import "current-song.dart";
 import "song.dart";
 
+/**
+ * Display's our playlist.
+ */
 @CustomTag("play-list")
 class PlayList extends PolymerElement {
 
@@ -25,7 +28,7 @@ class PlayList extends PolymerElement {
   }
 
   /**
-   * Request an update to the playlist
+   * Request an update to this [PlayList]
    */
   void getPlaylist() {
     HttpRequest.request("/upcoming")
@@ -33,27 +36,30 @@ class PlayList extends PolymerElement {
   }
 
   /**
-   * Should be called by an HttpRequest callback to update the playlist.
+   * Should be called by an HttpRequest callback to update this [PlayList].
    */
   void updatePlaylist(HttpRequest request) {
-    try {
-      songList.children.clear();
-      songList.children.add(currentSong);
-      setCurrentSong(songList.children[0]);
+    // Clear all the songs and readd the currentSong.
+    songList.children.clear();
+    songList.children.add(currentSong);
 
-      List json = JSON.decode(request.responseText);
-      json.forEach((Map songJson) {
-        Song song = new Song.fromJson(songJson);
-        LIElement listElement = createListItem(song);
-        songList.children.add(listElement);
-      });
-    } catch(exception, stacktrace) {
-    }
+    // For each song that we received from the server:
+    List json = JSON.decode(request.responseText);
+    json.forEach((Map songJson) {
+      // Create a new song and add it to the playlist list.
+      Song song = new Song.fromJson(songJson);
+      LIElement listElement = createListItem(song);
+      songList.children.add(listElement);
+    });
   }
 
+  /**
+   * A helper function to create a [Song]'s list item.
+   */
   LIElement createListItem(Song song) {
     LIElement listElement = new LIElement();
 
+    // Voting isn't ready yet so creating the thumbs is commented out.
     /*
     ButtonElement up = new ButtonElement()
     ..children.add(new ImageElement(src: "../img/thumbs-up.svg")
@@ -81,6 +87,7 @@ class PlayList extends PolymerElement {
     ..setAttribute("class", "thumbsWrapper");
     */
 
+    // Create new divs for title and artist.
     DivElement title = new DivElement()
     ..innerHtml = "${song.title}"
     ..setAttribute("class", "title");
@@ -88,27 +95,31 @@ class PlayList extends PolymerElement {
     ..innerHtml = "${song.artist}"
     ..setAttribute("class", "artist");
 
+    // Create a new div for the divs created above.
     DivElement songInfo = new DivElement()
     ..children.add(title)
     ..children.add(artist)
     ..setAttribute("class", "songInfo");
 
+    // Add our song info to the list element.
     listElement.children.add(songInfo);
-    //listElement.children.add(thumbsWrapper);
+    //listElement.children.add(thumbsWrapper); // Again this isn't ready yet.
 
     return listElement;
   }
 
-  void setCurrentSong(CurrentSong currentSong) {
-    this.currentSong = currentSong;
-  }
-
+  /**
+   * This will happen when a thumb button is clicked.
+   */
   void thumbClick(Song song, ButtonElement up, ButtonElement down, bool upClicked) {
+    // Everything is just getting disabled for now.
     up.disabled = true;
     down.disabled = true;
     up.setAttribute("class", "thumbs disabled");
     down.setAttribute("class", "thumbs disabled");
 
+    // If this was a thing on the server side, we could vote for a song
+    // based on it's filepath.
     /*
     if(upClicked) {
       HttpRequest.request("/voteup?song=${song.filePath}")

@@ -3,6 +3,9 @@ import "dart:async";
 import "dart:convert";
 import "dart:html";
 
+/**
+ * A song is a class that groups together data about a song.
+ */
 class Song {
   String title;
   String artist;
@@ -11,8 +14,21 @@ class Song {
   String filePath;
   Future<String> get albumArtUrl => getAlbumArtUrl();
 
+  /**
+   * Create a [Song] using [String]s.
+   */
   Song(this.title, this.artist, this.album, this.filePath);
 
+  /**
+   * Create a [Song] using a [Map].
+   *
+   * The map should have these fields:
+   * * Title
+   * * Artist
+   * * Album
+   * * Time
+   * * File
+   */
   Song.fromJson(Map map) {
     if (!(map.containsKey("Title") && map.containsKey("Artist") && map.containsKey("Album"))) {
       print(map["file"]);
@@ -42,6 +58,12 @@ class Song {
       filePath = map["file"];
   }
 
+  /**
+   * Gets the url of the album art using Last.FM.
+   *
+   * It will return a [Future] that will return a [String] with the
+   * value of the url.
+   */
   Future<String> getAlbumArtUrl() {
     Completer<String> completer = new Completer<String>();
 
@@ -84,6 +106,9 @@ class Song {
     return completer.future;
   }
 
+  /**
+   * Requests the server to add this song to it's playlist.
+   */
   void addToPlaylist() {
     HttpRequest.request("add?song=$filePath");
   }
