@@ -1,3 +1,20 @@
+#toggleSound.playing:hover #restImg,
+#toggleSound.paused #restImg,
+#toggleSound.playing #restImgHover,
+#toggleSound.paused #restImgHover,
+#toggleSound.playing #noteImg,
+#toggleSound.playing #noteImgHover,
+#toggleSound.paused:hover #noteImg,
+#toggleSound.paused #noteImgHover {
+  display: none;
+}
+
+#toggleSound.playing #restImg,
+#toggleSound.playing:hover #restImgHover,
+#toggleSound.paused #noteImg,
+#toggleSound.paused:hover #noteImgHover {
+  display: inline;
+}
 
 
 button {

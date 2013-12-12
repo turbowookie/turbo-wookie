@@ -108,8 +108,22 @@ class MediaBar extends PolymerElement {
     });
 
     // Don't allow focus on the pause/play button.
-    toggleSoundButton.onFocus.listen((e) {
+    toggleSoundButton.onFocus.listen((MouseEvent e) {
       toggleSoundButton.blur();
+    });
+
+    toggleSoundButton.onMouseOver.listen((MouseEvent e) {
+      if(isPlaying)
+        toggleSoundImage.src = "../img/rest-hover.svg";
+      else
+        toggleSoundImage.src = "../img/note-hover.svg";
+    });
+
+    toggleSoundButton.onMouseLeave.listen((MouseEvent e) {
+      if(isPlaying)
+        toggleSoundImage.src = "../img/rest.svg";
+      else
+        toggleSoundImage.src = "../img/note.svg";
     });
 
     // Set the volume slider listeners.
@@ -143,7 +157,8 @@ class MediaBar extends PolymerElement {
    * Play the stream.
    */
   void play() {
-    toggleSoundImage.src = "../img/rest.svg";
+    toggleSoundButton.classes.remove("paused");
+    toggleSoundButton.classes.add("playing");
     isPlaying = true;
 
     setVolume(double.parse(volumeSlider.value));
@@ -153,7 +168,8 @@ class MediaBar extends PolymerElement {
    * Pause the stream.
    */
   void pause() {
-    toggleSoundImage.src = "../img/note.svg";
+    toggleSoundButton.classes.remove("playing");
+    toggleSoundButton.classes.add("paused");
     isPlaying = false;
     setVolume(0.0);
   }

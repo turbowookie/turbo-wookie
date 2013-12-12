@@ -7,18 +7,12 @@ img {
   cursor: pointer;
 }
 
+.button:hover .addImg,
 .button .addHoverImg {
   display: none;
 }
 
-.button .addImg {
-  display: block;
-}
-
-.button:hover .addImg {
-  display: none;
-}
-
+.button .addImg,
 .button:hover .addHoverImg {
   display: block;
 }
