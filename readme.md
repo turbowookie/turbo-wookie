@@ -54,4 +54,4 @@ The only difference between the above steps for getting Turbo Wookie running is 
 
 Using the flags is easy, even if you're using `go run`, just append them to the end of the command (as in `go run server.go -dart -nompd`).
 
-The backend is fairly well documented, the frontend ... less so.
+Everything is fairly well documented.
