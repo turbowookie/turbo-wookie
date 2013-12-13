@@ -5,20 +5,20 @@ import (
   "time"
 )
 
-type TBError struct {
+type tbError struct {
   Msg string
   Err error
 }
 
-func (e *TBError) Error() string {
+func (e *tbError) Error() string {
   return e.Msg + "\n\t" + e.Err.Error()
 }
 
-type TBErrorMsg struct {
+type tbErrorMsg struct {
   Msg string
 }
 
-func (e *TBErrorMsg) Error() string {
+func (e *tbErrorMsg) Error() string {
   return e.Msg
 }
 

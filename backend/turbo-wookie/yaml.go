@@ -5,8 +5,10 @@ import (
   "github.com/kylelemons/go-gypsy/yaml"
 )
 
+// ReadConfig reads a configuration yaml file and spits out a map
+// of the keys we care about.
 func ReadConfig(filename string) (map[string]string, error) {
-  tb_keys := [...]string{
+  tbKeys := [...]string{
     "mpd_command",
     "server_port",
     "server_domain",
@@ -26,16 +28,16 @@ func ReadConfig(filename string) (map[string]string, error) {
   file, err := yaml.ReadFile(filename)
 
   if err != nil {
-    return nil, &TBError{Msg: "Cannot read " + filename + " for YAML parsing", Err: err}
+    return nil, &tbError{Msg: "Cannot read " + filename + " for YAML parsing", Err: err}
     //log.Fatal("Cannot read", filename, "for YAML parsing")
   }
 
   config := make(map[string]string)
 
-  for _, key := range tb_keys {
+  for _, key := range tbKeys {
     val, err := file.Get(key)
     if err != nil {
-      return nil, &TBError{Msg: "Config is missing key `" + key + "`", Err: err}
+      return nil, &tbError{Msg: "Config is missing key `" + key + "`", Err: err}
       //log.Fatal("Config is missing key", key)
     }
 

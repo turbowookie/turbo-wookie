@@ -9,7 +9,7 @@ import (
   "time"
 )
 
-// Simpler layer over a gompd/mpd.Client.
+// TWMPDClient is a simpler layer over a gompd/mpd.Client.
 type TWMPDClient struct {
   // Domain MPD's running on
   Domain string
@@ -24,7 +24,7 @@ type TWMPDClient struct {
   config map[string]string
 }
 
-// Create a new TWMPDClient.
+// NewTWMPDClient creates a new TWMPDClient.
 // Takes in a config map (typically
 // retreived from a config.yaml file), and a noStartMPD bool (which, if true
 // will NOT start MPD . If it's false (and it should default to false), it will
@@ -69,7 +69,7 @@ func (c *TWMPDClient) startMpd() *exec.Cmd {
   return cmd
 }
 
-// Kill the underlying MPD process.
+// KillMpd kills the underlying MPD process.
 func (c *TWMPDClient) KillMpd() {
   if c.MpdCmd != nil {
     c.MpdCmd.Process.Kill()
@@ -78,10 +78,10 @@ func (c *TWMPDClient) KillMpd() {
 
 // Connect to MPD.
 // It just means there's slightly less typing involved.
-func (c *TWMPDClient) GetClient() (*mpd.Client, error) {
+func (c *TWMPDClient) getClient() (*mpd.Client, error) {
   client, err := mpd.Dial("tcp", c.toString())
   if err != nil {
-    return nil, &TBError{Msg: "Couldn't connect to " + c.toString(), Err: err}
+    return nil, &tbError{Msg: "Couldn't connect to " + c.toString(), Err: err}
   }
 
   return client, nil
@@ -96,37 +96,37 @@ func (c *TWMPDClient) toString() string {
 // Startup routine. Makes sure we can connect to MPD and that there's something
 // playing.
 func (c *TWMPDClient) Startup() error {
-  client, err := c.GetClient()
+  client, err := c.getClient()
   if err != nil {
-    return &TBError{Msg: "MPD isn't running.", Err: err}
+    return &tbError{Msg: "MPD isn't running.", Err: err}
   }
   defer client.Close()
 
   // check if client is playing
   attrs, err := client.Status()
   if err != nil {
-    return &TBError{Msg: "Couldn't get status from client", Err: err}
+    return &tbError{Msg: "Couldn't get status from client", Err: err}
   }
 
   // if we're not playing, play a random song
   if attrs["state"] != "play" {
     songs, err := client.GetFiles()
     if err != nil {
-      return &TBError{Msg: "Couldn't get all files...", Err: err}
+      return &tbError{Msg: "Couldn't get all files...", Err: err}
     }
 
     song := songs[random(0, len(songs))]
     if err := client.Add(song); err != nil {
-      return &TBError{Msg: "Couldn't add song: " + song, Err: err}
+      return &tbError{Msg: "Couldn't add song: " + song, Err: err}
     }
 
     plen, err := strconv.Atoi(attrs["playlistlength"])
     if err != nil {
-      return &TBError{Msg: "Couldn't get playlistlength...", Err: err}
+      return &tbError{Msg: "Couldn't get playlistlength...", Err: err}
     }
 
     if err := client.Play(plen); err != nil {
-      return &TBError{Msg: "Couldn't play song", Err: err}
+      return &tbError{Msg: "Couldn't play song", Err: err}
     }
   }
 
@@ -153,9 +153,10 @@ func attrsToMap(attrs []mpd.Attrs) []map[string]string {
     THINGS THE TWHandler WANTS
 *********************************/
 
-// Return a all songs in the library, and their information (artist, album, etc).
+// GetFiles returns a map of all songs in the library, and their stored
+// metadata (artist, album, etc).
 func (c *TWMPDClient) GetFiles() ([]map[string]string, error) {
-  client, err := c.GetClient()
+  client, err := c.getClient()
   if err != nil {
     return nil, err
   }
@@ -163,15 +164,15 @@ func (c *TWMPDClient) GetFiles() ([]map[string]string, error) {
 
   mpdFiles, err := client.ListAllInfo("/")
   if err != nil {
-    return nil, &TBError{Msg: "Couldn't listallinfo from MPD", Err: err}
+    return nil, &tbError{Msg: "Couldn't listallinfo from MPD", Err: err}
   }
 
   return attrsToMap(mpdFiles), nil
 }
 
-// Return's information about the current song
+// CurrentSong returns information about the song currently playing.
 func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
-  client, err := c.GetClient()
+  client, err := c.getClient()
   if err != nil {
     return nil, err
   }
@@ -179,22 +180,23 @@ func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
 
   currentSong, err := client.CurrentSong()
   if err != nil {
-    return nil, &TBError{Msg: "Couldn't get current song", Err: err}
+    return nil, &tbError{Msg: "Couldn't get current song", Err: err}
   }
 
   return currentSong, nil
 }
 
-// Returns all upcoming songs in the playlist, and their information.
+// GetUpcoming returns a list of all upcoming songs in the queue, and 
+// their metadata.
 func (c *TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
   if err != nil {
-    return nil, &TBError{Msg: "Couldn't get current song info for upcoming list", Err: err}
+    return nil, &tbError{Msg: "Couldn't get current song info for upcoming list", Err: err}
   }
 
   pos, err := strconv.Atoi(currentSong["Pos"])
   if err != nil {
-    return nil, &TBError{Msg: "Couldn't turn current song's position to int", Err: err}
+    return nil, &tbError{Msg: "Couldn't turn current song's position to int", Err: err}
   }
 
   playlist, err := c.GetPlaylist()
@@ -205,9 +207,9 @@ func (c *TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   return playlist[pos+1:], nil
 }
 
-// Returns the entire playlist, played and unplayed.
+// GetPlaylist returns the entire playlist queue, played and unplayed.
 func (c *TWMPDClient) GetPlaylist() ([]map[string]string, error) {
-  client, err := c.GetClient()
+  client, err := c.getClient()
   if err != nil {
     return nil, err
   }
@@ -232,10 +234,10 @@ func (c *TWMPDClient) GetPlaylist() ([]map[string]string, error) {
   return playlist, nil
 }
 
-// Add the specified uri to the playlist. uri can be a directory or file.
+// Add adds the specified uri to the playlist. uri can be a directory or file.
 // uri must be relative to MPD's music directory.
 func (c *TWMPDClient) Add(uri string) error {
-  client, err := c.GetClient()
+  client, err := c.getClient()
   if err != nil {
     return err
   }

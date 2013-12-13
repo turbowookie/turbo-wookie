@@ -34,8 +34,8 @@ type TWHandler struct {
   pollerClients int
 }
 
-// Create a new TWHandler, using the passed in filename as a yaml file
-// containing the server's configuation settings.
+// NewTWHandler creates a new TWHandler, using the passed in filename as a 
+// yaml file containing the server's configuation settings.
 func NewTWHandler(filename string, serveDart, startMPD bool) (*TWHandler, error) {
   // make us a pointer to a handler.
   h := &TWHandler{}
@@ -98,14 +98,15 @@ func (h *TWHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
   h.Router.ServeHTTP(w, r)
 }
 
-// Make TWHandler extendible...
+// HandleFunc make TWHandler extendible...
 // Same as ServeHTTP, just pass up the Router's function.
 func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *http.Request)) *mux.Route {
   return h.Router.HandleFunc(path, f)
 }
 
-// Serve up some TurboWookie. And setup an MPD Watcher to see when things happen
-// to the stream. Because things sometimes happen to the stream.
+// ListenAndServe serve up some TurboWookie. And setup an MPD Watcher to see 
+// when things happen to the stream. Because things sometimes happen to the 
+// stream.
 func (h *TWHandler) ListenAndServe() {
   // Setup a watcher.
   WatchMPD(h.ServerConfig["mpd_domain"]+":"+h.ServerConfig["mpd_control_port"], h)
@@ -242,8 +243,8 @@ func jsoniffy(v interface{}) string {
   return string(obj)
 }
 
-// Tell clients connected to our long-poll system that something (element)
-// has changed.
+// PolarChanged tell clients connected to our long-poll system that something 
+// (element) has changed.
 func (h *TWHandler) PolarChanged(element string) {
   m2 := make(map[string]string)
   m2["changed"] = element

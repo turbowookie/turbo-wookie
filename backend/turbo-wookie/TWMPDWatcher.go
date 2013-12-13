@@ -6,46 +6,51 @@ import (
   "strconv"
 )
 
-type MPDWatcher struct {
+type mpdWatcher struct {
   w    *mpd.Watcher
   host string
   h    *TWHandler
 }
 
+// WatchMPD starts up an MPD watcher, and does performs tasks when certain
+// things happen. The biggest task is in telling the client things have changed
+// using a long-poll system.
 func WatchMPD(host string, handler *TWHandler) {
   w, err := mpd.NewWatcher("tcp", host, "")
   if err != nil {
     log.Fatal("Couldn't start watching MPD")
   }
 
-  mw := new(MPDWatcher)
+  mw := new(mpdWatcher)
   mw.w = w
   mw.host = host
   mw.h = handler
 
-  log.Println("Staring MPDWatcher for", host)
+  log.Println("Staring mpdWatcher for", host)
 
   go mw.logWatcherEvents()
   go mw.logWatcherErrors()
 }
 
-func (mw *MPDWatcher) logWatcherEvents() {
+func (mw *mpdWatcher) logWatcherEvents() {
   for subsystem := range mw.w.Event {
     if subsystem == "player" {
       mw.queueSong()
     }
 
+    // alert the TWHandler that something in MPD has changed, so it can tell
+    // the client.
     mw.h.PolarChanged(subsystem)
   }
 }
 
-func (mw *MPDWatcher) logWatcherErrors() {
+func (mw *mpdWatcher) logWatcherErrors() {
   for err := range mw.w.Error {
     log.Println("MPD Watcher Error!\n", err)
   }
 }
 
-func (mw *MPDWatcher) queueSong() {
+func (mw *mpdWatcher) queueSong() {
   client, err := mpd.Dial("tcp", mw.host)
   if err != nil {
     log.Fatal("Couldn't connect to MPD...", err)
