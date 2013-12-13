@@ -5,22 +5,33 @@
 # and to set some server configuation variables (such as domain, and port, 
 # and MPD's port).
 
-#Don't use quotes in the config.yaml
+# Don't use quotes in the config.yaml
 
-#the only argument needed to start MPD is the path to the log file
-mpd_command: mpd
-mpd_arguments: required
+# what port do you want Turbo Wookie to run on?
 server_port: 9000
-server_domain: localhost
-mpd_http_domain: localhost
+
+# If MPD isn't in your path, change this to be the mpd executable's path
+mpd_command: mpd
+
+# what domain is MPD running on? You only need to change this if
+# MPD is running on a different computer
 mpd_domain: localhost
+
+# What port is MPD outputting the stream to? Default is 8000
 mpd_http_port: 8000
+
+# What port is MPD listening for commands? Default is 6600
 mpd_control_port: 6600
 
 # MUST BE ABSOLUTE!
+# Where is Turbo Wookie's source located?
 turbo_wookie_directory: /home/don/code/turbo-wookie
-mpd_subdirectory: /backend/mpd
 
+# Relative to Turbo Wookie's directory, where are MPD files being stored?
+mpd_subdirectory: backend/mpd
+
+# Relative to the MPD subdirectory, what are the paths of these files and 
+# directories
 mpd_music_directory: music
 mpd_playlist_directory: playlists
 mpd_db_file: database.db

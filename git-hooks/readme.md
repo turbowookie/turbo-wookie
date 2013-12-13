@@ -1,6 +1,6 @@
 #Git Hooks
 
-- Move all files in this folder to the `.git/hooks`. folder.
+- Copy all files in this folder to the `.git/hooks`. folder.
 - Be sure that you have permission to run these files. (You will see no output if you do not have permission)
 
 ##`post-merge`

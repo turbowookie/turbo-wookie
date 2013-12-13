@@ -21,11 +21,11 @@ type TWMPDClient struct {
   MpdCmd *exec.Cmd
 
   // configuration stuff
-  config   map[string]string
+  config map[string]string
 }
 
 // Create a new TWMPDClient.
-// Takes in a config map (which is just a bunch of key/value pairs typically
+// Takes in a config map (typically
 // retreived from a config.yaml file), and a noStartMPD bool (which, if true
 // will NOT start MPD . If it's false (and it should default to false), it will
 // start MPD as expected).
@@ -37,7 +37,7 @@ func NewTWMPDClient(config map[string]string, noStartMPD bool) *TWMPDClient {
 
   // Don't start MPD if `noStartMPD` is true.
   if !noStartMPD {
-    c.MpdCmd = c.startMPD()
+    c.MpdCmd = c.startMpd()
   }
 
   return c
@@ -47,13 +47,14 @@ func NewTWMPDClient(config map[string]string, noStartMPD bool) *TWMPDClient {
     HELPER FUNCTIONS
 ************************/
 
-// Start an MPD instance, assuming MPD is in your system path.
-func (c *TWMPDClient) startMPD() *exec.Cmd {
+// Start an MPD instance.
+func (c *TWMPDClient) startMpd() *exec.Cmd {
   mpdCommand := c.config["mpd_command"]
   mpdConf := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
 
   // --no-daemon is for Linux, it tells MPD to run in the foreground, and keeps
   // it attached to cmd's underlying Process. Useful, so we can kill it later.
+  // It also doesn't hurt Windows instances, so it's fine. Promise.
   cmd := exec.Command(mpdCommand, "--no-daemon", mpdConf)
 
   // Run the command in the backround
@@ -62,15 +63,17 @@ func (c *TWMPDClient) startMPD() *exec.Cmd {
     log.Fatal("Error running MPD command")
   }
 
-  // Wait 1 second. Otherwise MPD hasn't started completely and we'll get some
+  // Wait .1 seconds. Otherwise MPD hasn't started completely and we'll get some
   // Fatals saying we couldn't connect to MPD.
-  time.Sleep(time.Second)
+  time.Sleep(time.Second / 10)
   return cmd
 }
 
 // Kill the underlying MPD process.
 func (c *TWMPDClient) KillMpd() {
-  c.MpdCmd.Process.Kill()
+  if c.MpdCmd != nil {
+    c.MpdCmd.Process.Kill()
+  }
 }
 
 // Connect to MPD.
@@ -113,8 +116,8 @@ func (c *TWMPDClient) Startup() error {
     }
 
     song := songs[random(0, len(songs))]
-    if client.Add(song) != nil {
-      return &TBErrorMsg{Msg: "Couldn't add song: " + song}
+    if err := client.Add(song); err != nil {
+      return &TBError{Msg: "Couldn't add song: " + song, Err: err}
     }
 
     plen, err := strconv.Atoi(attrs["playlistlength"])
@@ -122,8 +125,8 @@ func (c *TWMPDClient) Startup() error {
       return &TBError{Msg: "Couldn't get playlistlength...", Err: err}
     }
 
-    if client.Play(plen) != nil {
-      return &TBErrorMsg{Msg: "Couldn't play song"}
+    if err := client.Play(plen); err != nil {
+      return &TBError{Msg: "Couldn't play song", Err: err}
     }
   }
 

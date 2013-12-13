@@ -42,16 +42,19 @@ If you'd rather just have the gist, and figure it out yourself:
 
 Eventually (hopefully) we'll put together an executable, complete with the frontend, so you don't have to manually build all that stuff.
 
+Turbo Wookie assumes you're running it in a directory with a `config.yaml` file with the required keys for Turbo Wookie. If you aren't, you can specify the location of a config file using the `-config` flag (like this: `go run server.go -config /path/to/config.yaml`).
+
 
 ## How can I play with it?
 
 You need the same things installed as before, in addition to [Dartium](https://www.dartlang.org/tools/dartium/), a Chromium build that can run unconverted Dart code, if you want to play with the frontend.
 
-The only difference between the above steps for getting Turbo Wookie running is that when you run the server, you might want to use one of our two flags:
+The only difference between the above steps for getting Turbo Wookie running is that when you run the server, you might want to use one of our three flags:
 
-- `-dart` will serve up the unconverted dart code (the `frontend/turbo_wookie/web` directory instead of the `frontend/turbo_wookie/build` directory).
-- `-nompd` will *not* start MPD with the server, it'll assume you've started MPD already.
+- `-dart` (bool) will serve up the unconverted dart code (the `frontend/turbo_wookie/web` directory instead of the `frontend/turbo_wookie/build` directory).
+- `-nompd` (bool) will *not* start MPD with the server, it'll assume you've started MPD already. If you don't start MPD and use this flag, bad things will happen (as in, the server won't start because it won't be able to talk to MPD).
+- `-config` (string) will specify a specific config file. If you don't include the config flag, it will assume there's a config file in your current working directory.
 
-Using the flags is easy, even if you're using `go run`, just append them to the end of the command (as in `go run server.go -dart -nompd`).
+Using the flags is easy, even if you're using `go run`, just append them to the end of the command (as in `go run server.go -dart -config /path/to/config.yaml -nompd`).
 
 Everything is fairly well documented.

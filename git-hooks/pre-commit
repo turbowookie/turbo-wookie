@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+'''
+  Automatically format the go code in the backend directory.
+  Because it's useful to make sure everyone has the same style...
+  Even if they don't write that way.
+'''
+
+from os import walk, getcwd, popen, chdir
+from subprocess import call
+from glob import glob
+
+def directoriesWithExt(ext, path):
+  directories = []
+  for root, dirs, files in walk(path):
+    for f in files:
+      if f[len(ext) * -1:] == ext:
+        directories.append(root)
+        break
+
+  return directories
+
+
+goDirs = directoriesWithExt(".go", getcwd())
+root = getcwd()
+
+for directory in goDirs:
+  chdir(root)
+  chdir(directory)
+
+  for f in glob("*.go"):
+    call(["gofmt", "-tabs=false", "-tabwidth=2", "-s", "-w", f])

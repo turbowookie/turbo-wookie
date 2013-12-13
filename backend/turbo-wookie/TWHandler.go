@@ -37,8 +37,8 @@ type TWHandler struct {
 // Create a new TWHandler, using the passed in filename as a yaml file
 // containing the server's configuation settings.
 func NewTWHandler(filename string, serveDart, startMPD bool) (*TWHandler, error) {
-  // make us a handler.
-  h := TWHandler{}
+  // make us a pointer to a handler.
+  h := &TWHandler{}
 
   // attempt to read the passed in config file. See `yaml.go` for more info.
   config, err := ReadConfig(filename)
@@ -89,7 +89,7 @@ func NewTWHandler(filename string, serveDart, startMPD bool) (*TWHandler, error)
   h.pollerClients = 0
 
   // nothing bad happened. Suprise!
-  return &h, nil
+  return h, nil
 }
 
 // Make TWHandler an HTTP.Handler. Hackily. Just pass up the underlying
@@ -108,7 +108,7 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 // to the stream. Because things sometimes happen to the stream.
 func (h *TWHandler) ListenAndServe() {
   // Setup a watcher.
-  WatchMPD(h.ServerConfig["mpd_domain"] + ":" + h.ServerConfig["mpd_control_port"], h)
+  WatchMPD(h.ServerConfig["mpd_domain"]+":"+h.ServerConfig["mpd_control_port"], h)
 
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
@@ -224,12 +224,14 @@ func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
     HELPER FUNCTIONS
 ************************/
 
+// Print an error the the screen, and send a simple message to the client.
 func printError(w http.ResponseWriter, msg string, err error) {
   log.Println("ERROR:", err)
   log.Println("Sending to client:", msg)
   fmt.Fprintf(w, msg+"\n")
 }
 
+// Turn things into JSON.
 func jsoniffy(v interface{}) string {
   obj, err := json.MarshalIndent(v, "", "  ")
   if err != nil {
@@ -240,6 +242,8 @@ func jsoniffy(v interface{}) string {
   return string(obj)
 }
 
+// Tell clients connected to our long-poll system that something (element)
+// has changed.
 func (h *TWHandler) PolarChanged(element string) {
   m2 := make(map[string]string)
   m2["changed"] = element

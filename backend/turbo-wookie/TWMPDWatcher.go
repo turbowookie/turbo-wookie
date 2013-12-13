@@ -23,14 +23,11 @@ func WatchMPD(host string, handler *TWHandler) {
   mw.host = host
   mw.h = handler
 
-
   log.Println("Staring MPDWatcher for", host)
 
   go mw.logWatcherEvents()
   go mw.logWatcherErrors()
 }
-
-
 
 func (mw *MPDWatcher) logWatcherEvents() {
   for subsystem := range mw.w.Event {
