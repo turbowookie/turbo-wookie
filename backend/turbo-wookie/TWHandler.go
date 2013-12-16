@@ -9,6 +9,7 @@ import (
   "net/http/httputil"
   "net/url"
   "time"
+  "strconv"
 )
 
 // TWHandler is our custom http.Handler used to actually do the HTTP stuff.
@@ -36,7 +37,7 @@ type TWHandler struct {
 
 // NewTWHandler creates a new TWHandler, using the passed in filename as a
 // yaml file containing the server's configuation settings.
-func NewTWHandler(filename string, serveDart, startMPD bool) (*TWHandler, error) {
+func NewTWHandler(filename string, serveDart, startMPD bool, portOverride int) (*TWHandler, error) {
   // make us a pointer to a handler.
   h := &TWHandler{}
 
@@ -44,6 +45,10 @@ func NewTWHandler(filename string, serveDart, startMPD bool) (*TWHandler, error)
   config, err := ReadConfig(filename)
   if err != nil {
     return nil, err
+  }
+
+  if !(config["server_port"] != "9000" && portOverride == 9000) {
+    config["server_port"] = strconv.Itoa(portOverride)
   }
 
   h.ServerConfig = config
@@ -107,13 +112,13 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 // ListenAndServe serve up some TurboWookie. And setup an MPD Watcher to see
 // when things happen to the stream. Because things sometimes happen to the
 // stream.
-func (h *TWHandler) ListenAndServe() {
+func (h *TWHandler) ListenAndServe() error {
   // Setup a watcher.
   WatchMPD(h.ServerConfig["mpd_domain"]+":"+h.ServerConfig["mpd_control_port"], h)
 
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)
-  http.ListenAndServe(port, h)
+  return http.ListenAndServe(port, h)
 }
 
 /************************

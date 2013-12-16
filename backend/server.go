@@ -13,11 +13,12 @@ func main() {
   serveDart := flag.Bool("dart", false, "Include to serve dart code.")
   noStartMPD := flag.Bool("nompd", false, "Include to not start MPD.")
   configFile := flag.String("config", "config.yaml", "Location of a Turbo Wookie configuration file.")
+  portOverride := flag.Int("port", 9000, "Force override Turbo Wookie's port.")
 
   flag.Parse()
 
   // create a new Turbo Wookie Handler, using our flags.
-  h, err := turbowookie.NewTWHandler(*configFile, *serveDart, *noStartMPD)
+  h, err := turbowookie.NewTWHandler(*configFile, *serveDart, *noStartMPD, *portOverride)
   if err != nil {
     log.Fatal(err)
   }
@@ -37,5 +38,7 @@ func main() {
   }
 
   // Listen for and serve HTTP requests
-  h.ListenAndServe()
+  if err := h.ListenAndServe(); err != nil {
+    log.Println(err)
+  }
 }
