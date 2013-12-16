@@ -6,7 +6,6 @@ If that doesn't really explain anything, in less technical terms, Turbo Wookie i
 
 Think of it like an internet radio station, but the only music played is yours, and the DJ is everyone you let access your Turbo Wookie instance.
 
-
 ## Background
 
 Turbo Wookie started as a group final project for a Software Design and Development course. We liked it more than the other ideas proposed to the group.
@@ -58,3 +57,11 @@ The only difference between the above steps for getting Turbo Wookie running is 
 Using the flags is easy, even if you're using `go run`, just append them to the end of the command (as in `go run server.go -dart -config /path/to/config.yaml -nompd`).
 
 Everything is fairly well documented.
+
+## Other Uses
+
+If you really want to, you can use Turbo Wookie as an MPD controller, and output
+to your speakers instead of to the web (or do both). In this case, just adjust
+your `backend/mpd/mpd.conf`. Uncomment one of the other `audio_output` blocks
+(for most Linux users, the `alsa` output should be fine; OS X and Windows users,
+I'm not sure what output you need).

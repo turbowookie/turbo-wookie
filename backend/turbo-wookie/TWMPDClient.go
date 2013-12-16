@@ -186,7 +186,7 @@ func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
   return currentSong, nil
 }
 
-// GetUpcoming returns a list of all upcoming songs in the queue, and 
+// GetUpcoming returns a list of all upcoming songs in the queue, and
 // their metadata.
 func (c *TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
