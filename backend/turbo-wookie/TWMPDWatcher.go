@@ -4,6 +4,7 @@ import (
   "github.com/dkuntz2/gompd/mpd"
   "log"
   "strconv"
+  "time"
 )
 
 type mpdWatcher struct {
@@ -47,6 +48,7 @@ func (mw *mpdWatcher) logWatcherEvents() {
 func (mw *mpdWatcher) logWatcherErrors() {
   for err := range mw.w.Error {
     log.Println("MPD Watcher Error!\n", err)
+    time.Sleep(time.Second * 15)
   }
 }
 

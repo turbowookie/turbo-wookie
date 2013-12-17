@@ -8,8 +8,8 @@ import (
   "net/http"
   "net/http/httputil"
   "net/url"
-  "time"
   "strconv"
+  "time"
 )
 
 // TWHandler is our custom http.Handler used to actually do the HTTP stuff.

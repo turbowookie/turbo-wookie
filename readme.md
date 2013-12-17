@@ -63,5 +63,5 @@ Everything is fairly well documented.
 If you really want to, you can use Turbo Wookie as an MPD controller, and output
 to your speakers instead of to the web (or do both). In this case, just adjust
 your `backend/mpd/mpd.conf`. Uncomment one of the other `audio_output` blocks
-(for most Linux users, the `alsa` output should be fine; OS X and Windows users,
-I'm not sure what output you need).
+(for most Linux users, the `alsa` output should be fine; for Windows users , the
+`winmm` block should do; OS X users, I have no idea...)

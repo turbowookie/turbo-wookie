@@ -63,6 +63,8 @@ func (c *TWMPDClient) startMpd() *exec.Cmd {
     log.Fatal("Error running MPD command")
   }
 
+  log.Println("Starting MPD")
+
   // Wait .1 seconds. Otherwise MPD hasn't started completely and we'll get some
   // Fatals saying we couldn't connect to MPD.
   time.Sleep(time.Second / 10)
