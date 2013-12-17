@@ -41,7 +41,7 @@ class Observer {
       // Update whatever was changed if we care.
       if(changed == "playlist")
         updatePlaylist();
-      else if(changed == "library")
+      else if(changed == "database")
         updateLibrary();
     });
   }
