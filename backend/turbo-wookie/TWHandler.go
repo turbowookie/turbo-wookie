@@ -74,6 +74,8 @@ func NewTWHandler(filename string, serveDart, startMPD bool, portOverride int) (
     }).ServeHTTP)
 
   h.Router.HandleFunc("/songs", h.listSongs)
+  h.Router.HandleFunc("/artists", h.listArtists)
+  h.Router.HandleFunc("/albums", h.listArtistAlbums)
   h.Router.HandleFunc("/current", h.getCurrentSong)
   h.Router.HandleFunc("/upcoming", h.getUpcomingSongs)
   h.Router.HandleFunc("/add", h.addSong)
@@ -134,6 +136,34 @@ func (h *TWHandler) listSongs(w http.ResponseWriter, r *http.Request) {
   }
 
   fmt.Fprintf(w, jsoniffy(files))
+}
+
+func (h *TWHandler) listArtists(w http.ResponseWriter, r *http.Request) {
+  artists, err := h.MpdClient.GetArtists()
+  if err != nil {
+    printError(w, "An error occured while processing your request", err)
+    return
+  }
+
+  fmt.Fprintf(w, jsoniffy(artists))
+}
+
+func (h *TWHandler) listArtistAlbums(w http.ResponseWriter, r *http.Request) {
+  r.ParseForm()
+  artist, ok := r.Form["artist"]
+  var albums []string
+  var err error
+  if !ok {
+    albums, err = h.MpdClient.GetAlbums("")
+  } else {
+    albums, err = h.MpdClient.GetAlbums(artist[0])
+  }
+  if err != nil {
+    printError(w, "An error occured while processing your request", err)
+    return
+  }
+
+  fmt.Fprintf(w, jsoniffy(albums))
 }
 
 // Return information about the currently playing song.

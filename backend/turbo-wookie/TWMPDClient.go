@@ -2,8 +2,8 @@ package turbowookie
 
 import (
   //"github.com/fhs/gompd/mpd"
-  //"github.com/dkuntz2/gompd/mpd"
-  "../../../gompd/mpd"
+  "github.com/dkuntz2/gompd/mpd"
+  //"../../../gompd/mpd"
   "log"
   "os/exec"
   "strconv"
@@ -171,6 +171,41 @@ func (c *TWMPDClient) GetFiles() ([]map[string]string, error) {
   }
 
   return attrsToMap(mpdFiles), nil
+}
+
+func (c *TWMPDClient) GetArtists() ([]string, error) {
+  client, err := c.getClient()
+  if err != nil {
+    return nil, err
+  }
+  defer client.Close()
+
+  artists, err := client.List("artist")
+  if err != nil {
+    return nil, err
+  }
+
+  return artists, nil
+}
+
+func (c *TWMPDClient) GetAlbums(artist string) ([]string, error) {
+  client, err := c.getClient()
+  if err != nil {
+    return nil, err
+  }
+  defer client.Close()
+  var command string
+  if len(artist) > 0 {
+    command = "album artist \"" + artist + "\""
+  } else {
+    command = "album"
+  }
+  album, err := client.List(command)
+  if err != nil {
+    return nil, err
+  }
+
+  return album, nil
 }
 
 // CurrentSong returns information about the song currently playing.
