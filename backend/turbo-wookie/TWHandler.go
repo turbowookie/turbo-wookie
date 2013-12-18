@@ -136,9 +136,13 @@ func (h *TWHandler) listSongs(w http.ResponseWriter, r *http.Request) {
 	var songs []map[string]string
 	var err error
 
+	log.Println("oks")
+	log.Println(ok1)
+	log.Println(ok2)
+
 	if ok1 && ok2 {
 		songs, err = h.MpdClient.GetSongs(artist[0], album[0])
-	} else if !ok2 {
+	} else if ok1 && !ok2 {
 		songs, err = h.MpdClient.GetSongs(artist[0], "")
 	} else {
 		songs, err = h.MpdClient.GetFiles()
