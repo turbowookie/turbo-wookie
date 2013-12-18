@@ -4,6 +4,7 @@ import "dart:html";
 import "media-bar.dart";
 import "play-list.dart";
 import "library-list.dart";
+import "header-bar.dart";
 import "observer.dart";
 
 /**
@@ -17,16 +18,17 @@ void main() {
   MediaBar mediaBar = querySelector("#mediaBar");
   PlayList playlist = querySelector("#playlist");
   LibraryList library = querySelector("#library");
-  TextInputElement search = querySelector("#search");
+  HeaderBar header = querySelector("#header");
 
   // Connect our elements.
   new Observer(playlist, library);
-  search.onInput.listen((Event e) => library.filter(search.value));
 
   // When polymer is done loading, we can connect the mediaBar and the
   // playlist. We have to wait for polymer to be ready just for the
   // compiled down Javascript part.
   Polymer.onReady.whenComplete((){
     mediaBar.setPlaylist(playlist);
+    mediaBar.setHeader(header);
+    header.setLibrary(library);
   });
 }

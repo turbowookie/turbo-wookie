@@ -1,0 +1,43 @@
+header {
+  background-color: #111;
+  line-height: 60px;
+  max-height: 60px;
+  padding: 0;
+}
+
+h1 {
+  color: #33B5E5;
+  margin: 0;
+  display: inline-flex;
+}
+
+h1 img {
+  height: 50px;
+  padding: 5px;
+}
+
+#search {
+  font-size: 14px;
+  font-family: Roboto, "Open Sans", "Droid Sans", sans-serif;
+  float: right;
+  width: calc(100% - 350px);
+  border: 1px solid #444;
+  height: 20px;
+  line-height: 20px;
+  padding: 8px 28px;
+  margin: 10px 23px 10px 0;
+  background-color: #2a2a2a;
+
+  color: #ccc;
+}
+
+#search:focus {
+  outline: none;
+  color: #fff;
+  background-color: #4a4a4a;
+}
+
+/* TODO: duplicate for other browsers */
+#search::-webkit-input-placeholder {
+  color: #aaa;
+}

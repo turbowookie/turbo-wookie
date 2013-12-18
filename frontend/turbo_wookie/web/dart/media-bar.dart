@@ -4,6 +4,7 @@ import "dart:html";
 import "package:polymer/polymer.dart";
 import "current-song.dart";
 import "play-list.dart";
+import "header-bar.dart";
 import "song.dart";
 
 /**
@@ -21,6 +22,7 @@ class MediaBar extends PolymerElement {
   String album;
   bool preventOnEmptied;
   PlayList playlist;
+  HeaderBar header;
 
 
   MediaBar.created()
@@ -39,7 +41,6 @@ class MediaBar extends PolymerElement {
     stream = $["audioElement"];
     stream.src = "/stream";
 
-    setupHotKeys();
     setupEvents();
     progressSlider.disabled = true;
 
@@ -61,7 +62,12 @@ class MediaBar extends PolymerElement {
     window.onKeyPress
       // Be sure we are not on an input element before we do anything.
       .where((KeyboardEvent e) {
-        return document.activeElement.tagName != "INPUT";
+        // TODO There must be a better way to do this?
+        return
+            // For the dart code.
+            !header.isInput() &&
+            // For the compiled code.
+            document.activeElement.tagName != "INPUT";
     })
       .listen((KeyboardEvent e) {
         e.preventDefault();
@@ -201,6 +207,11 @@ class MediaBar extends PolymerElement {
    */
   double getVolume() {
     return double.parse(volumeSlider.value);
+  }
+  
+  void setHeader(HeaderBar header) {
+    this.header = header;
+    setupHotKeys();
   }
 
   /**
