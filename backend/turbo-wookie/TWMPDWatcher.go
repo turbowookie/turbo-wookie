@@ -4,13 +4,14 @@ import (
   "github.com/turbowookie/gompd/mpd"
   "log"
   "strconv"
-  "time"
+  //"time"
 )
 
 type mpdWatcher struct {
   w    *mpd.Watcher
   host string
   h    *TWHandler
+  c    chan bool
 }
 
 // WatchMPD starts up an MPD watcher, and does performs tasks when certain
@@ -26,31 +27,52 @@ func WatchMPD(host string, handler *TWHandler) {
   mw.w = w
   mw.host = host
   mw.h = handler
+  mw.c = make(chan bool)
 
   log.Println("Staring mpdWatcher for", host)
 
-  go mw.logWatcherEvents()
-  go mw.logWatcherErrors()
+  go mw.onWatcherEvents()
+  go mw.onWatcherErrors()
 }
 
-func (mw *mpdWatcher) logWatcherEvents() {
-  for subsystem := range mw.w.Event {
-    if subsystem == "player" {
-      mw.queueSong()
+func (mw *mpdWatcher) onWatcherEvents() {
+  for {
+    select {
+    case subsystem := <-mw.w.Event:
+      if subsystem == "player" {
+        mw.queueSong()
+      }
+
+      log.Println("Subsystem changed:", subsystem)
+
+      // alert the TWHandler that something in MPD has changed, so it can tell
+      // the client.
+      mw.h.PolarChanged(subsystem)
+    case <-mw.c:
+      break
     }
-
-    //log.Println("Subsystem changed:", subsystem)
-
-    // alert the TWHandler that something in MPD has changed, so it can tell
-    // the client.
-    mw.h.PolarChanged(subsystem)
   }
 }
 
-func (mw *mpdWatcher) logWatcherErrors() {
+func (mw *mpdWatcher) onWatcherErrors() {
   for err := range mw.w.Error {
     log.Println("MPD Watcher Error!\n", err)
-    time.Sleep(time.Second * 15)
+    //time.Sleep(time.Second * 15)
+
+    mw.restart()
+    break
+  }
+}
+
+func (mw *mpdWatcher) restart() {
+  log.Println("Restarting MPD Watcher")
+  if err := mw.w.Close(); err != nil {
+    log.Fatal("Error closing mpd.Watcher\n\t", err)
+  } else {
+    mw.c <- true
+
+    go mw.onWatcherEvents()
+    go mw.onWatcherErrors()
   }
 }
 
