@@ -11,11 +11,18 @@ import "song.dart";
 class LibraryList extends PolymerElement {
 
   List<Song> songs;
-  TableElement table;
+  TableElement songsTable;
   TableSectionElement tableBody;
   bool titleSort;
   bool artistSort;
   bool albumSort;
+
+  LIElement artistsButton;
+  LIElement albumsButton;
+  LIElement songsButton;
+  
+  OListElement artistsList;
+  OListElement albumsList;
 
   LibraryList.created()
       : super.created() {
@@ -26,28 +33,83 @@ class LibraryList extends PolymerElement {
 
   void enteredView() {
     songs = new List<Song>();
-    table = $["songs"];
-    tableBody = table.tBodies[0];
-    getAllSongs();
+    songsTable = $["songs"];
+    tableBody = songsTable.tBodies[0];
+    
+    UListElement viewsList = $["viewsList"];
+    artistsButton = viewsList.children[0];
+    albumsButton = viewsList.children[1];
+    songsButton = viewsList.children[2];
+
+    artistsList = $["artists"];
+    albumsList = $["albums"];
+    
+    songsTable.style.display = "none";
+    
+    getAllArtists();
     setupEvents();
   }
 
   /**
    * Setup all event listeners.
    */
-  void setupEvents() {
-    // Get the table rows.
-    TableSectionElement head = table.tHead;
-    TableRowElement row = head.children[0];
-    // For each row:
-    row.children.forEach((TableCellElement cell) {
-      // If the row is not the add row, add a click event to sort the table.
-      if(cell.innerHtml != "Add") {
-        cell.onClick.listen((MouseEvent e) {
-          sort(cell.innerHtml);
-        });
-      }
+  void setupEvents() {    
+    artistsButton.onClick.listen((Event e) {
+      artistsList.style.display = "block";
+      albumsList.style.display = "none";
+      songsTable.style.display = "none";
+      
+      clearAllData();
+      getAllArtists();
+      
+      artistsButton.classes.add("active");
+      albumsButton.classes.remove("active");
+      songsButton.classes.remove("active");
     });
+    
+    albumsButton.onClick.listen((Event e) {
+      albumsList.style.display = "block";
+      artistsList.style.display = "none";
+      songsTable.style.display = "none";
+
+      clearAllData();
+      //getAllAlbums();
+      
+      albumsButton.classes.add("active");
+      artistsButton.classes.remove("active");
+      songsButton.classes.remove("active");
+    });
+    
+    songsButton.onClick.listen((Event e) {
+      songsTable.style.display = "block";
+      artistsList.style.display = "none";
+      albumsList.style.display = "none";
+      
+      clearAllData();
+      getAllSongs();
+      
+      songsButton.classes.add("active");
+      artistsButton.classes.remove("active");
+      albumsButton.classes.remove("active");
+    });
+  }
+  
+  void clearAllData() {
+    artistsList.children.clear();
+    tableBody.children.clear();
+    albumsList.children.clear();
+  }
+  
+  void getAllArtists() {
+    HttpRequest.request("/artists")
+      .then((HttpRequest request) {
+        List<String> artists = JSON.decode(request.responseText);
+        artists.forEach((String artist) {
+          LIElement artistElement = new LIElement();
+          artistElement.text = artist;
+          artistsList.children.add(artistElement);
+        });
+      });
   }
 
   /**
@@ -68,6 +130,19 @@ class LibraryList extends PolymerElement {
           // Now add our song to the table.
           TableRowElement row = tableBody.addRow();
           createSongRow(row, song);
+        });
+        
+        // Get the table rows.
+        TableSectionElement head = songsTable.tHead;
+        TableRowElement row = head.children[0];
+        // For each row:
+        row.children.forEach((TableCellElement cell) {
+          // If the row is not the add row, add a click event to sort the table.
+          if(cell.innerHtml != "Add") {
+            cell.onClick.listen((MouseEvent e) {
+              sort(cell.innerHtml);
+            });
+          }
         });
 
       });

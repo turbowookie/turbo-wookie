@@ -1,3 +1,35 @@
+#views {
+  width: 100%;
+  background: #222;
+  height: 50px;
+}
+
+#viewsList {
+  height: 100%;
+  padding: 0;
+  margin: 0 0 0 25px;
+}
+
+
+#viewsList li {
+  float: left;
+  padding: 0.65em 20px 0 20px;
+  list-style-type: none;
+  font-weight: bold;
+  font-size: 1.3em;
+  color: white;
+  cursor: pointer;
+  height: calc(100% - 0.65em);
+}
+
+#viewsList li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#viewsList li.active {
+  height: calc(100% - 0.65em - 3px);
+  border-bottom: 3px solid #33B5E5;
+}
 
 img {
   width: 25px;
