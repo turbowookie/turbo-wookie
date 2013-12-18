@@ -1,7 +1,7 @@
 package turbowookie
 
 import (
-  "github.com/dkuntz2/gompd/mpd"
+  "github.com/turbowookie/gompd/mpd"
   "log"
   "strconv"
   "time"
@@ -27,7 +27,7 @@ func WatchMPD(host string, handler *TWHandler) {
   mw.host = host
   mw.h = handler
 
-  //log.Println("Staring mpdWatcher for", host)
+  log.Println("Staring mpdWatcher for", host)
 
   go mw.logWatcherEvents()
   go mw.logWatcherErrors()
@@ -39,7 +39,7 @@ func (mw *mpdWatcher) logWatcherEvents() {
       mw.queueSong()
     }
 
-    log.Println("Subsystem changed:", subsystem)
+    //log.Println("Subsystem changed:", subsystem)
 
     // alert the TWHandler that something in MPD has changed, so it can tell
     // the client.
