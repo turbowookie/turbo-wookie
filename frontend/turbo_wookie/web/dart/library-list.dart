@@ -24,6 +24,8 @@ class LibraryList extends PolymerElement {
   LIElement albumsButton;
   LIElement songsButton;
   
+  Map artistUrls;
+  
   OListElement dataList;
 
   LibraryList.created()
@@ -31,6 +33,7 @@ class LibraryList extends PolymerElement {
     titleSort = false;
     artistSort = false;
     albumSort = false;
+    artistUrls = new Map();
   }
 
   void enteredView() {
@@ -123,10 +126,46 @@ class LibraryList extends PolymerElement {
   void getAllArtists() {
     HttpRequest.request("/artists")
       .then((HttpRequest request) {
+        dataList.attributes['class'] = "artists";
         List<String> artists = JSON.decode(request.responseText);
         artists.forEach((String artist) {
+          DivElement artistImgCrop = new DivElement();
+          artistImgCrop.attributes['class'] = "artistCrop";
+          ImageElement artistImg = new ImageElement();
+          artistImgCrop.append(artistImg);
+          
+          if (artistUrls.containsKey(artist)) {
+            artistImg.src = artistUrls[artist];
+          }
+          else {
+            HttpRequest.request("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&format=json")
+              .then((HttpRequest request) {
+                try {
+                  Map obj = JSON.decode(request.responseText);
+                  Map artistJson = obj["artist"];
+                  for (Map img in artistJson['image']) {
+                    if (img['size'] == "extralarge") {
+                      artistImg.src = img['#text'];
+                      artistUrls[artist] = img["#text"];
+                      break;
+                    }
+                  }
+                  
+                  if (artistImg.src.length == 0)
+                    throw new Exception("");
+                } catch(exception, stackTrace) {
+                  artistImg.src = "../img/wookie.jpg";
+                  artistUrls[artist] = "../img/wookie.jpg";
+                }
+              });
+          }
+          
+          
           LIElement artistElement = new LIElement()
-            ..text = artist
+            ..append(artistImgCrop)
+            ..append(new DivElement()
+              ..attributes['class'] = "artistName"
+              ..text = artist)
             ..onClick.listen((_) => getAllAlbums(artist));
           dataList.children.add(artistElement);
         });
@@ -144,7 +183,8 @@ class LibraryList extends PolymerElement {
     HttpRequest.request(requestStr)
     .then((HttpRequest request) {
       clearAllData();
-      dataList.style.display = "block";
+      dataList.attributes['class'] = "albums";
+      //dataList.style.display = "block";
       songsTable.style.display = "none";
       
       if(artist != null) {

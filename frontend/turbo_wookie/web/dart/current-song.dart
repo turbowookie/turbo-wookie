@@ -45,7 +45,6 @@ class CurrentSong extends PolymerElement {
       }
       else {
         song = new Song.fromJson(json);
-
         song.albumArtUrl.then((String url) => albumArt.src = url);
       }
 
