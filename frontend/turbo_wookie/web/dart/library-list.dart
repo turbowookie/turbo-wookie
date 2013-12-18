@@ -122,9 +122,7 @@ class LibraryList extends PolymerElement {
         artists.forEach((String artist) {
           LIElement artistElement = new LIElement()
             ..text = artist
-            ..onClick.listen((MouseEvent e) {
-              getAllAlbums(artist);
-            });
+            ..onClick.listen((_) => getAllAlbums(artist));
           dataList.children.add(artistElement);
         });
       });
@@ -148,17 +146,36 @@ class LibraryList extends PolymerElement {
       
       if(artist != null) {
         LIElement allSongsElement = new LIElement()
-          ..text = "All Songs";
+          ..text = "All Songs"
+          ..onClick.listen((_) => getSongs(artist));
         dataList.children.add(allSongsElement);
       }
       
       List<String> albums = JSON.decode(request.responseText);
       albums.forEach((String album) {
         LIElement albumElement = new LIElement()
-          ..text = album;
+          ..text = album
+          ..onClick.listen((_) => getSongs(artist, album));
         dataList.children.add(albumElement);
       });
     });
+  }
+  
+  void getSongs(String artist, [String album]) {
+    String requestStr;
+    if(album == null)
+      requestStr = "/songs?artist=$artist";
+    else
+      requestStr = "/songs?artist=$artist&album=$album";
+    
+    HttpRequest.request(requestStr)
+      .then((HttpRequest request) {
+        List songs = JSON.decode(request.responseText);
+        createSongTable(songs);
+        songsTable.style.display = "block";
+        dataList.style.display = "none";
+      });
+        
   }
 
   /**
@@ -167,20 +184,23 @@ class LibraryList extends PolymerElement {
   void getAllSongs() {
     HttpRequest.request("/songs")
       .then((HttpRequest request) {
-
-        // The songs come in a list of json data.
-        List songsJson = JSON.decode(request.responseText);
-        // For every song:
-        songsJson.forEach((Map json) {
-          // Create the new song from json and add it to our list.
-          Song song = new Song.fromJson(json);
-          songs.add(song);
-
-          // Now add our song to the table.
-          TableRowElement row = tableBody.addRow();
-          createSongRow(row, song);
-        });
+        List songs = JSON.decode(request.responseText);
+        createSongTable(songs);
       });
+  }
+  
+  void createSongTable(List songsList) {
+    // The songs come in a list of json data.
+    // For every song:
+    songsList.forEach((Map json) {
+      // Create the new song from json and add it to our list.
+      Song song = new Song.fromJson(json);
+      songs.add(song);
+
+      // Now add our song to the table.
+      TableRowElement row = tableBody.addRow();
+      createSongRow(row, song);
+    });
   }
 
   /**

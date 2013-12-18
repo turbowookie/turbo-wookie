@@ -172,6 +172,29 @@ func (c *TWMPDClient) GetFiles() ([]map[string]string, error) {
 	return attrsToMap(mpdFiles), nil
 }
 
+func (c *TWMPDClient) GetSongs(artist string, album string) ([]map[string]string, error) {
+	client, err := c.getClient()
+	if err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	var requestStr string
+
+	if album != "" {
+		requestStr = "artist \"" + artist + "\" album \"" + album + "\""
+	} else {
+		requestStr = "artist \"" + artist + "\""
+	}
+
+	mpdFiles, err := client.Find(requestStr)
+	if err != nil {
+		return nil, &tbError{Msg: "Couldn't search from MPD", Err: err}
+	}
+
+	return attrsToMap(mpdFiles), nil
+}
+
 func (c *TWMPDClient) GetArtists() ([]string, error) {
 	client, err := c.getClient()
 	if err != nil {
@@ -230,8 +253,6 @@ func (c *TWMPDClient) GetUpcoming() ([]map[string]string, error) {
 	if err != nil {
 		return nil, &tbError{Msg: "Couldn't get current song info for upcoming list", Err: err}
 	}
-
-	log.Println(currentSong)
 
 	pos, err := strconv.Atoi(currentSong["Pos"])
 	if err != nil {
