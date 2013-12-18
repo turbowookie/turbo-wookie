@@ -5,6 +5,7 @@ import "media-bar.dart";
 import "play-list.dart";
 import "library-list.dart";
 import "header-bar.dart";
+import "login-menu.dart";
 import "observer.dart";
 
 /**
@@ -19,6 +20,7 @@ void main() {
   PlayList playlist = querySelector("#playlist");
   LibraryList library = querySelector("#library");
   HeaderBar header = querySelector("#header");
+  LoginMenu loginMenu = querySelector("#loginMenu");
 
   // Connect our elements.
   new Observer(playlist, library);
@@ -30,5 +32,6 @@ void main() {
     mediaBar.setPlaylist(playlist);
     mediaBar.setHeader(header);
     header.setLibrary(library);
+    header.loginMenu = loginMenu;
   });
 }
