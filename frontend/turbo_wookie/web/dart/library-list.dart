@@ -146,6 +146,9 @@ class LibraryList extends PolymerElement {
       dataList.style.display = "block";
       songsTable.style.display = "none";
       
+      LIElement allSongsElement = new LIElement()
+        ..text = "All Songs";
+      dataList.children.add(allSongsElement);
       List<String> albums = JSON.decode(request.responseText);
       albums.forEach((String album) {
         LIElement albumElement = new LIElement()

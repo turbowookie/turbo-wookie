@@ -33,6 +33,13 @@
 }
 
 /* List/Table Things */
+#title {
+  font-size: 1.5em;
+  color: white;
+  margin: 20px;
+  font-weight: bold;
+}
+
 #data li {
   list-style-type: none;
   padding: 10px 0;
