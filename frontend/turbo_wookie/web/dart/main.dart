@@ -31,6 +31,7 @@ void main() {
   Polymer.onReady.whenComplete((){
     mediaBar.setPlaylist(playlist);
     mediaBar.setHeader(header);
+    mediaBar.loginMenu = loginMenu;
     header.setLibrary(library);
     header.loginMenu = loginMenu;
   });

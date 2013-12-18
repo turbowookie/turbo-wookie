@@ -5,6 +5,7 @@ import "package:polymer/polymer.dart";
 import "current-song.dart";
 import "play-list.dart";
 import "header-bar.dart";
+import "login-menu.dart";
 import "song.dart";
 
 /**
@@ -23,6 +24,7 @@ class MediaBar extends PolymerElement {
   bool preventOnEmptied;
   PlayList playlist;
   HeaderBar header;
+  LoginMenu loginMenu;
 
 
   MediaBar.created()
@@ -66,6 +68,7 @@ class MediaBar extends PolymerElement {
         return
             // For the dart code.
             !header.isInput() &&
+            !loginMenu.isInput() &&
             // For the compiled code.
             document.activeElement.tagName != "INPUT";
     })

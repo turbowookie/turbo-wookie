@@ -3,7 +3,16 @@
   <template>
     <link rel="stylesheet" href="../css/login-menu.css">
 
-    <div id="login">LOGIN</div>
+    <div id="login">
+    <form id="loginForm">
+        <lable>Username: </lable><input id="user" type="text" name="user"/>
+        <br>
+        <lable>Password: </lable><input id="pass" type="password" name="pass"/>
+        <br>
+        <div id="loginFailed">Login Failed</div>
+        <input type="submit" value="Login" on-click="{{login}}" />
+      </form>
+    </div>
     
   </template>
   
