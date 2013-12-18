@@ -284,7 +284,7 @@ func (h *TWHandler) PolarChanged(element string) {
   if h.pollerClients < 1 {
     return
   }
-  
+
   m2 := make(map[string]string)
   m2["changed"] = element
   h.updater <- jsoniffy(m2)
