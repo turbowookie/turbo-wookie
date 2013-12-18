@@ -89,7 +89,7 @@ class LibraryList extends PolymerElement {
       titleDiv.style.display = "none";
 
       clearAllData();
-      //getAllAlbums();
+      getAllAlbums();
       
       albumsButton.classes.add("active");
       artistsButton.classes.remove("active");
@@ -132,7 +132,7 @@ class LibraryList extends PolymerElement {
   
   void getAllAlbums([String artist]) {
     String requestStr;
-    if(artist.isEmpty || artist == null) {
+    if(artist == null) {
       requestStr = "/albums";
     }
     else
@@ -146,9 +146,12 @@ class LibraryList extends PolymerElement {
       dataList.style.display = "block";
       songsTable.style.display = "none";
       
-      LIElement allSongsElement = new LIElement()
-        ..text = "All Songs";
-      dataList.children.add(allSongsElement);
+      if(artist != null) {
+        LIElement allSongsElement = new LIElement()
+          ..text = "All Songs";
+        dataList.children.add(allSongsElement);
+      }
+      
       List<String> albums = JSON.decode(request.responseText);
       albums.forEach((String album) {
         LIElement albumElement = new LIElement()
