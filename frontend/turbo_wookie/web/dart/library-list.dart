@@ -16,13 +16,14 @@ class LibraryList extends PolymerElement {
   bool titleSort;
   bool artistSort;
   bool albumSort;
+  
+  DivElement titleDiv;
 
   LIElement artistsButton;
   LIElement albumsButton;
   LIElement songsButton;
   
-  OListElement artistsList;
-  OListElement albumsList;
+  OListElement dataList;
 
   LibraryList.created()
       : super.created() {
@@ -36,15 +37,17 @@ class LibraryList extends PolymerElement {
     songsTable = $["songs"];
     tableBody = songsTable.tBodies[0];
     
+    titleDiv = $["title"];
+    
     UListElement viewsList = $["viewsList"];
     artistsButton = viewsList.children[0];
     albumsButton = viewsList.children[1];
     songsButton = viewsList.children[2];
 
-    artistsList = $["artists"];
-    albumsList = $["albums"];
-    
+    dataList = $["data"];
+
     songsTable.style.display = "none";
+    titleDiv.style.display = "none";
     
     getAllArtists();
     setupEvents();
@@ -68,9 +71,9 @@ class LibraryList extends PolymerElement {
     });
     
     artistsButton.onClick.listen((Event e) {
-      artistsList.style.display = "block";
-      albumsList.style.display = "none";
+      dataList.style.display = "block";
       songsTable.style.display = "none";
+      titleDiv.style.display = "none";
       
       clearAllData();
       getAllArtists();
@@ -81,9 +84,9 @@ class LibraryList extends PolymerElement {
     });
     
     albumsButton.onClick.listen((Event e) {
-      albumsList.style.display = "block";
-      artistsList.style.display = "none";
+      dataList.style.display = "block";
       songsTable.style.display = "none";
+      titleDiv.style.display = "none";
 
       clearAllData();
       //getAllAlbums();
@@ -95,8 +98,8 @@ class LibraryList extends PolymerElement {
     
     songsButton.onClick.listen((Event e) {
       songsTable.style.display = "block";
-      artistsList.style.display = "none";
-      albumsList.style.display = "none";
+      dataList.style.display = "none";
+      titleDiv.style.display = "none";
       
       clearAllData();
       getAllSongs();
@@ -108,9 +111,8 @@ class LibraryList extends PolymerElement {
   }
   
   void clearAllData() {
-    artistsList.children.clear();
+    dataList.children.clear();
     tableBody.children.clear();
-    albumsList.children.clear();
   }
   
   void getAllArtists() {
@@ -118,11 +120,39 @@ class LibraryList extends PolymerElement {
       .then((HttpRequest request) {
         List<String> artists = JSON.decode(request.responseText);
         artists.forEach((String artist) {
-          LIElement artistElement = new LIElement();
-          artistElement.text = artist;
-          artistsList.children.add(artistElement);
+          LIElement artistElement = new LIElement()
+            ..text = artist
+            ..onClick.listen((MouseEvent e) {
+              getAllAlbums(artist);
+            });
+          dataList.children.add(artistElement);
         });
       });
+  }
+  
+  void getAllAlbums([String artist]) {
+    String requestStr;
+    if(artist.isEmpty || artist == null) {
+      requestStr = "/albums";
+    }
+    else
+      requestStr = "/albums?artist=$artist";
+    
+    HttpRequest.request(requestStr)
+    .then((HttpRequest request) {
+      clearAllData();
+      titleDiv.text = artist;
+      titleDiv.style.display = "block";
+      dataList.style.display = "block";
+      songsTable.style.display = "none";
+      
+      List<String> albums = JSON.decode(request.responseText);
+      albums.forEach((String album) {
+        LIElement albumElement = new LIElement()
+          ..text = album;
+        dataList.children.add(albumElement);
+      });
+    });
   }
 
   /**
