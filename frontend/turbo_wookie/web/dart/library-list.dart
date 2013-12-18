@@ -18,6 +18,7 @@ class LibraryList extends PolymerElement {
   bool albumSort;
   
   DivElement titleDiv;
+  String currentArtist;
 
   LIElement artistsButton;
   LIElement albumsButton;
@@ -68,6 +69,10 @@ class LibraryList extends PolymerElement {
           sort(cell.innerHtml);
         });
       }
+    });
+    
+    titleDiv.onClick.listen((MouseEvent e) {
+      getAllAlbums(currentArtist);
     });
     
     artistsButton.onClick.listen((Event e) {
@@ -148,11 +153,9 @@ class LibraryList extends PolymerElement {
           ..onClick.listen((_) => getSongs(artist));
         dataList.children.add(allSongsElement);
 
+        currentArtist = artist;
         titleDiv.text = artist;
         titleDiv.style.display = "block";
-        titleDiv.onClick.listen((MouseEvent e) {
-          getAllAlbums(artist);
-        });
       }
       
       List<String> albums = JSON.decode(request.responseText);
