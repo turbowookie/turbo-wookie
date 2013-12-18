@@ -53,7 +53,20 @@ class LibraryList extends PolymerElement {
   /**
    * Setup all event listeners.
    */
-  void setupEvents() {    
+  void setupEvents() {
+    // Get the table rows.
+    TableSectionElement head = songsTable.tHead;
+    TableRowElement row = head.children[0];
+    // For each row:
+    row.children.forEach((TableCellElement cell) {
+      // If the row is not the add row, add a click event to sort the table.
+      if(cell.innerHtml != "Add") {
+        cell.onClick.listen((MouseEvent e) {
+          sort(cell.innerHtml);
+        });
+      }
+    });
+    
     artistsButton.onClick.listen((Event e) {
       artistsList.style.display = "block";
       albumsList.style.display = "none";
@@ -131,20 +144,6 @@ class LibraryList extends PolymerElement {
           TableRowElement row = tableBody.addRow();
           createSongRow(row, song);
         });
-        
-        // Get the table rows.
-        TableSectionElement head = songsTable.tHead;
-        TableRowElement row = head.children[0];
-        // For each row:
-        row.children.forEach((TableCellElement cell) {
-          // If the row is not the add row, add a click event to sort the table.
-          if(cell.innerHtml != "Add") {
-            cell.onClick.listen((MouseEvent e) {
-              sort(cell.innerHtml);
-            });
-          }
-        });
-
       });
   }
 
