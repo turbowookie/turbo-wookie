@@ -1,7 +1,7 @@
 header {
   background-color: #111;
   line-height: 60px;
-  max-height: 60px;
+  height: 60px;
   padding: 0;
 }
 
@@ -16,16 +16,28 @@ h1 img {
   padding: 5px;
 }
 
+button {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ccc;
+  height: 30px;
+}
+
+#logo {
+  float: left;
+  max-height: 50px;
+}
+
 #search {
   font-size: 14px;
   font-family: Roboto, "Open Sans", "Droid Sans", sans-serif;
-  float: right;
-  width: calc(100% - 350px);
+  float: left;
+  width: calc(100% - 400px);
   border: 1px solid #444;
   height: 20px;
   line-height: 20px;
   padding: 8px 28px;
-  margin: 10px 23px 10px 0;
+  margin: 10px 23px 10px 23px;
   background-color: #2a2a2a;
 
   color: #ccc;
@@ -40,4 +52,11 @@ h1 img {
 /* TODO: duplicate for other browsers */
 #search::-webkit-input-placeholder {
   color: #aaa;
+}
+
+#controls {
+  float: right;
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
 }
