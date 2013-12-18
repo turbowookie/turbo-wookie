@@ -139,8 +139,6 @@ class LibraryList extends PolymerElement {
     HttpRequest.request(requestStr)
     .then((HttpRequest request) {
       clearAllData();
-      titleDiv.text = artist;
-      titleDiv.style.display = "block";
       dataList.style.display = "block";
       songsTable.style.display = "none";
       
@@ -149,6 +147,12 @@ class LibraryList extends PolymerElement {
           ..text = "All Songs"
           ..onClick.listen((_) => getSongs(artist));
         dataList.children.add(allSongsElement);
+
+        titleDiv.text = artist;
+        titleDiv.style.display = "block";
+        titleDiv.onClick.listen((MouseEvent e) {
+          getAllAlbums(artist);
+        });
       }
       
       List<String> albums = JSON.decode(request.responseText);

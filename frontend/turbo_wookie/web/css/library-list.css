@@ -38,6 +38,7 @@
   color: white;
   margin: 20px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #data li {
