@@ -22,6 +22,8 @@ type TWMPDClient struct {
 
   // configuration stuff
   config map[string]string
+
+  queueingSong bool
 }
 
 // NewTWMPDClient creates a new TWMPDClient.
@@ -34,6 +36,7 @@ func NewTWMPDClient(config map[string]string, noStartMPD bool) *TWMPDClient {
   c.config = config
   c.Domain = c.config["mpd_domain"]
   c.Port = c.config["mpd_control_port"]
+  c.queueingSong = false
 
   // Don't start MPD if `noStartMPD` is true.
   if !noStartMPD {
@@ -336,7 +339,14 @@ func (c *TWMPDClient) Add(uri string) error {
   return nil
 }
 
-func (c *TWMPDClient) QueueSong()  {
+func (c *TWMPDClient) QueueSong() {
+  if c.queueingSong {
+    return
+  }
+
+  c.queueingSong = true
+  defer func() { c.queueingSong = false }()
+
   client, err := c.getClient()
   if err != nil {
     log.Fatal("Couldn't get client", err)
