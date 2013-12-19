@@ -138,7 +138,7 @@ class LibraryList extends PolymerElement {
             artistImg.src = artistUrls[artist];
           }
           else {
-            HttpRequest.request("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${artist}&format=json")
+            HttpRequest.request("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${Uri.encodeComponent(artist)}&format=json")
               .then((HttpRequest request) {
                 try {
                   Map obj = JSON.decode(request.responseText);
@@ -178,7 +178,7 @@ class LibraryList extends PolymerElement {
       requestStr = "/albums";
     }
     else
-      requestStr = "/albums?artist=$artist";
+      requestStr = "/albums?artist=${Uri.encodeComponent(artist)}";
     
     HttpRequest.request(requestStr)
     .then((HttpRequest request) {
@@ -211,9 +211,9 @@ class LibraryList extends PolymerElement {
   void getSongs(String artist, [String album]) {
     String requestStr;
     if(album == null)
-      requestStr = "/songs?artist=$artist";
+      requestStr = "/songs?artist=${Uri.encodeComponent(artist)}";
     else {
-      requestStr = "/songs?artist=$artist&album=$album";
+      requestStr = "/songs?artist=${Uri.encodeComponent(artist)}&album=${Uri.encodeComponent(album)}";
       titleDiv.text = "$artist - $album";
     }
     
