@@ -1,4 +1,5 @@
 library LibraryList;
+import "dart:async";
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
@@ -9,24 +10,26 @@ import "song.dart";
  */
 @CustomTag('library-list')
 class LibraryList extends PolymerElement {
-
-  List<Song> songs;
-  TableElement songsTable;
-  TableSectionElement tableBody;
-  bool titleSort;
-  bool artistSort;
-  bool albumSort;
-  
-  DivElement titleDiv;
-  String currentArtist;
-
+  // View buttons.
   LIElement artistsButton;
   LIElement albumsButton;
   LIElement songsButton;
   
-  Map artistUrls;
-  
+  // Music data variables.
+  Map artistUrls;  
   OListElement dataList;
+  List<Song> songs;
+  TableElement songsTable;
+  TableSectionElement tableBody;
+  
+  // Title variables.
+  DivElement titleDiv;
+  String currentArtist;
+  
+  // Sort variables.
+  bool titleSort;
+  bool artistSort;
+  bool albumSort;
 
   LibraryList.created()
       : super.created() {
@@ -41,18 +44,19 @@ class LibraryList extends PolymerElement {
     songsTable = $["songs"];
     tableBody = songsTable.tBodies[0];
     
-    titleDiv = $["title"];
-    
+    // Get all of our elements
     UListElement viewsList = $["viewsList"];
     artistsButton = viewsList.children[0];
     albumsButton = viewsList.children[1];
     songsButton = viewsList.children[2];
-
     dataList = $["data"];
+    titleDiv = $["title"];
 
+    // Hide the song table and title div
     songsTable.style.display = "none";
     titleDiv.style.display = "none";
     
+    // Fill our artist page.
     getAllArtists();
     setupEvents();
   }
@@ -74,95 +78,96 @@ class LibraryList extends PolymerElement {
       }
     });
     
+    // When we click the title div, grab/display the albums for that artist.
     titleDiv.onClick.listen((MouseEvent e) {
       getAllAlbums(currentArtist);
     });
     
+    // Transition to the artist page.
     artistsButton.onClick.listen((Event e) {
+      // Show the datalist and hide the songs table/title div.
       dataList.style.display = "block";
       songsTable.style.display = "none";
       titleDiv.style.display = "none";
       
+      // Clear data from memory and grab all artists.
       clearAllData();
       getAllArtists();
       
+      // Set the artist button as the active button.
       artistsButton.classes.add("active");
       albumsButton.classes.remove("active");
       songsButton.classes.remove("active");
     });
     
     albumsButton.onClick.listen((Event e) {
+      // Show the datalist and hide the songs table/title div.
       dataList.style.display = "block";
       songsTable.style.display = "none";
       titleDiv.style.display = "none";
 
+      // Clear data from memory and grab all albums.
       clearAllData();
       getAllAlbums();
-      
+
+      // Set the album button as the active button.
       albumsButton.classes.add("active");
       artistsButton.classes.remove("active");
       songsButton.classes.remove("active");
     });
     
     songsButton.onClick.listen((Event e) {
+      // Show the songs table and hide the songs data list/title div.
       songsTable.style.display = "block";
       dataList.style.display = "none";
       titleDiv.style.display = "none";
-      
+
+      // Clear data from memory and grab all songs.
       clearAllData();
       getAllSongs();
-      
+
+      // Set the songs button as the active button.
       songsButton.classes.add("active");
       artistsButton.classes.remove("active");
       albumsButton.classes.remove("active");
     });
   }
   
+  /**
+   * Clears all song/artist/album data from memory in this library.
+   */
   void clearAllData() {
     dataList.children.clear();
     tableBody.children.clear();
   }
   
+  /**
+   * Get all artists from the server and display them.
+   */
   void getAllArtists() {
     HttpRequest.request("/artists")
       .then((HttpRequest request) {
+        // Tell the dataList that we are giving it artists in order for it
+        // to style correctly.
         dataList.attributes['class'] = "artists";
+        
+        // Convert all the artist info and sort it alphebetically, ignoring case.
         List<String> artists = JSON.decode(request.responseText);
         artists.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
         
+        // For each artist, add it to the page.
         artists.forEach((String artist) {
+          // Create the image stuff.
           DivElement artistImgCrop = new DivElement();
           artistImgCrop.attributes['class'] = "artistCrop";
           ImageElement artistImg = new ImageElement();
           artistImgCrop.append(artistImg);
           
-          if (artistUrls.containsKey(artist)) {
-            artistImg.src = artistUrls[artist];
-          }
-          else {
-            HttpRequest.request("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${Uri.encodeComponent(artist)}&format=json")
-              .then((HttpRequest request) {
-                try {
-                  Map obj = JSON.decode(request.responseText);
-                  Map artistJson = obj["artist"];
-                  for (Map img in artistJson['image']) {
-                    if (img['size'] == "extralarge") {
-                      artistImg.src = img['#text'];
-                      artistUrls[artist] = img["#text"];
-                      break;
-                    }
-                  }
-                  
-                  if (artistImg.src.length == 0)
-                    throw new Exception("");
-                } catch(exception, stackTrace) {
-                  artistImg.src = "../img/wookie.jpg";
-                  artistUrls[artist] = "../img/wookie.jpg";
-                }
-              });
-          }
+          // Get the artist's image.
+          getArtistImg(artist)
+            .then((String src) => artistImg.src = src);
           
-          
+          // Create the list element and add everything to it.
           LIElement artistElement = new LIElement()
             ..append(artistImgCrop)
             ..append(new DivElement()
@@ -174,7 +179,62 @@ class LibraryList extends PolymerElement {
       });
   }
   
+  /**
+   * This get's an image url associated with an artist from Last.FM.
+   * 
+   * If it cannot find an image, it uses a default wookie image.
+   */
+  Future<String> getArtistImg(String artist) {
+    Completer<String> completer = new Completer<String>();
+    
+    // If we already have the image, just use it instead of searching Last.FM.
+    if (artistUrls.containsKey(artist)) {
+      completer.complete(artistUrls[artist]);
+    }
+    else {
+      // Search Last.FM for the image.
+      HttpRequest.request("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${Uri.encodeComponent(artist)}&format=json")
+        .then((HttpRequest request) {
+          try {
+            // Get the source of the image out of the json data.
+            String src;
+            Map obj = JSON.decode(request.responseText);
+            Map artistJson = obj["artist"];
+            // Get a decent sized image.
+            for (Map img in artistJson['image']) {
+              if (img['size'] == "extralarge") {
+                src = img['#text'];
+                artistUrls[artist] = img["#text"];
+                break;
+              }
+            }
+            
+            // If we don't have an image, throw an exception to be handled.
+            if (src == null || src.isEmpty)
+              throw new Exception("");
+            // Otherwise, return our src.
+            else
+              completer.complete(src);
+            
+          } catch(exception, stackTrace) {
+            // Set the artist image to our wookie image.
+            completer.complete("../img/wookie.jpg");
+            artistUrls[artist] = "../img/wookie.jpg";
+          }
+        });
+    }
+    
+    return completer.future;
+  }
+  
+  /**
+   * Get all albums from the server and display them.
+   * 
+   * An optional parameter is artist. If you have this, it will get all albums
+   * with that artist.
+   */
   void getAllAlbums([String artist]) {
+    // Form the request string.
     String requestStr;
     if(artist == null) {
       requestStr = "/albums";
@@ -184,11 +244,13 @@ class LibraryList extends PolymerElement {
     
     HttpRequest.request(requestStr)
     .then((HttpRequest request) {
+      // Clear our data and show our album info.
       clearAllData();
       dataList.attributes['class'] = "albums";
       dataList.style.display = "block";
       songsTable.style.display = "none";
       
+      // If we had an artist, add an all songs and set the titleDiv.
       if(artist != null) {
         LIElement allSongsElement = new LIElement()
           ..text = "All Songs"
@@ -200,9 +262,11 @@ class LibraryList extends PolymerElement {
         titleDiv.style.display = "block";
       }
       
+      // Decode our albums from json data and sort them.
       List<String> albums = JSON.decode(request.responseText);
       albums.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
       
+      // For each album, add them to the datalist.
       albums.forEach((String album) {
         LIElement albumElement = new LIElement()
           ..text = album
@@ -212,7 +276,14 @@ class LibraryList extends PolymerElement {
     });
   }
   
+  /**
+   * Get songs belonging to an artist.
+   * 
+   * An optional parameter is album. If you have this, it will get all songs
+   * belonging to the specified artist, in that album.
+   */
   void getSongs(String artist, [String album]) {
+    // Form the request string.
     String requestStr;
     if(album == null)
       requestStr = "/songs?artist=${Uri.encodeComponent(artist)}";
@@ -221,8 +292,10 @@ class LibraryList extends PolymerElement {
       titleDiv.text = "$artist - $album";
     }
     
+    // Get all the songs.
     HttpRequest.request(requestStr)
       .then((HttpRequest request) {
+        // Add them to the table and show the table.
         List songs = JSON.decode(request.responseText);
         createSongTable(songs);
         songsTable.style.display = "block";
@@ -232,7 +305,7 @@ class LibraryList extends PolymerElement {
   }
 
   /**
-   * Get all the [Song]s in the library and add them to the page.
+   * Get every song in the library and add them to the page.
    */
   void getAllSongs() {
     HttpRequest.request("/songs")
@@ -242,6 +315,9 @@ class LibraryList extends PolymerElement {
       });
   }
   
+  /**
+   * Fill the song table with the passed in songs.
+   */
   void createSongTable(List songsList) {
     // The songs come in a list of json data.
     // For every song:
