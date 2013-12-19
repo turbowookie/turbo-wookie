@@ -128,6 +128,8 @@ class LibraryList extends PolymerElement {
       .then((HttpRequest request) {
         dataList.attributes['class'] = "artists";
         List<String> artists = JSON.decode(request.responseText);
+        artists.sort();
+        
         artists.forEach((String artist) {
           DivElement artistImgCrop = new DivElement();
           artistImgCrop.attributes['class'] = "artistCrop";
@@ -199,6 +201,8 @@ class LibraryList extends PolymerElement {
       }
       
       List<String> albums = JSON.decode(request.responseText);
+      albums.sort();
+      
       albums.forEach((String album) {
         LIElement albumElement = new LIElement()
           ..text = album
