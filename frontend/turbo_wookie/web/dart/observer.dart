@@ -57,6 +57,6 @@ class Observer {
    * Tell the [LibraryList] to update.
    */
   void updateLibrary() {
-    library.getAllSongs();
+    //library.getAllSongs();
   }
 }
