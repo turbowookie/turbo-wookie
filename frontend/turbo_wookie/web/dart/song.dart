@@ -54,8 +54,11 @@ class Song {
     else
       length = 0;
 
-    if(map.containsKey("file"))
+    if(map.containsKey("file")) {
       filePath = map["file"];
+      //print(map["file"]);
+      //print(Uri.decodeComponent(map["file"]));
+    }
   }
 
   /**
@@ -110,7 +113,8 @@ class Song {
    * Requests the server to add this song to it's playlist.
    */
   void addToPlaylist() {
-    HttpRequest.request("add?song=$filePath");
+    print("Add song path: add?song=${Uri.encodeComponent(filePath)}");
+    HttpRequest.request("add?song=${Uri.encodeComponent(filePath)}");
   }
 
   @override

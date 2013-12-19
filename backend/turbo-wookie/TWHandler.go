@@ -211,14 +211,24 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 
   // Get the song from the GET request variables,
   // and check that there's actually something called `song` in the request.
-  song, ok := r.Form["song"]
+  rawSongs, ok := r.Form["song"]
   if !ok {
+    log.Println(r.Form)
     printError(w, "No song specified", nil)
     return
   }
 
+  song, err := url.QueryUnescape(rawSongs[0])
+  if err != nil {
+    log.Println("Error unescaping song...\n\tError:", err, "\n\tSong:", song)
+  } else {
+    song = rawSongs[0]
+  }
+
+  log.Println("Adding song", song, " : ", rawSongs[0])
+
   // Attempt to add the song to the playlist
-  err := h.MpdClient.Add(song[0])
+  err = h.MpdClient.Add(song)
   if err != nil {
     printError(w, "Unknown song", err)
     return
@@ -226,7 +236,7 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 
   // Return a simple note saying that we got the song
   m := make(map[string]string)
-  m["note"] = "Added song: " + song[0]
+  m["note"] = "Added song: " + song
   fmt.Fprintf(w, jsoniffy(m))
 
   // tell long pollers that the playlist changed.
