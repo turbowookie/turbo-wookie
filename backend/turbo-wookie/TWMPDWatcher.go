@@ -3,8 +3,6 @@ package turbowookie
 import (
   "github.com/turbowookie/gompd/mpd"
   "log"
-  "strconv"
-  //"time"
 )
 
 type mpdWatcher struct {
@@ -40,10 +38,11 @@ func (mw *mpdWatcher) onWatcherEvents() {
     select {
     case subsystem := <-mw.w.Event:
       if subsystem == "player" {
-        mw.queueSong()
+        //mw.queueSong()
+        mw.h.MpdClient.QueueSong()
       }
 
-      log.Println("Subsystem changed:", subsystem)
+      //log.Println("Subsystem changed:", subsystem)
 
       // alert the TWHandler that something in MPD has changed, so it can tell
       // the client.
@@ -57,8 +56,7 @@ func (mw *mpdWatcher) onWatcherEvents() {
 func (mw *mpdWatcher) onWatcherErrors() {
   for err := range mw.w.Error {
     log.Println("MPD Watcher Error!\n", err)
-    //time.Sleep(time.Second * 15)
-
+    
     mw.restart()
     break
   }
@@ -74,39 +72,4 @@ func (mw *mpdWatcher) restart() {
     go mw.onWatcherEvents()
     go mw.onWatcherErrors()
   }
-}
-
-func (mw *mpdWatcher) queueSong() {
-  client, err := mpd.Dial("tcp", mw.host)
-  if err != nil {
-    log.Fatal("Couldn't connect to MPD...", err)
-  }
-
-  attrs, err := client.Status()
-  if err != nil {
-    log.Fatal("Couldn't get status from client.", err)
-  }
-
-  if attrs["state"] != "play" {
-    songs, err := client.GetFiles()
-    if err != nil {
-      log.Fatal("Couldn't get all files...", err)
-    }
-
-    song := songs[random(0, len(songs))]
-    if client.Add(song) != nil {
-      log.Fatal("Couldn't add song:", song)
-    }
-
-    plen, err := strconv.Atoi(attrs["playlistlength"])
-    if err != nil {
-      log.Fatal("Couldn't get playlistlength...", err)
-    }
-
-    if client.Play(plen) != nil {
-      log.Fatal("Couldn't play song")
-    }
-  }
-
-  client.Close()
 }

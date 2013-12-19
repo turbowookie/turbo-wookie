@@ -243,6 +243,11 @@ func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
     return nil, &tbError{Msg: "Couldn't get current song", Err: err}
   }
 
+  if len(currentSong) == 0 {
+    c.QueueSong()
+    return c.CurrentSong()
+  }
+
   return currentSong, nil
 }
 
@@ -329,4 +334,38 @@ func (c *TWMPDClient) Add(uri string) error {
   }
 
   return nil
+}
+
+func (c *TWMPDClient) QueueSong()  {
+  client, err := c.getClient()
+  if err != nil {
+    log.Fatal("Couldn't get client", err)
+  }
+  defer client.Close()
+
+  attrs, err := client.Status()
+  if err != nil {
+    log.Fatal("Couldn't get status from client.", err)
+  }
+
+  if attrs["state"] != "play" {
+    songs, err := client.GetFiles()
+    if err != nil {
+      log.Fatal("Couldn't get all files...", err)
+    }
+
+    song := songs[random(0, len(songs))]
+    if client.Add(song) != nil {
+      log.Fatal("Couldn't add song:", song)
+    }
+
+    plen, err := strconv.Atoi(attrs["playlistlength"])
+    if err != nil {
+      log.Fatal("Couldn't get playlistlength...", err)
+    }
+
+    if client.Play(plen) != nil {
+      log.Fatal("Couldn't play song")
+    }
+  }
 }
