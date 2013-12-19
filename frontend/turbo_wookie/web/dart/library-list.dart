@@ -184,7 +184,7 @@ class LibraryList extends PolymerElement {
     .then((HttpRequest request) {
       clearAllData();
       dataList.attributes['class'] = "albums";
-      //dataList.style.display = "block";
+      dataList.style.display = "block";
       songsTable.style.display = "none";
       
       if(artist != null) {
@@ -212,8 +212,10 @@ class LibraryList extends PolymerElement {
     String requestStr;
     if(album == null)
       requestStr = "/songs?artist=$artist";
-    else
+    else {
       requestStr = "/songs?artist=$artist&album=$album";
+      titleDiv.text = "$artist - $album";
+    }
     
     HttpRequest.request(requestStr)
       .then((HttpRequest request) {
