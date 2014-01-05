@@ -249,7 +249,7 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 // changed.
 //
 // This is done so that clients don't need to make periodic requests
-// asking for the current playlist.
+// asking for updates.
 func (h *TWHandler) bear(w http.ResponseWriter, r *http.Request) {
   // we got another live one.
   h.pollerClients += 1
