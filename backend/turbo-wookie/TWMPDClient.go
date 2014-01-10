@@ -3,6 +3,7 @@ package turbowookie
 import (
   //"github.com/fhs/gompd/mpd"
   "github.com/turbowookie/gompd/mpd"
+  //"../../../gompd/mpd"
   "log"
   "os/exec"
   "strconv"
