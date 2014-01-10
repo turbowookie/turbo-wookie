@@ -49,6 +49,7 @@ func main() {
   }
 }
 
+// This allows the user to request an abitrary command on MPD.
 func talkToMPD() {
   // Read from the stdin.
   clientReader := bufio.NewReader(os.Stdin)
