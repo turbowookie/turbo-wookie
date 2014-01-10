@@ -13,6 +13,9 @@ import (
 )
 
 func main() {
+  log.SetPrefix("[Turbo Wookie] ")
+  
+
   // Parse out our flags
   serveDart := flag.Bool("dart", false, "Include to serve dart code.")
   noStartMPD := flag.Bool("nompd", false, "Include to not start MPD.")
@@ -35,7 +38,7 @@ func main() {
     signal.Notify(c, os.Interrupt)
     go func() {
       for _ = range c {
-        h.MpdClient.KillMpd()
+        h.MpdClient.Shutdown()
         os.Exit(1)
       }
     }()
@@ -58,7 +61,7 @@ func main() {
 // The protocol reference can be found at http://www.musicpd.org/doc/protocol/index.html
 func talkToMPD() {
   //fmt.Print("\n> ")
-  fmt.Print("\n")
+  //fmt.Print("\n")
 
   // Read from the stdin.
   clientReader := bufio.NewReader(os.Stdin)

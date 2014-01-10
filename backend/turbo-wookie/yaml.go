@@ -28,7 +28,7 @@ func ReadConfig(filename string) (map[string]string, error) {
   file, err := yaml.ReadFile(filename)
 
   if err != nil {
-    return nil, &tbError{Msg: "Cannot read " + filename + " for YAML parsing", Err: err}
+    return nil, &twError{Msg: "Cannot read " + filename + " for YAML parsing", Err: err}
     //log.Fatal("Cannot read", filename, "for YAML parsing")
   }
 
@@ -37,7 +37,7 @@ func ReadConfig(filename string) (map[string]string, error) {
   for _, key := range tbKeys {
     val, err := file.Get(key)
     if err != nil {
-      return nil, &tbError{Msg: "Config is missing key `" + key + "`", Err: err}
+      return nil, &twError{Msg: "Config is missing key `" + key + "`", Err: err}
       //log.Fatal("Config is missing key", key)
     }
 

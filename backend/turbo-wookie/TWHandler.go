@@ -10,13 +10,14 @@ import (
   "net/url"
   "strconv"
   "time"
+  "./mpd"
 )
 
 // TWHandler is our custom http.Handler used to actually do the HTTP stuff.
 type TWHandler struct {
   // MpdClient is our MPD Client, used to tell MPD to do things. Important
   // things.
-  MpdClient *TWMPDClient
+  MpdClient MusicClient
 
   // ServerConfig is a map of configuration key/values found in
   // a config.yaml file.
@@ -29,6 +30,9 @@ type TWHandler struct {
   // updater is a channel used by our long poller/polar system. It contains
   // the message of what's been changed.
   updater chan string
+
+  // subsystem chanel is used by watchers.
+  subsystemChan chan string
 
   // pollerClients is the number of people currently connected to the long
   // poller.
@@ -52,7 +56,7 @@ func NewTWHandler(filename string, serveDart, startMPD bool, portOverride int) (
   }
 
   h.ServerConfig = config
-  h.MpdClient = NewTWMPDClient(h.ServerConfig, startMPD) // see TWMPDClient.go
+  h.MpdClient = mpd.NewTWMPDClient(h.ServerConfig, startMPD) // see TWMPDClient.go
 
   // Make sure there's a server to connect to, and run some other startup
   // commands (like making sure there's music playing...).
@@ -116,7 +120,15 @@ func (h *TWHandler) HandleFunc(path string, f func(w http.ResponseWriter, r *htt
 // stream.
 func (h *TWHandler) ListenAndServe() error {
   // Setup a watcher.
-  WatchMPD(h.ServerConfig["mpd_domain"]+":"+h.ServerConfig["mpd_control_port"], h)
+  h.subsystemChan = make(chan string)
+  mpd.WatchMPD(h.ServerConfig["mpd_domain"]+":"+h.ServerConfig["mpd_control_port"], h.subsystemChan)
+  go func() {
+    for subsystem := range h.subsystemChan {
+      if subsystem == "player" {
+        h.MpdClient.QueueRandomSong()
+      }
+    }
+  }()
 
   port := ":" + h.ServerConfig["server_port"]
   log.Println("Starting server on " + port)

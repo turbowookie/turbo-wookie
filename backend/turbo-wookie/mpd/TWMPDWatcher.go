@@ -1,22 +1,23 @@
-package turbowookie
+package mpd
 
 import (
-  "github.com/turbowookie/gompd/mpd"
+  gompd "github.com/turbowookie/gompd/mpd"
   "log"
 )
 
 type mpdWatcher struct {
-  w    *mpd.Watcher
+  w    *gompd.Watcher
   host string
-  h    *TWHandler
-  c    chan bool
+  
+  handlerChan    chan string
+  resetChan    chan bool
 }
 
 // WatchMPD starts up an MPD watcher, and does performs tasks when certain
 // things happen. The biggest task is in telling the client things have changed
 // using a long-poll system.
-func WatchMPD(host string, handler *TWHandler) {
-  w, err := mpd.NewWatcher("tcp", host, "")
+func WatchMPD(host string, handlerChan chan string) {
+  w, err := gompd.NewWatcher("tcp", host, "")
   if err != nil {
     log.Fatal("Couldn't start watching MPD")
   }
@@ -24,8 +25,8 @@ func WatchMPD(host string, handler *TWHandler) {
   mw := new(mpdWatcher)
   mw.w = w
   mw.host = host
-  mw.h = handler
-  mw.c = make(chan bool)
+  mw.handlerChan = handlerChan
+  mw.resetChan = make(chan bool)
 
   log.Println("Staring mpdWatcher for", host)
 
@@ -37,17 +38,8 @@ func (mw *mpdWatcher) onWatcherEvents() {
   for {
     select {
     case subsystem := <-mw.w.Event:
-      if subsystem == "player" {
-        //mw.queueSong()
-        mw.h.MpdClient.QueueSong()
-      }
-
-      //log.Println("Subsystem changed:", subsystem)
-
-      // alert the TWHandler that something in MPD has changed, so it can tell
-      // the client.
-      mw.h.PolarChanged(subsystem)
-    case <-mw.c:
+      mw.handlerChan <- subsystem
+    case <-mw.resetChan:
       break
     }
   }
@@ -67,7 +59,7 @@ func (mw *mpdWatcher) restart() {
   if err := mw.w.Close(); err != nil {
     log.Fatal("Error closing mpd.Watcher\n\t", err)
   } else {
-    mw.c <- true
+    mw.resetChan <- true
 
     go mw.onWatcherEvents()
     go mw.onWatcherErrors()

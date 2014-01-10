@@ -1,8 +1,8 @@
-package turbowookie
+package mpd
 
 import (
   //"github.com/fhs/gompd/mpd"
-  "github.com/turbowookie/gompd/mpd"
+  gompd "github.com/turbowookie/gompd/mpd"
   //"../../../gompd/mpd"
   "log"
   "os/exec"
@@ -10,7 +10,25 @@ import (
   "time"
   "io"
   "os"
+  "math/rand"
 )
+
+type twMPDError struct {
+  Msg string
+  Err error
+}
+
+func (e *twMPDError) Error() string {
+  return e.Msg + "\n\t" + e.Err.Error()
+}
+
+
+func random(min, max int) int {
+  rand.Seed(time.Now().Unix())
+  return rand.Intn(max-min) + min
+}
+
+
 
 // TWMPDClient is a simpler layer over a gompd/mpd.Client.
 type TWMPDClient struct {
@@ -92,7 +110,7 @@ func (c *TWMPDClient) startMpd() *exec.Cmd {
 }
 
 // KillMpd kills the underlying MPD process.
-func (c *TWMPDClient) KillMpd() {
+func (c *TWMPDClient) Shutdown() {
   if c.MpdCmd != nil {
     c.MpdCmd.Process.Kill()
   }
@@ -100,10 +118,10 @@ func (c *TWMPDClient) KillMpd() {
 
 // Connect to MPD.
 // It just means there's slightly less typing involved.
-func (c *TWMPDClient) getClient() (*mpd.Client, error) {
-  client, err := mpd.Dial("tcp", c.toString())
+func (c *TWMPDClient) getClient() (*gompd.Client, error) {
+  client, err := gompd.Dial("tcp", c.toString())
   if err != nil {
-    return nil, &tbError{Msg: "Couldn't connect to " + c.toString(), Err: err}
+    return nil, &twMPDError{Msg: "Couldn't connect to " + c.toString(), Err: err}
   }
 
   return client, nil
@@ -120,45 +138,55 @@ func (c *TWMPDClient) toString() string {
 func (c *TWMPDClient) Startup() error {
   client, err := c.getClient()
   if err != nil {
-    return &tbError{Msg: "MPD isn't running.", Err: err}
+    return &twMPDError{Msg: "MPD isn't running.", Err: err}
   }
   defer client.Close()
 
   // check if client is playing
   attrs, err := client.Status()
   if err != nil {
-    return &tbError{Msg: "Couldn't get status from client", Err: err}
+    return &twMPDError{Msg: "Couldn't get status from client", Err: err}
   }
 
   // if we're not playing, play a random song
   if attrs["state"] != "play" {
     songs, err := client.GetFiles()
     if err != nil {
-      return &tbError{Msg: "Couldn't get all files...", Err: err}
+      return &twMPDError{Msg: "Couldn't get all files...", Err: err}
     }
 
     song := songs[random(0, len(songs))]
     if err := client.Add(song); err != nil {
-      return &tbError{Msg: "Couldn't add song: " + song, Err: err}
+      return &twMPDError{Msg: "Couldn't add song: " + song, Err: err}
     }
 
     plen, err := strconv.Atoi(attrs["playlistlength"])
     if err != nil {
-      return &tbError{Msg: "Couldn't get playlistlength...", Err: err}
+      return &twMPDError{Msg: "Couldn't get playlistlength...", Err: err}
     }
 
     if err := client.Play(plen); err != nil {
-      return &tbError{Msg: "Couldn't play song", Err: err}
+      return &twMPDError{Msg: "Couldn't play song", Err: err}
     }
   }
 
   return nil
 }
 
+func (c *TWMPDClient) Status() (map[string]string, error) {
+  client, err := c.getClient()
+  if err != nil {
+    return nil, &twMPDError{Msg: "Couldn't get client", Err: err}
+  }
+  defer client.Close()
+
+  return client.Status()
+}
+
 // convert []mpd.Attrs to standard []map[string]string, because dealing with
 // non typical types is annoying if you're outside that library, and Go doesn't
 // consider types to be aliases, even if they are.
-func attrsToMap(attrs []mpd.Attrs) []map[string]string {
+func attrsToMap(attrs []gompd.Attrs) []map[string]string {
   out := make([]map[string]string, 0)
   for i := 0; i < len(attrs); i++ {
     m := make(map[string]string)
@@ -186,7 +214,7 @@ func (c *TWMPDClient) GetFiles() ([]map[string]string, error) {
 
   mpdFiles, err := client.ListAllInfo("/")
   if err != nil {
-    return nil, &tbError{Msg: "Couldn't listallinfo from MPD", Err: err}
+    return nil, &twMPDError{Msg: "Couldn't listallinfo from MPD", Err: err}
   }
 
   return attrsToMap(mpdFiles), nil
@@ -209,7 +237,7 @@ func (c *TWMPDClient) GetSongs(artist string, album string) ([]map[string]string
 
   mpdFiles, err := client.Find(requestStr)
   if err != nil {
-    return nil, &tbError{Msg: "Couldn't search from MPD", Err: err}
+    return nil, &twMPDError{Msg: "Couldn't search from MPD", Err: err}
   }
 
   return attrsToMap(mpdFiles), nil
@@ -260,11 +288,11 @@ func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
 
   currentSong, err := client.CurrentSong()
   if err != nil {
-    return nil, &tbError{Msg: "Couldn't get current song", Err: err}
+    return nil, &twMPDError{Msg: "Couldn't get current song", Err: err}
   }
 
   if len(currentSong) == 0 {
-    c.QueueSong()
+    c.QueueRandomSong()
     return c.CurrentSong()
   }
 
@@ -276,12 +304,12 @@ func (c *TWMPDClient) CurrentSong() (map[string]string, error) {
 func (c *TWMPDClient) GetUpcoming() ([]map[string]string, error) {
   currentSong, err := c.CurrentSong()
   if err != nil {
-    return nil, &tbError{Msg: "Couldn't get current song info for upcoming list", Err: err}
+    return nil, &twMPDError{Msg: "Couldn't get current song info for upcoming list", Err: err}
   }
 
   pos, err := strconv.Atoi(currentSong["Pos"])
   if err != nil {
-    return nil, &tbError{Msg: "Couldn't turn current song's position to int", Err: err}
+    return nil, &twMPDError{Msg: "Couldn't turn current song's position to int", Err: err}
   }
 
   playlist, err := c.GetPlaylist()
@@ -356,7 +384,7 @@ func (c *TWMPDClient) Add(uri string) error {
   return nil
 }
 
-func (c *TWMPDClient) QueueSong() {
+func (c *TWMPDClient) QueueRandomSong() {
   if c.queueingSong {
     return
   }
