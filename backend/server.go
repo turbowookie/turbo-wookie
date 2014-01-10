@@ -6,6 +6,10 @@ import (
   "log"
   "os"
   "os/signal"
+  "bufio"
+  "net"
+  "fmt"
+  "strings"
 )
 
 func main() {
@@ -37,8 +41,45 @@ func main() {
     }()
   }
 
+  go talkToMPD()
+
   // Listen for and serve HTTP requests
   if err := h.ListenAndServe(); err != nil {
     log.Println(err)
+  }
+}
+
+func talkToMPD() {
+  bio := bufio.NewReader(os.Stdin)
+  requestBytes, _, _ := bio.ReadLine()
+  request := string(requestBytes)
+
+  conn, err := net.Dial("tcp", "localhost:6600")
+  checkErr(err)
+
+  fmt.Fprintf(conn, request + "\n")
+
+  reader := bufio.NewReader(conn)
+
+  for {
+    response, err := reader.ReadString('\n')
+    checkErr(err)
+
+    fmt.Print(response)
+
+    if strings.HasSuffix(response, "OK\n") {
+      break
+    } else if strings.HasPrefix(response, "ACK [") {
+      break
+    }
+  }
+  fmt.Println("")
+  talkToMPD()
+}
+
+func checkErr(err error) {
+  if err != nil {
+    log.Println("Error: %s", err.Error())
+    os.Exit(1)
   }
 }
