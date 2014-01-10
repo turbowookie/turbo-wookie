@@ -42,7 +42,7 @@ func (mw *mpdWatcher) onWatcherEvents() {
         mw.h.MpdClient.QueueSong()
       }
 
-      log.Println("Subsystem changed:", subsystem)
+      //log.Println("Subsystem changed:", subsystem)
 
       // alert the TWHandler that something in MPD has changed, so it can tell
       // the client.

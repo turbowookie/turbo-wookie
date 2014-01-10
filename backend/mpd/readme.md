@@ -11,7 +11,7 @@ To setup your MPD config, open your mpd directory, and do the following:
     d.  state
     e.  sticker.sql
     f.  a `music/` directory
-    g.  a `playlits/` directory
+    g.  a `playlists/` directory
     
     You may need to make the directories, as I think they're currently ignored.
 

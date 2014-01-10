@@ -41,7 +41,11 @@ func main() {
     }()
   }
 
-  go talkToMPD()
+  go func() {
+    for {
+      talkToMPD()
+    }
+  }()
 
   // Listen for and serve HTTP requests
   if err := h.ListenAndServe(); err != nil {
@@ -49,8 +53,13 @@ func main() {
   }
 }
 
-// This allows the user to request an abitrary command on MPD.
+// talkToMPD reads from stdin and sends the inputted text to MPD.
+// Valid commands are anything permitted in the MPD protocol.
+// The protocol reference can be found at http://www.musicpd.org/doc/protocol/index.html
 func talkToMPD() {
+  //fmt.Print("\n> ")
+  fmt.Print("\n")
+
   // Read from the stdin.
   clientReader := bufio.NewReader(os.Stdin)
   requestBytes, _, _ := clientReader.ReadLine()
@@ -80,12 +89,6 @@ func talkToMPD() {
       break
     }
   }
-
-  // Just print a blank line to make it look prettier.
-  fmt.Println("")
-
-  // Talk to MPD again.
-  talkToMPD()
 }
 
 // I got sick of checking for errors after every function call, so I did this.

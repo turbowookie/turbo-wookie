@@ -8,6 +8,8 @@ import (
   "os/exec"
   "strconv"
   "time"
+  "io"
+  "os"
 )
 
 // TWMPDClient is a simpler layer over a gompd/mpd.Client.
@@ -56,16 +58,30 @@ func (c *TWMPDClient) startMpd() *exec.Cmd {
   mpdCommand := c.config["mpd_command"]
   mpdConf := c.config["turbo_wookie_directory"] + "/" + c.config["mpd_subdirectory"] + "/" + "mpd.conf"
 
+  log.Println(mpdConf)
+
   // --no-daemon is for Linux, it tells MPD to run in the foreground, and keeps
   // it attached to cmd's underlying Process. Useful, so we can kill it later.
   // It also doesn't hurt Windows instances, so it's fine. Promise.
   cmd := exec.Command(mpdCommand, "--no-daemon", mpdConf)
+  cmdOut, err := cmd.StdoutPipe()
+  if err != nil {
+    log.Fatal("Couldn't get MPD command's stdout pipe", err)
+  }
+  cmdErr, err := cmd.StderrPipe()
+  if err != nil {
+    log.Fatal("Couldn't get MPD command's stderr pipe", err)
+  }
+
+  go io.Copy(os.Stdout, cmdOut)
+  go io.Copy(os.Stderr, cmdErr)
 
   // Run the command in the backround
-  err := cmd.Start()
+  err = cmd.Start()
   if err != nil {
     log.Fatal("Error running MPD command")
   }
+
 
   log.Println("Starting MPD")
 
