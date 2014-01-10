@@ -50,33 +50,44 @@ func main() {
 }
 
 func talkToMPD() {
-  bio := bufio.NewReader(os.Stdin)
-  requestBytes, _, _ := bio.ReadLine()
+  // Read from the stdin.
+  clientReader := bufio.NewReader(os.Stdin)
+  requestBytes, _, _ := clientReader.ReadLine()
   request := string(requestBytes)
 
+  // Once we have read, create a connection to MPD.
   conn, err := net.Dial("tcp", "localhost:6600")
   checkErr(err)
 
+  // Write our response to MPD.
   fmt.Fprintf(conn, request + "\n")
 
+  // Read from MPD.
   reader := bufio.NewReader(conn)
-
   for {
     response, err := reader.ReadString('\n')
     checkErr(err)
 
+    // Using fmt to print a response because we don't care about time.
     fmt.Print(response)
 
+    // If the request was good, MPD's response will end with "OK\n"
+    // Otherwise, the response will start with "ACK [<num>@<num>] <error>"
     if strings.HasSuffix(response, "OK\n") {
       break
     } else if strings.HasPrefix(response, "ACK [") {
       break
     }
   }
+
+  // Just print a blank line to make it look prettier.
   fmt.Println("")
+
+  // Talk to MPD again.
   talkToMPD()
 }
 
+// I got sick of checking for errors after every function call, so I did this.
 func checkErr(err error) {
   if err != nil {
     log.Println("Error: %s", err.Error())
