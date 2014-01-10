@@ -4,7 +4,10 @@
   margin-top: -89px;
   position: relative;
 }
-#albumArt { position: relative; }
+#albumArt {
+  width: 100%;
+  position: relative;
+}
 
 #songInfo {
   color: white;
