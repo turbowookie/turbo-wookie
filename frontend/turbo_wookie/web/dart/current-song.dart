@@ -3,6 +3,7 @@ import "dart:async";
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
+import "library-list.dart";
 import "media-bar.dart";
 import "song.dart";
 
@@ -14,6 +15,7 @@ class CurrentSong extends PolymerElement {
 
   ImageElement albumArt;
   MediaBar mediaBar;
+  LibraryList library;
   DivElement titleDiv;
   DivElement artistDiv;
   DivElement albumDiv;
@@ -28,6 +30,9 @@ class CurrentSong extends PolymerElement {
     titleDiv = $["title"];
     artistDiv = $["artist"];
     albumDiv = $["album"];
+    
+    artistDiv.onClick.listen((_) => library.getAllAlbums(artistDiv.text));
+    albumDiv.onClick.listen((_) => library.getSongs(artistDiv.text, albumDiv.text));
   }
 
   /**
@@ -55,17 +60,23 @@ class CurrentSong extends PolymerElement {
 
       if(song.artist == null)
         artistDiv.setInnerHtml("Unknown Artist");
-      else
+      else {
         artistDiv.setInnerHtml(song.artist);
+      }
 
       if(song.album == null)
         albumDiv.setInnerHtml("Unknown Album");
-      else
+      else {
         albumDiv.setInnerHtml(song.album);
+      }
 
       completer.complete();
     });
 
     return completer.future;
+  }
+  
+  void setLibrary(LibraryList library) {
+    this.library = library;
   }
 }

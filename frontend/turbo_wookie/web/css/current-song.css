@@ -20,6 +20,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 178px;
+  cursor: pointer;
 }
 
 #title {

@@ -34,5 +34,6 @@ void main() {
     mediaBar.loginMenu = loginMenu;
     header.setLibrary(library);
     header.loginMenu = loginMenu;
+    playlist.currentSong.setLibrary(library);
   });
 }
