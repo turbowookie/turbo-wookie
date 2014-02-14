@@ -262,17 +262,24 @@ class LibraryList extends PolymerElement {
         titleDiv.style.display = "block";
       }
       
-      // Decode our albums from json data and sort them.
-      List<String> albums = JSON.decode(request.responseText);
-      albums.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-      
-      // For each album, add them to the datalist.
-      albums.forEach((String album) {
-        LIElement albumElement = new LIElement()
+      // Decode our albums from json data and create a DOM element out of them.
+      Map<String, List<String>> albums = JSON.decode(request.responseText);
+      List<LIElement> albumElements = new List<LIElement>();
+      albums.forEach((String artist, List<String> albums) {
+        for(String album in albums) {
+          LIElement albumElement = new LIElement()
           ..text = album
           ..onClick.listen((_) => getSongs(artist, album));
-        dataList.children.add(albumElement);
+          // Add it to a list so we can sort it later.
+          albumElements.add(albumElement);
+        }
       });
+      
+      // Sort the albums and add them to the DOM.
+      albumElements.sort((a, b) => a.text.toLowerCase().compareTo(b.text.toLowerCase()));
+      for(LIElement albumElement in albumElements) {
+        dataList.children.add(albumElement);
+      }
     });
   }
   
@@ -289,7 +296,9 @@ class LibraryList extends PolymerElement {
       requestStr = "/songs?artist=${Uri.encodeComponent(artist)}";
     else {
       requestStr = "/songs?artist=${Uri.encodeComponent(artist)}&album=${Uri.encodeComponent(album)}";
+      titleDiv.style.display = "block";
       titleDiv.text = "$artist - $album";
+      currentArtist = artist;
     }
     
     // Get all the songs.

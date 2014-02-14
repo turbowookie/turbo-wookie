@@ -230,24 +230,42 @@ func (c *TWMPDClient) GetArtists() ([]string, error) {
   return artists, nil
 }
 
-func (c *TWMPDClient) GetAlbums(artist string) ([]string, error) {
+func (c *TWMPDClient) GetAlbums(artist string) (map[string][]string, error) {
   client, err := c.getClient()
   if err != nil {
     return nil, err
   }
   defer client.Close()
-  var command string
+  
+  albums := make(map[string][]string, 0)
+
+  // Only get the artist requested.
   if len(artist) > 0 {
-    command = "album artist \"" + artist + "\""
+    artistAlbums, err := client.List("album artist \"" + artist + "\"")
+    if err != nil {
+      return nil, err
+    }
+    albums[artist] = artistAlbums
+
   } else {
-    command = "album"
-  }
-  album, err := client.List(command)
-  if err != nil {
-    return nil, err
+    // Get all albums.
+    artists, err := client.List("artist")
+    if err != nil {
+      return nil, err
+    }
+    
+    // For earch artist, create list in the map, keyed to the artist and add
+    // all the artist's albums to it.
+    for _, artist := range artists {
+      artistAlbums, err := client.List("album artist \"" + artist + "\"")
+      if err != nil {
+        return nil, err
+      }
+      albums[artist] = artistAlbums
+    }
   }
 
-  return album, nil
+  return albums, nil
 }
 
 // CurrentSong returns information about the song currently playing.

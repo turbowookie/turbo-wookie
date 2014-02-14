@@ -165,7 +165,7 @@ func (h *TWHandler) listArtists(w http.ResponseWriter, r *http.Request) {
 func (h *TWHandler) listArtistAlbums(w http.ResponseWriter, r *http.Request) {
   r.ParseForm()
   artist, ok := r.Form["artist"]
-  var albums []string
+  var albums map[string][]string
   var err error
   if !ok {
     albums, err = h.MpdClient.GetAlbums("")
