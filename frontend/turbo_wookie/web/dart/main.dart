@@ -28,7 +28,7 @@ void main() {
   // When polymer is done loading, we can connect the mediaBar and the
   // playlist. We have to wait for polymer to be ready just for the
   // compiled down Javascript part.
-  Polymer.onReady.whenComplete((){
+  Polymer.onReady.whenComplete(() {
     mediaBar.setPlaylist(playlist);
     mediaBar.setHeader(header);
     mediaBar.loginMenu = loginMenu;

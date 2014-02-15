@@ -32,10 +32,10 @@ class MediaBar extends PolymerElement {
     isPlaying = false;
     preventOnEmptied = false;
   }
-
+  
+  
   void enteredView() {
     super.enteredView();
-
     toggleSoundButton = $["toggleSound"];
     toggleSoundImage = toggleSoundButton.children.first;
     volumeSlider = $["volumeSlider"];
@@ -223,7 +223,7 @@ class MediaBar extends PolymerElement {
   void setPlaylist(PlayList playlist) {
     this.playlist = playlist;
     playlist.currentSong.loadMetaData()
-      .then((var nothing) => updateProgressSlider());
+      .then((_) => updateProgressSlider());
   }
 
   /**
