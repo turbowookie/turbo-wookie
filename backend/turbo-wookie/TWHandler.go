@@ -87,7 +87,7 @@ func NewTWHandler(filename string, serveDart, startMPD bool, portOverride int) (
   if serveDart {
     fileDir += "/web"
   } else {
-    fileDir += "/build/web"
+    fileDir += "/build"
   }
   h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(fileDir)))
 
