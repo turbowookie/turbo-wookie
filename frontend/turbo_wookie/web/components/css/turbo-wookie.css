@@ -18,10 +18,17 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+#views {
+  display: block;
+  width: 100%;
+  background: #222;
+  height: 50px;
+}
+
 #library {
   float: right;
   width: calc(100% - 268px);
-  max-height: calc(100% - 110px);
+  max-height: calc(100% - 160px);
   overflow: auto;
 }
 

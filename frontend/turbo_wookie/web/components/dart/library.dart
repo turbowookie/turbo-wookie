@@ -3,6 +3,7 @@ library TWLibrary;
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
+import "views.dart";
 import "../../classes/song.dart";
 import "../../classes/lastfm.dart";
 
@@ -23,9 +24,7 @@ class Library extends PolymerElement {
   TableElement songsTable;
   TableSectionElement songsTableBody;
   
-  ButtonElement artistButton;
-  ButtonElement albumsButton;
-  ButtonElement songsButton;
+  Views views;
   
   void enteredView() {
     super.enteredView();
@@ -36,26 +35,6 @@ class Library extends PolymerElement {
     songs = new List<Song>();
     songsTable = $["songs"];
     songsTableBody = songsTable.tBodies[0];
-    
-    UListElement views = $["viewsList"];
-    artistButton = views.children[0];
-    albumsButton = views.children[1];
-    songsButton = views.children[2];
-    
-    artistButton.onClick.listen((_) {
-      clearAllData();
-      getArtists();
-    });
-    
-    albumsButton.onClick.listen((_) {
-      clearAllData();
-      getAlbums();
-    });
-    
-    songsButton.onClick.listen((_) {
-      clearAllData();
-      getSongs();
-    });
     
     getArtists();
   }
@@ -71,13 +50,13 @@ class Library extends PolymerElement {
   }
   
   void getArtists() {
-    artistButton.classes.add("active");
-    albumsButton.classes.remove("active");
-    songsButton.classes.remove("active");
     songsTable.style.display = "none";
     dataList.style.display = "block";
     
     HttpRequest.request("/artists").then((HttpRequest request) {
+      clearAllData();
+      views.setArtists(false);
+      
       dataList.attributes["class"] = "artists";
       locationArtist = "";
       locationAlbum = "";
@@ -110,9 +89,6 @@ class Library extends PolymerElement {
   }
   
   void getAlbums([String artist]) {
-    artistButton.classes.remove("active");
-    albumsButton.classes.add("active");
-    songsButton.classes.remove("active");
     songsTable.style.display = "none";
     dataList.style.display = "block";
     
@@ -129,6 +105,8 @@ class Library extends PolymerElement {
     .then((HttpRequest request) {
       // Clear our data and show our album info.
       clearAllData();
+      views.setAlbums(false);
+      
       dataList.attributes['class'] = "albums";
       dataList.style.display = "block";
       songsTable.style.display = "none";
@@ -167,9 +145,6 @@ class Library extends PolymerElement {
   }
   
   void getSongs([String artist, String album]) {
-    artistButton.classes.remove("active");
-    albumsButton.classes.remove("active");
-    songsButton.classes.add("active");
     songsTable.style.display = "block";
     dataList.style.display = "none";
     
@@ -192,6 +167,9 @@ class Library extends PolymerElement {
     }
     
     HttpRequest.request(requestStr).then((HttpRequest request) {
+      clearAllData();
+      views.setSongs(false);
+      
       List<Map> songsJson = JSON.decode(request.responseText);
       
       for(Map songMap in songsJson) {
