@@ -11,7 +11,9 @@ import "../../classes/lastfm.dart";
 class Library extends PolymerElement {
   Library.created() : super.created();
 
-  @observable String location;
+  @observable String locationArtist;
+  @observable String locationAlbum;
+  
   String currentArtist;
   UListElement dataList;
   @observable List<String> artists;
@@ -21,7 +23,6 @@ class Library extends PolymerElement {
   TableElement songsTable;
   TableSectionElement songsTableBody;
   
-
   ButtonElement artistButton;
   ButtonElement albumsButton;
   ButtonElement songsButton;
@@ -65,6 +66,10 @@ class Library extends PolymerElement {
     dataList.children.clear();
   }
   
+  void locationClick(Event e, var detail, Element target) {
+    getAlbums(target.text);
+  }
+  
   void getArtists() {
     artistButton.classes.add("active");
     albumsButton.classes.remove("active");
@@ -74,7 +79,8 @@ class Library extends PolymerElement {
     
     HttpRequest.request("/artists").then((HttpRequest request) {
       dataList.attributes["class"] = "artists";
-      location = "";
+      locationArtist = "";
+      locationAlbum = "";
       
       artists = JSON.decode(request.responseText);
       artists.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
@@ -114,7 +120,7 @@ class Library extends PolymerElement {
     String requestStr;
     if(artist == null) {
       requestStr = "/albums";
-      location = "";
+      locationArtist = "";
     }
     else
       requestStr = "/albums?artist=${Uri.encodeComponent(artist)}";
@@ -135,7 +141,8 @@ class Library extends PolymerElement {
         dataList.children.add(allSongsElement);
 
         currentArtist = artist;
-        location = artist;
+        locationArtist = artist;
+        locationAlbum = "";
       }
       
       // Decode our albums from json data and create a DOM element out of them.
@@ -168,12 +175,21 @@ class Library extends PolymerElement {
     
     String requestStr;
 
-    if(album == null && artist != null)
+    if(album == null && artist != null) {
       requestStr = "/songs?artist=${Uri.encodeComponent(artist)}";
-    else if(album != null && artist != null)
+      locationArtist = artist;
+      locationAlbum = " - All Songs";
+    }
+    else if(album != null && artist != null) {
       requestStr = "/songs?artist=${Uri.encodeComponent(artist)}&album=${Uri.encodeComponent(album)}";
-    else
+      locationArtist = artist;
+      locationAlbum = " - $album";
+    }
+    else {
       requestStr = "/songs";
+      locationArtist = "";
+      locationAlbum = "";
+    }
     
     HttpRequest.request(requestStr).then((HttpRequest request) {
       List<Map> songsJson = JSON.decode(request.responseText);
