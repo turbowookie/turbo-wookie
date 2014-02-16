@@ -3,15 +3,16 @@ library TWSong;
 import "dart:async";
 import "dart:convert";
 import "dart:html";
+import "package:polymer/polymer.dart";
 import "../classes/lastfm.dart";
 
 class Song {
   static Future<Song> get currentSong => Song.getCurrent();
   static Song _currSong;
   
-  String title;
-  String artist;
-  String album;
+  @observable String title;
+  @observable String artist;
+  @observable String album;
   String filePath;
   double length;
   

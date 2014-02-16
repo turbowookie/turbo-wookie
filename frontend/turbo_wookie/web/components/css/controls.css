@@ -23,8 +23,9 @@ img {
 }
 
 button {
+  padding: 0;
   height: 50px;
-  background: none;
+  background-color: transparent;
   border: none;
   border-right: 1px solid #444;
 }

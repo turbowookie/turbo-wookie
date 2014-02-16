@@ -11,7 +11,7 @@ class Playlist extends PolymerElement implements StreamObserver {
   Playlist.created() : super.created();
   
   @observable Song currentSong;
-  @observable List<Song> songs;
+  @observable ObservableList<Song> songs;
   @observable String albumArtURL;
   
   void enteredView() {
@@ -23,7 +23,7 @@ class Playlist extends PolymerElement implements StreamObserver {
   
   void getPlaylist() {
     HttpRequest.request("/upcoming").then((HttpRequest request) {
-      songs = new List<Song>();
+      songs = new ObservableList<Song>();
       List jsonList = JSON.decode(request.responseText);
       
       for(Map songMap in jsonList) {
