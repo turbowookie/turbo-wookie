@@ -1,5 +1,6 @@
-library TurboWookie;
+library TWTurboWookie;
 
+import "dart:html";
 import "package:polymer/polymer.dart";
 
 @CustomTag("tw-turbo-wookie")

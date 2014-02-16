@@ -1,0 +1,117 @@
+#pausePlay.playing:hover #restImg,
+#pausePlay.paused #restImg,
+#pausePlay.playing #restImgHover,
+#pausePlay.paused #restImgHover,
+#pausePlay.playing #noteImg,
+#pausePlay.playing #noteImgHover,
+#pausePlay.paused:hover #noteImg,
+#pausePlay.paused #noteImgHover {
+  display: none;
+}
+
+#pausePlay.playing #restImg,
+#pausePlay.playing:hover #restImgHover,
+#pausePlay.paused #noteImg,
+#pausePlay.paused:hover #noteImgHover {
+  display: inline;
+}
+
+img {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+}
+
+button {
+  height: 50px;
+  background: none;
+  border: none;
+  border-right: 1px solid #444;
+}
+
+/* Slider Stuff */
+
+#volumeSlider {
+  width: calc(100% - 160px);
+  float: right;
+  margin-right: 25px;
+  margin-top: 20px;
+
+  height: 10px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #4a4a4a;
+  border: none;
+}
+#volumeSlider::-moz-range-track {
+  width: calc(100% - 160px);
+  float: right;
+  margin-right: 25px;
+  margin-top: 20px;
+
+  height: 10px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #4a4a4a;
+  border: none;
+}
+#volumeSlider:focus {
+  outline: none;
+}
+#volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  background: rgb(51, 181, 229);
+}
+#volumeSlider::-moz-range-thumb {
+  -moz-appearance: none;
+  height: 12px;
+  width: 12px;
+  background: rgb(51, 181, 229);
+  border-radius: 0px;
+  border: none;
+}
+
+#progressSlider {
+  display: block;
+  padding: 7px 0;
+  margin: 0;
+  height: 3px;
+  padding: 0;
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #333;
+  border: none;
+}
+#progressSlider::-moz-range-track {
+  display: block;
+  padding: 7px 0;
+  margin: 0;
+  height: 3px;
+  padding: 0;
+  width: 100%;
+  -webkit-appearance: none;
+  background-color: #4a4a4a;
+  border: none;
+}
+#progressSlider:focus {
+  outline: none;
+}      
+#progressSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 5px;
+  width: 5px;
+  background: rgb(51, 181, 229);
+}
+#progressSlider::-moz-range-thumb {
+  -moz-appearance: none;
+  height: 5px;
+  width: 5px;
+  background: rgb(51, 181, 229);
+  border-radius: 50%;
+}
