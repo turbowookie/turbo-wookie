@@ -9,3 +9,67 @@
   margin: 0;
 }
 
+#playlist {
+  position: relative;
+  overflow-y: auto;
+  float: left;
+  height: calc(100% - 110px);
+  width: 268px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* Header Stuff */
+header {
+  background: #111;
+  height: 60px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+header #logoTitle {
+  position: relative;
+  top: 20px;
+  color: #33B5E5;
+  display: inline-block;
+  margin: 0;
+}
+
+header #logoImg {
+  position: relative;
+  float: left;
+  top: 5px;
+}
+
+header #logo #logoImg, header #logo #logoTitle {
+  height: 50px;
+  padding 5px;
+}
+
+/* Search Stuff */
+#search {
+  font-size: 14px;
+  font-family: Roboto, "Open Sans", "Droid Sans", sans-serif;
+  float: right;
+  width: calc(100% - 400px);
+  border: 1px solid #444;
+  height: 20px;
+  line-height: 20px;
+  padding: 8px 28px;
+  margin: 10px 23px 10px 23px;
+  background-color: #2a2a2a;
+
+  color: #ccc;
+}
+
+#search:focus {
+  outline: none;
+  color: #fff;
+  background-color: #4a4a4a;
+}
+
+/* TODO: duplicate for other browsers */
+#search::-webkit-input-placeholder {
+  color: #aaa;
+}

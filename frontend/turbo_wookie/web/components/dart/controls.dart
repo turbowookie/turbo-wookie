@@ -46,7 +46,8 @@ class Controls extends PolymerElement {
     window.onKeyPress
       // Be sure we are not on an input element before we do anything.
       .where((KeyboardEvent e) {
-        return document.activeElement.tagName != "INPUT";
+        print(document.activeElement.tagName);
+        return document.activeElement.tagName != "TW-TURBO-WOOKIE";
     })
       .listen((KeyboardEvent e) {
         e.preventDefault();

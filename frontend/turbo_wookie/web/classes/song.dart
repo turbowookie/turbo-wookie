@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 import "dart:html";
+import "../classes/lastfm.dart";
 
 class Song {
   static Future<Song> get currentSong => Song.getCurrent();
@@ -61,5 +62,15 @@ class Song {
     }
     
     return com.future;
+  }
+  
+  Future<String> getAlbumArtURL() {
+    return LastFM.getAlbumArtUrl(this);
+  }
+  
+  String toString() {
+    return "Title : $title\n"
+        "Artist: $artist\n"
+        "Album : $album\n";
   }
 }

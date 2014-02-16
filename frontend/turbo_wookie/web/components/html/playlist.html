@@ -1,0 +1,26 @@
+<polymer-element name="tw-playlist">
+  
+  <template>
+    <link rel="stylesheet" href="../css/playlist.css">
+    <link rel="stylesheet" href="../css/scrollbar.css">
+    
+    <div id="currentSong">
+      <img id="albumArt" src={{albumArtURL}} />
+      <div id="songInfoBox">
+        <div id="currTitle">{{currentSong.title}}</div>
+        <div id="currArtist">{{currentSong.artist}}</div>
+        <div id="currAlbum">{{currentSong.album}}</div>
+      </div>
+    </div>
+    <ul id="list">
+    <template repeat="{{song in songs}}">
+      <li>
+        <div class="title">{{song.title}}</div>
+        <div class="artist">{{song.artist}}</div>
+      </li>
+    </template>
+    </ul>
+  </template>
+  
+  <script type="application/dart" src="../dart/playlist.dart"></script>
+</polymer-element>
