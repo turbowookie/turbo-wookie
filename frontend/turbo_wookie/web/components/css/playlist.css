@@ -37,6 +37,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 208px;
+  cursor: pointer;
 }
 
 /* Current Song Stuff */
@@ -74,5 +75,5 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 178px;
-  cursor: pointer;  
+  cursor: pointer;
 }

@@ -3,6 +3,7 @@ library TWPlaylist;
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
+import "library.dart";
 import "../../classes/song.dart";
 import "../../classes/stream-observer.dart";
 
@@ -13,6 +14,7 @@ class Playlist extends PolymerElement implements StreamObserver {
   @observable Song currentSong;
   @observable ObservableList<Song> songs;
   @observable String albumArtURL;
+  Library library;
   
   void enteredView() {
     super.enteredView();
@@ -42,6 +44,14 @@ class Playlist extends PolymerElement implements StreamObserver {
   void onPlayerUpdate() {
     getPlaylist();
     getCurrentSong(true);
+  }
+  
+  void onArtistClick(Event event, var detail, Element target) {
+    library.getAlbums(target.text);
+  }
+  
+  void onAlbumClick(Event e) {
+    library.getSongs(currentSong.artist, currentSong.album);
   }
   
   void onPlaylistUpdate() {}

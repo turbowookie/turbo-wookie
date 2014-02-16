@@ -7,16 +7,16 @@
     <div id="currentSong">
       <img id="albumArt" src={{albumArtURL}} />
       <div id="songInfoBox">
-        <div id="currTitle">{{currentSong.title}}</div>
-        <div id="currArtist">{{currentSong.artist}}</div>
-        <div id="currAlbum">{{currentSong.album}}</div>
+        <div id="currTitle" title="{{currentSong.title}}">{{currentSong.title}}</div>
+        <div id="currArtist" title="{{currentSong.artist}}" on-click="{{onArtistClick}}">{{currentSong.artist}}</div>
+        <div id="currAlbum" title="{{currentSong.album}}" on-click="{{onAlbumClick}}">{{currentSong.album}}</div>
       </div>
     </div>
     <ul id="list">
     <template repeat="{{song in songs}}">
       <li>
         <div class="title">{{song.title}}</div>
-        <div class="artist">{{song.artist}}</div>
+        <div class="artist" on-click="{{onArtistClick}}">{{song.artist}}</div>
       </li>
     </template>
     </ul>

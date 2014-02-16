@@ -5,7 +5,7 @@ import "package:polymer/polymer.dart";
 import "../../classes/song.dart";
 import "../../classes/stream-observer.dart";
 
-@CustomTag("tw-controls")
+@CustomTag("tw-player")
 class Controls extends PolymerElement implements StreamObserver {
   Controls.created() : super.created();
   
