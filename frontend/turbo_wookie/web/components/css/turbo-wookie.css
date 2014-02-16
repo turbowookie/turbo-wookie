@@ -18,6 +18,13 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
+#library {
+  float: right;
+  width: calc(100% - 268px);
+  max-height: calc(100% - 110px);
+  overflow: auto;
+}
+
 
 /* Header Stuff */
 header {

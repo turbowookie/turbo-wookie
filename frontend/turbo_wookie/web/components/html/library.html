@@ -1,0 +1,34 @@
+<polymer-element name="tw-library">
+  
+  <template>
+    <link rel="stylesheet" href="../css/library.css">
+    <link rel="stylesheet" href="../css/scrollbar.css">
+    
+    <div id="views">
+      <ul id="viewsList">
+      <li class="active">Artists</li>
+      <li>Albums</li>
+      <li>Songs</li>
+      </ul>
+    </div>
+    
+    <div id="location">{{location}}</div>
+    
+    <ul id="data"></ul>
+    
+    <table id="songs">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Album</th>
+        <th>Add</th>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
+    
+  </template>
+  
+  <script type="application/dart" src="../dart/library.dart"></script>
+</polymer-element>

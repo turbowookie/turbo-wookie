@@ -3,9 +3,10 @@ library TWControls;
 import "dart:html";
 import "package:polymer/polymer.dart";
 import "../../classes/song.dart";
+import "../../classes/stream-observer.dart";
 
 @CustomTag("tw-controls")
-class Controls extends PolymerElement {
+class Controls extends PolymerElement implements StreamObserver {
   Controls.created() : super.created();
   
   bool isPlaying = true;
@@ -16,6 +17,7 @@ class Controls extends PolymerElement {
   
   void enteredView() {
     super.enteredView();
+    StreamObserver.addObserver(this);
     
     // Get all our elements.
     pausePlay = $["pausePlay"];
@@ -46,7 +48,6 @@ class Controls extends PolymerElement {
     window.onKeyPress
       // Be sure we are not on an input element before we do anything.
       .where((KeyboardEvent e) {
-        print(document.activeElement.tagName);
         return document.activeElement.tagName != "TW-TURBO-WOOKIE";
     })
       .listen((KeyboardEvent e) {
@@ -97,8 +98,8 @@ class Controls extends PolymerElement {
     stream.play();
   }
   
-  void setCurrSongTime() {
-    Song.currentSong.then((Song currSong) {
+  void setCurrSongTime([bool update = false]) {
+    Song.getCurrent(update: update).then((Song currSong) {
       progressSlider.max = currSong.length.toString();
     });
   }
@@ -122,4 +123,11 @@ class Controls extends PolymerElement {
   double getVolume() {
     return double.parse(volumeSlider.value);
   }
+
+  void onPlayerUpdate() {
+    setCurrSongTime(true);
+  }
+  
+  void onPlaylistUpdate() {}
+  void onLibraryUpdate() {}
 }

@@ -1,12 +1,13 @@
-library Playlist;
+library TWPlaylist;
 
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
 import "../../classes/song.dart";
+import "../../classes/stream-observer.dart";
 
 @CustomTag("tw-playlist")
-class Playlist extends PolymerElement {
+class Playlist extends PolymerElement implements StreamObserver {
   Playlist.created() : super.created();
   
   @observable Song currentSong;
@@ -14,11 +15,9 @@ class Playlist extends PolymerElement {
   @observable String albumArtURL;
   
   void enteredView() {
-    Song.getCurrent().then((Song song) { 
-      currentSong = song;
-      song.getAlbumArtURL().then((String url) => albumArtURL = url);
-    });
-    
+    super.enteredView();
+    StreamObserver.addObserver(this);
+    getCurrentSong();
     getPlaylist();
   }
   
@@ -32,4 +31,19 @@ class Playlist extends PolymerElement {
       }
     });
   }
+  
+  void getCurrentSong([bool update = false]) {
+    Song.getCurrent(update: update).then((Song song) { 
+      currentSong = song;
+      song.getAlbumArtURL().then((String url) => albumArtURL = url);
+    });    
+  }
+
+  void onPlayerUpdate() {
+    getPlaylist();
+    getCurrentSong(true);
+  }
+  
+  void onPlaylistUpdate() {}
+  void onLibraryUpdate() {}
 }

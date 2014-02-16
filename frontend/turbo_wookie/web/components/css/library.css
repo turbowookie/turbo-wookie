@@ -1,0 +1,133 @@
+/* View Things */
+#views {
+  width: 100%;
+  background: #222;
+  height: 50px;
+}
+
+#viewsList {
+  height: 100%;
+  padding: 0;
+  margin: 0 0 0 25px;
+}
+
+
+#viewsList li {
+  float: left;
+  padding: 0.65em 20px 0 20px;
+  list-style-type: none;
+  font-weight: bold;
+  font-size: 1.3em;
+  color: white;
+  cursor: pointer;
+  height: calc(100% - 0.65em);
+}
+
+#viewsList li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#viewsList li.active {
+  height: calc(100% - 0.65em - 3px);
+  border-bottom: 3px solid #33B5E5;
+}
+
+/* List/Table Things */
+#location {
+  font-size: 1.5em;
+  color: white;
+  margin: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#data li {
+  list-style-type: none;
+  padding: 10px 0;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+}
+
+#data.artists li {
+  display: inline-block;
+  width: 200px;
+  height: 150px;
+  float: left;
+}
+#data.artists li .artistCrop {
+  width: 200px;
+  height: 150px;
+  display: block;
+  overflow: hidden;
+}
+#data.artists li .artistCrop img {
+  min-width: 200px;
+  //width: auto;
+  min-height: 150px;
+  display: block;
+  position: relative;
+}
+#data.artists li .artistName {
+  margin-top: -50px;
+  height: 50px;
+  line-height: 50px;
+  background: rgba(0,0,0,.8);
+  position: relative;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+
+table {
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  border-collapse: collapse;
+  margin: 20px;
+}
+
+thead tr {
+  border-bottom: none;
+}
+
+th {
+  cursor: pointer;
+  text-align: left;
+  padding: 0 10px 5px;
+  font-size: 1.2em;
+  color: white;
+}
+
+tbody tr:hover, #data li:hover {
+  background-color: rgba(0, 0, 0, 0.1)
+}
+
+tr, #data li {
+  border-bottom: 1px solid #555;
+}
+
+td {
+  padding: 2px 10px;
+}
+
+/* Add Button Things */
+td:nth-child(-n+3) {
+  width: 32%;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.button:hover .addImg,
+.button .addHoverImg {
+  display: none;
+}
+
+.button .addImg,
+.button:hover .addHoverImg {
+  display: block;
+}
+
+img {
+  width: 25px;
+}

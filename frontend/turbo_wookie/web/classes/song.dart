@@ -1,3 +1,5 @@
+library TWSong;
+
 import "dart:async";
 import "dart:convert";
 import "dart:html";
@@ -66,6 +68,10 @@ class Song {
   
   Future<String> getAlbumArtURL() {
     return LastFM.getAlbumArtUrl(this);
+  }
+  
+  void addToPlaylist() {
+    HttpRequest.request("add?song=${Uri.encodeComponent(filePath)}");
   }
   
   String toString() {

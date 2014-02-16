@@ -1,7 +1,7 @@
 library TWTurboWookie;
 
-import "dart:html";
 import "package:polymer/polymer.dart";
+import "../../classes/stream-observer.dart";
 
 @CustomTag("tw-turbo-wookie")
 class TurboWookie extends PolymerElement {
@@ -9,6 +9,8 @@ class TurboWookie extends PolymerElement {
   TurboWookie.created() : super.created();
   
   void enteredView() {
-    // Put everything together here.
+    super.enteredView();
+    
+    StreamObserver.requestUpdate();
   }
 }
