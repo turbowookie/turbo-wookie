@@ -24,7 +24,7 @@ class Controls extends PolymerElement implements StreamObserver {
     volumeSlider = $["volumeSlider"];
     stream = $["stream"];
     progressSlider = $["progressSlider"];
-    setCurrSongTime();
+    resetStream();
 
     // Set the volume.
     if(window.localStorage["volume"] != null) {

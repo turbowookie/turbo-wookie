@@ -3,7 +3,7 @@
   <template>
     <link rel="stylesheet" href="../css/controls.css">
     
-    <audio autoplay src="/stream" id="stream"></audio>
+    <audio autoplay id="stream"></audio>
     
     <input type="range" min="0" step="0.0001" id="progressSlider" value="0" />
     
