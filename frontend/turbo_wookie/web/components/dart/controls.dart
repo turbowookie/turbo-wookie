@@ -41,6 +41,30 @@ class Controls extends PolymerElement {
     stream.onEmptied.listen((_) => resetStream());
     stream.onTimeUpdate.listen((_) =>
         progressSlider.value = stream.currentTime.toString());
+    
+    // Setup keyboard controls.
+    window.onKeyPress
+      // Be sure we are not on an input element before we do anything.
+      .where((KeyboardEvent e) {
+        return document.activeElement.tagName != "INPUT";
+    })
+      .listen((KeyboardEvent e) {
+        e.preventDefault();
+
+        // Pause/Play
+        if(e.keyCode == KeyCode.SPACE) {
+          playPause();
+        }
+
+        // Change volume
+        else if(e.keyCode == 44) {
+          setVolume(getVolume() - 0.05, true);
+        }
+        else if(e.keyCode == 46) {
+          setVolume(getVolume() + 0.05, true);
+        }
+
+      });
   }
   
   void playPause() {
@@ -55,7 +79,7 @@ class Controls extends PolymerElement {
     pausePlay.classes.add("playing");
     
     isPlaying = true;    
-    setVolume(double.parse(volumeSlider.value));
+    setVolume(getVolume());
   }
   
   void pause() {
@@ -94,4 +118,7 @@ class Controls extends PolymerElement {
     }
   }
   
+  double getVolume() {
+    return double.parse(volumeSlider.value);
+  }
 }
