@@ -6,6 +6,11 @@ import "playlist.dart";
 import "views.dart";
 import "../../classes/stream-observer.dart";
 
+/**
+ * Turbo Wookie!
+ * 
+ * This class puts all the elements of Turbo Wookie together.
+ */
 @CustomTag("tw-turbo-wookie")
 class TurboWookie extends PolymerElement {
   

@@ -7,7 +7,9 @@ import "views.dart";
 import "../../classes/song.dart";
 import "../../classes/lastfm.dart";
 
-
+/**
+ * Displays the songs/artists/albums in the library.
+ */
 @CustomTag("tw-library")
 class Library extends PolymerElement {
   Library.created() : super.created();
@@ -39,55 +41,83 @@ class Library extends PolymerElement {
     getArtists();
   }
   
+  /**
+   * Clears all song/artist/album data. 
+   */
   void clearAllData() {
     songs.clear();
     songsTableBody.children.clear();
     dataList.children.clear();
   }
   
+  /**
+   * Called when the location text is clicked.
+   * This will switch the view to an artist's albums page. 
+   */
   void locationClick(Event e, var detail, Element target) {
     getAlbums(target.text);
   }
   
+  /**
+   * Get's all the artists and displays them.
+   */
   void getArtists() {
     songsTable.style.display = "none";
     dataList.style.display = "block";
     
     HttpRequest.request("/artists").then((HttpRequest request) {
+      // Clear the data and tell views to switch to artists.
       clearAllData();
       views.setArtists(false);
-      
+
+      // Tell the dataList that we are giving it artists in order for it
+      // to style correctly.
       dataList.attributes["class"] = "artists";
+      
+      // Don't show anything for the location text.
       locationArtist = "";
       locationAlbum = "";
       
+      // Get all the artists and sort them.
       artists = JSON.decode(request.responseText);
       artists.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
       
+      // Add each artist to the page.
       for(String artist in artists) {
+        // Create the image element.
         ImageElement artistImg = new ImageElement();
         LastFM.getArtistImgUrl(artist)
           .then((String url) => artistImg.src = url);
 
+        // Create the outter image element.
         DivElement artistImgCrop = new DivElement()
         ..classes.add("artistCrop")
         ..append(artistImg);
         
+        // Create the artist name element.
         DivElement artistName = new DivElement()
         ..text = artist
         ..classes.add("artistName");
         
+        // Create the list element and add everything to it.
         LIElement artistElement = new LIElement()
         ..append(artistImgCrop)
         ..append(artistName)
         ..onClick.listen((_) => getAlbums(artist));
         
+        // Finally, add the list element to the list.
         dataList.children.add(artistElement);
       }
       
     });
   }
   
+  /**
+   * Get all albums from the server and display them.
+   * 
+   * An optional parameter is artist. If you have this, it will get all albums
+   * with that artist.
+   */
   void getAlbums([String artist]) {
     songsTable.style.display = "none";
     dataList.style.display = "block";
@@ -144,12 +174,20 @@ class Library extends PolymerElement {
     });    
   }
   
+  /**
+   * Get songs belonging to an artist.
+   * 
+   * With artist, it will grab all songs belonging to that artist.
+   * With artist and album, it will grab all songs in the album belonging to the artist.
+   * Otherwise, it will grab all songs.
+   */
   void getSongs([String artist, String album]) {
+    // Show the songs table/Hide the datalist.
     songsTable.style.display = "block";
     dataList.style.display = "none";
     
+    // Form the request string and setup the location text.
     String requestStr;
-
     if(album == null && artist != null) {
       requestStr = "/songs?artist=${Uri.encodeComponent(artist)}";
       locationArtist = artist;
@@ -166,20 +204,28 @@ class Library extends PolymerElement {
       locationAlbum = "";
     }
     
+    // Get the songs.
     HttpRequest.request(requestStr).then((HttpRequest request) {
+      // Clear the data and tell views we're on the songs tab.
       clearAllData();
       views.setSongs(false);
       
+      // Grab all the songs from the response.
       List<Map> songsJson = JSON.decode(request.responseText);
       
-      for(Map songMap in songsJson) {
+      // Create the songs and add it to songs list. 
+      for(Map songMap in songsJson)
         songs.add(new Song.fromMap(songMap));
-      }
+      
+      // Sort it and create the table.
       songs.sort((Song a, Song b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
       createSongTable();
     });
   }
   
+  /**
+   * A helper function to fill the song table with songs list.
+   */
   void createSongTable() {
     for(Song song in songs) {
       
@@ -198,11 +244,11 @@ class Library extends PolymerElement {
       ..classes.add("addImg");
       ImageElement addHover = new ImageElement(src: "../components/img/add-hover.svg")
       ..classes.add("addHoverImg");
-      
       DivElement addDiv = new DivElement()
       ..append(add)
       ..append(addHover);
       
+      // Create the actual cell element and add it to the table.
       TableCellElement addC = tr.addCell()
       ..classes.add("button")
       ..appendHtml(addDiv.innerHtml)

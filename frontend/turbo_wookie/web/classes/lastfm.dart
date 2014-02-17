@@ -7,6 +7,9 @@ import "dart:html";
 import "song.dart";
 
 
+/**
+ * This class talks to LastFM in order to get media metadata.
+ */
 class LastFM {
 
   static Map<String, String> artistUrls = new Map<String, String>();
@@ -55,7 +58,12 @@ class LastFM {
     }
     return completer.future;
   }
-
+  
+  /**
+   * This get's an image url associated with an artist from Last.FM.
+   * 
+   * If it cannot find an image, it uses a default wookie image.
+   */
   static Future<String> getArtistImgUrl(String artist) {
     Completer<String> com = new Completer<String>();
 
