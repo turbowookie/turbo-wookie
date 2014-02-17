@@ -17,10 +17,10 @@ class Library extends PolymerElement {
   
   String currentArtist;
   UListElement dataList;
-  @observable List<String> artists;
-  @observable List<String> albums;
+  List<String> artists;
+  List<String> albums;
   
-  @observable List<Song> songs;
+  List<Song> songs;
   TableElement songsTable;
   TableSectionElement songsTableBody;
   
