@@ -2,29 +2,18 @@
 
 <html>
   <head>
-    <meta charset="utf-8">
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Turbo Wookie</title>
-    <link rel="stylesheet" href="css/turbo_wookie.css">
-    <link rel="stylesheet" href="css/scrollbar.css">
     
-    <!-- Import our polymer things -->
-    <link rel="import" href="html/header-bar.html">
-    <link rel="import" href="html/login-menu.html">
-    <link rel="import" href="html/media-bar.html">
-    <link rel="import" href="html/play-list.html">
-    <link rel="import" href="html/library-list.html">
-
-    <script src="packages/browser/dart.js"></script>
-    
+    <link rel="stylesheet" href="style.css">
+    <link rel="import" href="components/html/turbo-wookie.html">
     
   </head>
+ 
   <body>
-    <header-bar id="header"></header-bar>
-    <login-menu id="loginMenu"></login-menu>
-    
-    <media-bar id="mediaBar"></media-bar>
-    <play-list id="playlist"></play-list>
-    <library-list id="library"></library-list>
-    <script type="application/dart" src="dart/main.dart"></script>
+    <tw-turbo-wookie id="turboWookie"></tw-turbo-wookie>
+    <script type="application/dart">export "package:polymer/init.dart";</script>
   </body>
 </html>
