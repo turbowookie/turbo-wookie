@@ -1,5 +1,6 @@
 library TWTurboWookie;
 
+import "dart:html";
 import "package:polymer/polymer.dart";
 import "library.dart";
 import "playlist.dart";
@@ -26,10 +27,15 @@ class TurboWookie extends PolymerElement {
     Playlist playlist = $["playlist"];
     Library library = $["library"];
     Views views = $["views"];
+    InputElement search = $["search"];
     
     // Connect things.
     playlist.library = library;
     views.library = library;
     library.views = views;
+    
+    search.onInput.listen((e) {
+      library.search(search.value);
+    });
   }
 }

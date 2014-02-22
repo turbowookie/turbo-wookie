@@ -81,35 +81,37 @@ class Library extends PolymerElement {
       // Get all the artists and sort them.
       artists = JSON.decode(request.responseText);
       artists.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-      
-      // Add each artist to the page.
-      for(String artist in artists) {
-        // Create the image element.
-        ImageElement artistImg = new ImageElement();
-        LastFM.getArtistImgUrl(artist)
-          .then((String url) => artistImg.src = url);
-
-        // Create the outter image element.
-        DivElement artistImgCrop = new DivElement()
-        ..classes.add("artistCrop")
-        ..append(artistImg);
-        
-        // Create the artist name element.
-        DivElement artistName = new DivElement()
-        ..text = artist
-        ..classes.add("artistName");
-        
-        // Create the list element and add everything to it.
-        LIElement artistElement = new LIElement()
-        ..append(artistImgCrop)
-        ..append(artistName)
-        ..onClick.listen((_) => getAlbums(artist));
-        
-        // Finally, add the list element to the list.
-        dataList.children.add(artistElement);
-      }
+      displayArtists(artists);
       
     });
+  }
+  
+  void displayArtists(List<String> artists) {
+    for(String artist in artists) {
+      // Create the image element.
+      ImageElement artistImg = new ImageElement();
+      LastFM.getArtistImgUrl(artist)
+        .then((String url) => artistImg.src = url);
+
+      // Create the outter image element.
+      DivElement artistImgCrop = new DivElement()
+      ..classes.add("artistCrop")
+      ..append(artistImg);
+      
+      // Create the artist name element.
+      DivElement artistName = new DivElement()
+      ..text = artist
+      ..classes.add("artistName");
+      
+      // Create the list element and add everything to it.
+      LIElement artistElement = new LIElement()
+      ..append(artistImgCrop)
+      ..append(artistName)
+      ..onClick.listen((_) => getAlbums(artist));
+      
+      // Finally, add the list element to the list.
+      dataList.children.add(artistElement);
+    }    
   }
   
   /**
@@ -255,6 +257,32 @@ class Library extends PolymerElement {
       ..onClick.listen((_) {
         song.addToPlaylist();
       });
+    }
+  }
+  
+  /**
+   * Searches artists, albums, and songs for some text, then displays it.
+   */
+  void search(String search) {
+    if(search.isNotEmpty) {
+      HttpRequest.request("/search?search=${Uri.encodeComponent(search)}")
+      .then((HttpRequest request) {
+        Map response = JSON.decode(request.responseText);
+        List<String> artists = response["artist"];
+        List<String> albums = response["album"];
+        List<Map<String, String>> songs = response["song"];
+        
+        clearAllData();
+        displayArtists(artists);
+      });
+    }
+    else {
+      if(views.isArtists())
+        getArtists();
+      else if(views.isAlbums())
+        getAlbums();
+      else
+        getSongs();
     }
   }
   

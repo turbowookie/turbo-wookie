@@ -81,4 +81,16 @@ class Views extends PolymerElement {
     albumsButton.setAttribute("class", "");
     songsButton.setAttribute("class", "active");
   }
+  
+  bool isArtists() {
+    return artistsButton.attributes["class"] == "active";
+  }
+  
+  bool isAlbums() {
+    return albumsButton.attributes["class"] == "active";
+  }
+  
+  bool isSongs() {
+    return songsButton.attributes["class"] == "active";
+  }
 }
