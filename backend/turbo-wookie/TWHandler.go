@@ -244,7 +244,9 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
   h.PolarChanged("playlist")
 }
 
+// Searches for an artist, album, or song in the database.
 func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
+  // Get the query string.
   r.ParseForm()
   query, ok := r.Form["search"]
   if !ok {
@@ -252,61 +254,52 @@ func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  /*
-    {
-      artist: {
-        [string]
-      },
-      album: {
-        [string]
-      },
-      song: {
-        [
-          songMap
-        ]
-      }
-    }
-  */
-
+  // Create the response variables.
   artistResponse := make([]string, 0)
   albumResponse := make([]string, 0)
   songsResponse := make([]map[string]string, 0)
 
-
+  // Search for all artists.
   songsArtist, err := h.MpdClient.Search("artist " + query[0])
   if err != nil {
     log.Println("Error searching MPD")
     return
   }
 
+  // Add each artist to the list.
   for _, song := range songsArtist {
     if indexOf(artistResponse, song["Artist"]) == -1 {
       artistResponse = append(artistResponse, song["Artist"])      
     }
   }
 
+  // Search for all albums.
   songsAlbum, err := h.MpdClient.Search("album " + query[0])
   if err != nil {
     log.Println("Error searching MPD")
     return
   }
 
+  // Add each album to the list.
   for _, song := range songsAlbum {
     if indexOf(albumResponse, song["Album"]) == -1 {
       albumResponse = append(albumResponse, song["Album"])      
     }
   }
 
+  // Search for all songs.
   songsSongs, err := h.MpdClient.Search("title " + query[0])
   if err != nil {
     log.Println("Error searching MPD")
     return
   }
 
+  // Add each song to the list.
   for _, song := range songsSongs {
     songsResponse = append(songsResponse, song)
   }
 
+  // Create the json response and send it to the client.
   response := "{artist: " + jsoniffy(artistResponse) + ","
   response += "album: " + jsoniffy(albumResponse) + ","
   response += "song: " + jsoniffy(songsResponse) + "}"
