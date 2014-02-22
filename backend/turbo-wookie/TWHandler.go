@@ -79,6 +79,7 @@ func NewTWHandler(filename string, serveDart, startMPD bool, portOverride int) (
   h.Router.HandleFunc("/current", h.getCurrentSong)
   h.Router.HandleFunc("/upcoming", h.getUpcomingSongs)
   h.Router.HandleFunc("/add", h.addSong)
+  h.Router.HandleFunc("/search", h.search)
   h.Router.HandleFunc("/polar", h.bear)
 
   // This needs to be last, otherwise it'll override all routes after it
@@ -241,6 +242,76 @@ func (h *TWHandler) addSong(w http.ResponseWriter, r *http.Request) {
 
   // tell long pollers that the playlist changed.
   h.PolarChanged("playlist")
+}
+
+func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
+  r.ParseForm()
+  query, ok := r.Form["search"]
+  if !ok {
+    log.Println("No search specified", nil)
+    return
+  }
+
+  /*
+    {
+      artist: {
+        [string]
+      },
+      album: {
+        [string]
+      },
+      song: {
+        [
+          songMap
+        ]
+      }
+    }
+  */
+
+  artistResponse := make([]string, 0)
+  albumResponse := make([]string, 0)
+  songsResponse := make([]map[string]string, 0)
+
+
+  songsArtist, err := h.MpdClient.Search("artist " + query[0])
+  if err != nil {
+    log.Println("Error searching MPD")
+    return
+  }
+
+  for _, song := range songsArtist {
+    if indexOf(artistResponse, song["Artist"]) == -1 {
+      artistResponse = append(artistResponse, song["Artist"])      
+    }
+  }
+
+  songsAlbum, err := h.MpdClient.Search("album " + query[0])
+  if err != nil {
+    log.Println("Error searching MPD")
+    return
+  }
+
+  for _, song := range songsAlbum {
+    if indexOf(albumResponse, song["Album"]) == -1 {
+      albumResponse = append(albumResponse, song["Album"])      
+    }
+  }
+
+  songsSongs, err := h.MpdClient.Search("title " + query[0])
+  if err != nil {
+    log.Println("Error searching MPD")
+    return
+  }
+
+  for _, song := range songsSongs {
+    songsResponse = append(songsResponse, song)
+  }
+
+  response := "{artist: " + jsoniffy(artistResponse) + ","
+  response += "album: " + jsoniffy(albumResponse) + ","
+  response += "song: " + jsoniffy(songsResponse) + "}"
+
+  fmt.Fprintf(w, response)
 }
 
 // Our long poller. Accessed through `/polar`.

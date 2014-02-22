@@ -414,3 +414,21 @@ func (c *TWMPDClient) QueueSong() {
     }
   }
 }
+
+func (c *TWMPDClient) Search(query string) ([]map[string]string, error) {
+  client, err := c.getClient()
+  if err != nil {
+    log.Fatal("Couldn't get client", err)
+  }
+  defer client.Close()
+
+  attrs, err := client.Search(query)
+  if err != nil {
+    log.Fatal("Couldn't search MPD", err)
+  }
+
+  response := attrsToMap(attrs)
+
+  return response, nil
+
+}
