@@ -260,7 +260,7 @@ func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
   songsResponse := make([]map[string]string, 0)
 
   // Search for all artists.
-  songsArtist, err := h.MpdClient.Search("artist " + query[0])
+  songsArtist, err := h.MpdClient.Search("artist \"" + query[0] + "\"")
   if err != nil {
     log.Println("Error searching MPD")
     return
@@ -274,7 +274,7 @@ func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
   }
 
   // Search for all albums.
-  songsAlbum, err := h.MpdClient.Search("album " + query[0])
+  songsAlbum, err := h.MpdClient.Search("album \"" + query[0] + "\"")
   if err != nil {
     log.Println("Error searching MPD")
     return
@@ -288,7 +288,7 @@ func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
   }
 
   // Search for all songs.
-  songsSongs, err := h.MpdClient.Search("title " + query[0])
+  songsSongs, err := h.MpdClient.Search("title \"" + query[0] + "\"")
   if err != nil {
     log.Println("Error searching MPD")
     return
@@ -300,9 +300,9 @@ func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
   }
 
   // Create the json response and send it to the client.
-  response := "{artist: " + jsoniffy(artistResponse) + ","
-  response += "album: " + jsoniffy(albumResponse) + ","
-  response += "song: " + jsoniffy(songsResponse) + "}"
+  response := "{\"artist\": " + jsoniffy(artistResponse) + ","
+  response += "\"album\": " + jsoniffy(albumResponse) + ","
+  response += "\"song\": " + jsoniffy(songsResponse) + "}"
 
   fmt.Fprintf(w, response)
 }
