@@ -51,7 +51,9 @@ class Controls extends PolymerElement implements StreamObserver {
     window.onKeyPress
       // Be sure we are not on an input element before we do anything.
       .where((KeyboardEvent e) {
-        return document.activeElement.tagName != "TW-TURBO-WOOKIE";
+        return 
+            document.activeElement.tagName != "TW-TURBO-WOOKIE" &&
+            document.activeElement.tagName != "INPUT";
     })
       .listen((KeyboardEvent e) {
         e.preventDefault();
