@@ -300,11 +300,12 @@ func (h *TWHandler) search(w http.ResponseWriter, r *http.Request) {
   }
 
   // Create the json response and send it to the client.
-  response := "{\"artist\": " + jsoniffy(artistResponse) + ","
-  response += "\"album\": " + jsoniffy(albumResponse) + ","
-  response += "\"song\": " + jsoniffy(songsResponse) + "}"
+  responseMap := make(map[string]interface{})
+  responseMap["artist"] = artistResponse
+  responseMap["album"] = albumResponse
+  responseMap["song"] = songsResponse
 
-  fmt.Fprintf(w, response)
+  fmt.Fprintf(w, jsoniffy(responseMap))
 }
 
 // Our long poller. Accessed through `/polar`.
