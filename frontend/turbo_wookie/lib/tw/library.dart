@@ -12,8 +12,5 @@ class Library extends PolymerElement {
   void attached() {
     super.attached();
     artists = new List();
-    
-    artists.add(new Artist("Front Porch Step", "http://userserve-ak.last.fm/serve/500/97508231/Front+Porch+Step++2014.jpg"));
-    artists.add(new Artist("A Day to Remember", "http://userserve-ak.last.fm/serve/500/97508231/Front+Porch+Step++2014.jpg"));
   }
 }
