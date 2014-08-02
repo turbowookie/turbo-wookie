@@ -1,0 +1,35 @@
+<link rel="import" href="../../../packages/polymer/polymer.html">
+
+<link rel="import" href="../../../packages/core_elements/core_header_panel.html">
+<link rel="import" href="../../../packages/core_elements/core_toolbar.html">
+<link rel="import" href="../../../packages/paper_elements/paper_tabs.html">
+
+<link rel="import" href="artist.html">
+
+<polymer-element name="tw-library">
+  <template>
+    <link rel="stylesheet" href="library.css">
+
+    <core-header-panel>
+      <core-toolbar>      
+        <paper-tabs id="tabs" selected="artists" self-end>
+          <paper-tab name="artists">Artists</paper-tab>
+          <paper-tab name="albums">Albums</paper-tab>
+          <paper-tab name="songs">Songs</paper-tab>
+        </paper-tabs>
+      </core-toolbar>
+      
+      <div class="container">
+        <div id="artists">
+          <template repeat="{{artist in artists}}">
+            <tw-artist name="{{artist.name}}" img="{{artist.img}}"></tw-artist>
+          </template>
+        </div>
+        <div id="albums"></div>
+        <div id="songs"></div>
+      </div>
+    </core-header-panel>
+  
+  </template>
+  <script type="application/dart" src="library.dart"></script>
+</polymer-element>

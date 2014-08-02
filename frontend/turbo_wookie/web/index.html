@@ -7,13 +7,17 @@
     
     <title>Turbo Wookie</title>
     
+    <script src="packages/web_components/platform.js"></script>
+    <script src="packages/web_components/dart_support.js"></script>
+    
     <link rel="stylesheet" href="style.css">
-    <link rel="import" href="components/html/turbo-wookie.html">
+    <link rel="import" href="packages/polymer/polymer.html">
+    <link rel="import" href="packages/turbo_wookie/turbo_wookie.html">
     
   </head>
  
   <body>
-    <tw-turbo-wookie id="turboWookie"></tw-turbo-wookie>
-    <script type="application/dart">export "package:polymer/init.dart";</script>
+    <turbo-wookie></turbo-wookie>
+    <script type="application/dart">export 'package:polymer/init.dart';</script>
   </body>
 </html>

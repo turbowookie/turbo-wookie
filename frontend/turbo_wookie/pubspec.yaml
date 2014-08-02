@@ -2,7 +2,9 @@ name: turbo_wookie
 description: A sample Polymer application
 dependencies:
   browser: any
-  polymer: "0.9.5"
+  core_elements: any
+  paper_elements: any
+  polymer: any
 transformers:
 - polymer:
     entry_points: web/index.html
