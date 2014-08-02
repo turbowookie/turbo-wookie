@@ -1,17 +1,13 @@
 :host {
   display: inline-block;
-}
-
-.container {
   width: 200px;
   height: 150px;
 }
 
-img {
+#img {
   width: 100%;
   height: 100%;
-  display: block;
-  position: relative;
+  background-position: center top;
 }
 
 #name {
@@ -21,5 +17,7 @@ img {
   position: relative;
   padding: 0 20px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   width: calc(100% - 40px);
 }
