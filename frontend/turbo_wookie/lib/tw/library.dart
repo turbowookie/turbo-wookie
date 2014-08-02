@@ -11,6 +11,6 @@ class Library extends PolymerElement {
   
   void attached() {
     super.attached();
-    artists = new List();
+    Artist.getArtists().then((arts) => artists = arts);
   }
 }
