@@ -16,9 +16,16 @@ class Song {
   
   Song(this.artist, this.album, this.name);
   
-  static Future<List<Song>> getSongs(Library library, [Artist artist]) {
+  static Future<List<Song>> getSongs(Library library, [Artist artist, Album album]) {
     var com = new Completer();
-    HttpRequest.request("/songs?artist=${Uri.encodeComponent(artist.name)}")
+    
+    var artistUrl = artist != null ? "?artist=${Uri.encodeComponent(artist.name)}" : "";
+    var albumUrl = album != null ? "&album=${Uri.encodeComponent(album.name)}" : "";
+    var url = "/songs$artistUrl$albumUrl";
+    
+    print(url);
+    
+    HttpRequest.request(url)
       .then((req) {
         var songsJson = JSON.decode(req.responseText);
         var songs = [];

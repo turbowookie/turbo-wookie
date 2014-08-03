@@ -47,8 +47,8 @@ class Library extends PolymerElement {
     }
   }
   
-  void showSongs({Artist artist, Album album, onlySongs: true}) {
-    Song.getSongs(this, new Artist("The Story So Far", this)).then((son) => songs = son);
+  void showSongs({Artist artist, Album album, onlySongs: true}) {    
+    Song.getSongs(this, artist, album).then((son) => songs = son);
     
     hideSongs(false);
     if(onlySongs) {

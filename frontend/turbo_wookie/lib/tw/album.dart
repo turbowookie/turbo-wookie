@@ -18,6 +18,10 @@ class Album extends PolymerElement {
   
   void attached() {
     super.attached();
+    
+    onClick.listen((e) {
+      library.showSongs(artist: artist, album: this);
+    });
   }
   
   factory Album(String name, Artist artist) {
