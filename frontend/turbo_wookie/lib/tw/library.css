@@ -35,23 +35,32 @@ paper-tab::shadow #ink {
 
 
 /* Song Table Stuff */
+
+table {
+  width: calc(100% - 100px);
+  border-collapse: collapse;
+}
+
+th {
+  cursor: pointer;
+  text-align: left;
+  padding: 0 10px 5px;
+  font-size: 1.2em;
+  color: white;
+}
+
+td {
+  padding: 5px 10px;
+}
+
 .song {
   border-bottom: 1px solid #444;
-  padding: 10px;
 }
 
 .songName {
-  
-}
-
-.artistName {
-  
-}
-
-.albumName {
-  
+  padding-right: 20px;
+  width: 32%;
 }
 
 .addBtn {
-  
 }

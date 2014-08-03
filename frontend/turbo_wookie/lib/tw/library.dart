@@ -1,6 +1,5 @@
 library TurboWookie.Library;
 
-import "dart:convert";
 import "package:polymer/polymer.dart";
 import "album.dart";
 import "artist.dart";
@@ -19,8 +18,7 @@ class Library extends PolymerElement {
     
     Artist.library = this;
     Album.library = this;
-    //showArtists();
-    showSongs();
+    showArtists();
     
     
     
@@ -52,7 +50,7 @@ class Library extends PolymerElement {
   }
   
   void showSongs({Artist artist, Album album, onlySongs: true}) {
-    Song.getSongs(new Artist("Spose")).then((son) => songs = son);
+    Song.getSongs(new Artist("The Story So Far")).then((son) => songs = son);
     
     hideSongs(false);
     if(onlySongs) {

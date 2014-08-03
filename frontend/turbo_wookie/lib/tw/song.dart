@@ -1,29 +1,21 @@
+library TurboWookie.Song;
+
 import "dart:async";
 import "dart:convert";
 import "dart:html";
-import "package:polymer/polymer.dart";
 import "album.dart";
 import "artist.dart";
 
-@CustomTag("tw-song")
-class Song extends PolymerElement {
-  Song.created() : super.created();
+class Song {
   
-  @published Artist artist;
-  @published Album album;
-  @published String name;
+  Artist artist;
+  Album album;
+  String name;
   
   
-  factory Song(Artist artist, Album album, String name) {
-    var elem = new Element.tag("tw-song");
-    elem.artist = artist;
-    elem.album = album;
-    elem.name = name;
-    
-    return elem;
-  }
+  Song(this.artist, this.album, this.name);
   
-  static Future<List<Song>> getSongs(Artist artist) {
+  static Future<List<Song>> getSongs([Artist artist]) {
     var com = new Completer();
     HttpRequest.request("/songs?artist=${Uri.encodeComponent(artist.name)}")
       .then((req) {

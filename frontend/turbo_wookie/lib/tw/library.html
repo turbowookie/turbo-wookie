@@ -6,7 +6,6 @@
 
 <link rel="import" href="artist.html">
 <link rel="import" href="album.html">
-<link rel="import" href="song.html">
 
 <polymer-element name="tw-library">
   <template>
@@ -17,7 +16,7 @@
         <paper-tabs id="tabs" selected="artists" self-end>
           <paper-tab id="artistsTab" name="artists">Artists</paper-tab>
           <paper-tab id="albumsTab" name="albums">Albums</paper-tab>
-          <paper-tab id="songsTab" name="songs">Songs</paper-tab>
+          <paper-tab id="songsTab" name="songs">Songs*</paper-tab>
         </paper-tabs>
       </core-toolbar>
       
@@ -49,7 +48,7 @@
                 <td class="songName">{{song.name}}</td>
                 <td class="artistName">{{song.artist.name}}</td>
                 <td class="albumName">{{song.album.name}}</td>
-                <td class="addbtn">+</td>
+                <td class="addBtn">+</td>
               </tr>
               
             </tbody>
