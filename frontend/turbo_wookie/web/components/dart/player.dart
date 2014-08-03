@@ -18,8 +18,8 @@ class Controls extends PolymerElement implements StreamObserver {
   RangeInputElement volumeSlider;
   RangeInputElement progressSlider;
   
-  void enteredView() {
-    super.enteredView();
+  void attached() {
+    super.attached();
     StreamObserver.addObserver(this);
     
     // Get all our elements.

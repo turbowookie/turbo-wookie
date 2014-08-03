@@ -19,8 +19,8 @@ class Playlist extends PolymerElement implements StreamObserver {
   @observable String albumArtURL;
   Library library;
   
-  void enteredView() {
-    super.enteredView();
+  void attached() {
+    super.attached();
     StreamObserver.addObserver(this);
     getCurrentSong();
     getPlaylist();

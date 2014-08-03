@@ -28,8 +28,8 @@ class Library extends PolymerElement {
   
   Views views;
   
-  void enteredView() {
-    super.enteredView();
+  void attached() {
+    super.attached();
     
     dataList = $["data"];
     artists = new List<String>();

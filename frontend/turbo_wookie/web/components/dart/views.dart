@@ -17,7 +17,9 @@ class Views extends PolymerElement {
   ButtonElement albumsButton;
   ButtonElement songsButton;
   
-  void enteredView() {
+  void attached() {
+    super.attached();
+    
     // Grab the views buttons.
     UListElement views = $["viewsList"];
     artistsButton = views.children[0];

@@ -17,8 +17,8 @@ class TurboWookie extends PolymerElement {
   
   TurboWookie.created() : super.created();
   
-  void enteredView() {
-    super.enteredView();
+  void attached() {
+    super.attached();
     
     // Start requesting updates from the server.
     StreamObserver.requestUpdate();
