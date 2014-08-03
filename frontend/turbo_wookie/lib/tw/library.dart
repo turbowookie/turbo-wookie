@@ -16,8 +16,6 @@ class Library extends PolymerElement {
   void attached() {
     super.attached();
     
-    Artist.library = this;
-    Album.library = this;
     showArtists();
     
     
@@ -28,7 +26,7 @@ class Library extends PolymerElement {
   }
   
   void showArtists({bool onlyArtists: true}) {
-    Artist.getArtists().then((arts) => artists = arts.toList());
+    Artist.getArtists(this).then((arts) => artists = arts.toList());
     
     hideArtists(false); 
     if(onlyArtists) {
@@ -39,7 +37,7 @@ class Library extends PolymerElement {
   }
   
   void showAlbums({Artist artist, bool onlyAlbums: true}) {
-    Album.getAlbums(artist).then((alb) => albums = alb.toList());
+    Album.getAlbums(this, artist).then((alb) => albums = alb.toList());
     
     hideAlbums(false);
     if(onlyAlbums) {
@@ -50,7 +48,7 @@ class Library extends PolymerElement {
   }
   
   void showSongs({Artist artist, Album album, onlySongs: true}) {
-    Song.getSongs(new Artist("The Story So Far")).then((son) => songs = son);
+    Song.getSongs(this, new Artist("The Story So Far", this)).then((son) => songs = son);
     
     hideSongs(false);
     if(onlySongs) {

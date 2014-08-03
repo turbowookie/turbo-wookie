@@ -12,11 +12,12 @@ class Artist extends PolymerElement {
   
   @published String name;
   @published String img;
-  static Library library;
+  @published Library library;
   
-  factory Artist(String name) {
+  factory Artist(String name, Library library) {
     var elem = new Element.tag("tw-artist");
     elem.name = name;
+    elem.library = library;
     elem.setArtistArtUrl();
     
     return elem;
@@ -50,13 +51,13 @@ class Artist extends PolymerElement {
     return com.future;
   }
   
-  static Future<List<Artist>> getArtists() {
+  static Future<List<Artist>> getArtists(Library library) {
     var com = new Completer();
     
     HttpRequest.request("/artists")
       .then((req) {
         var artistsStr = JSON.decode(req.responseText);
-        var artists = artistsStr.map((str) => new Artist(str));
+        var artists = artistsStr.map((str) => new Artist(str, library));
         com.complete(artists);
       });
     

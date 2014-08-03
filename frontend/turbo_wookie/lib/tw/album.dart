@@ -11,7 +11,7 @@ import "library.dart";
 class Album extends PolymerElement {
   Album.created() : super.created();
   
-  static Library library;
+  Library get library => artist.library;
   @published String name;
   @published Artist artist;
   @published String img;
@@ -51,10 +51,9 @@ class Album extends PolymerElement {
     return com.future;    
   }
   
-  static Future<List<Album>> getAlbums([Artist artist]) {
+  static Future<List<Album>> getAlbums(Library library, [Artist artist]) {
     var com = new Completer();
     var url = "/albums" + (artist != null ? "?artist=${Uri.encodeComponent(artist.name)}" : "");
-    print(url);
     HttpRequest.request(url)
       .then((req) {
         var albumsJson = JSON.decode(req.responseText);
@@ -70,7 +69,7 @@ class Album extends PolymerElement {
         else {
           for(var artistName in albumsJson.keys) {
             for(var album in albumsJson[artistName]) {
-              albums.add(new Album(album, new Artist(artistName)));
+              albums.add(new Album(album, new Artist(artistName, library)));
             }
           }
         }
