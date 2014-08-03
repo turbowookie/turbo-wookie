@@ -1,7 +1,7 @@
 :host {
   display: inline-block;
   width: 200px;
-  height: 150px;
+  height: 200px;
   cursor: pointer;
   padding-bottom: 10px;
   margin: 10px;
@@ -18,14 +18,21 @@
   background-position: center top;
 }
 
-#name {
-  margin-top: -50px;
-  line-height: 50px;
+#info p {
   background: rgba(0, 0, 0, .8);
   position: relative;
   padding: 0 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: calc(100% - 40px);
+  margin: 0;
+}
+
+#name {
+  font-size: 1.2em;
+}
+
+#artist {
+  font-size: 1.0em;
+  color: #666;
 }

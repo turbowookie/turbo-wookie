@@ -1,0 +1,17 @@
+<link rel="import" href="../../../packages/polymer/polymer.html">
+
+<polymer-element name="tw-album" attributes="name img">
+  <template>
+    <link rel="stylesheet" href="album.css">
+    
+    <div id="img" style="background-image: url({{img}});">
+    </div>
+    
+    <div id="info">
+      <p id="name">{{name}}</p>
+      <p id="artist">{{artist.name}}</p>      
+    </div>
+      
+  </template>
+  <script type="application/dart" src="album.dart"></script>
+</polymer-element>

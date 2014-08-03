@@ -31,3 +31,27 @@ paper-tab::shadow #ink {
 #tabs::shadow #selectionBar {
   background-color: #33B5E5;
 }
+
+
+
+/* Song Table Stuff */
+.song {
+  border-bottom: 1px solid #444;
+  padding: 10px;
+}
+
+.songName {
+  
+}
+
+.artistName {
+  
+}
+
+.albumName {
+  
+}
+
+.addBtn {
+  
+}

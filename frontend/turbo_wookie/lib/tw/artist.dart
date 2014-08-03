@@ -1,7 +1,10 @@
+library TurboWookie.Artist;
+
 import "dart:async";
 import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
+import "library.dart";
 
 @CustomTag("tw-artist")
 class Artist extends PolymerElement {
@@ -9,16 +12,21 @@ class Artist extends PolymerElement {
   
   @published String name;
   @published String img;
+  static Library library;
   
-  factory Artist.create(String name) {
+  factory Artist(String name) {
     var elem = new Element.tag("tw-artist");
     elem.name = name;
     elem.setArtistArtUrl();
+    
     return elem;
   }
   
   void attached() {
     super.attached();
+    onClick.listen((e) {
+      library.showAlbums(artist: this);
+    });
   }
   
   Future<String> setArtistArtUrl() {
@@ -48,7 +56,7 @@ class Artist extends PolymerElement {
     HttpRequest.request("/artists")
       .then((req) {
         var artistsStr = JSON.decode(req.responseText);
-        var artists = artistsStr.map((str) => new Artist.create(str));
+        var artists = artistsStr.map((str) => new Artist(str));
         com.complete(artists);
       });
     

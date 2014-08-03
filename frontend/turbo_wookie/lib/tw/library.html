@@ -5,6 +5,8 @@
 <link rel="import" href="../../../packages/paper_elements/paper_tabs.html">
 
 <link rel="import" href="artist.html">
+<link rel="import" href="album.html">
+<link rel="import" href="song.html">
 
 <polymer-element name="tw-library">
   <template>
@@ -13,9 +15,9 @@
     <core-header-panel>
       <core-toolbar>      
         <paper-tabs id="tabs" selected="artists" self-end>
-          <paper-tab name="artists">Artists</paper-tab>
-          <paper-tab name="albums">Albums</paper-tab>
-          <paper-tab name="songs">Songs</paper-tab>
+          <paper-tab id="artistsTab" name="artists">Artists</paper-tab>
+          <paper-tab id="albumsTab" name="albums">Albums</paper-tab>
+          <paper-tab id="songsTab" name="songs">Songs</paper-tab>
         </paper-tabs>
       </core-toolbar>
       
@@ -25,8 +27,34 @@
             <tw-artist name="{{artist.name}}" img="{{artist.img}}"></tw-artist>
           </template>
         </div>
-        <div id="albums"></div>
-        <div id="songs"></div>
+        
+        <div id="albums">
+          <template repeat="{{album in albums}}">
+            <tw-album name="{{album.name}}" artist="{{album.artist}}" img="{{album.img}}"></tw-album>
+          </template>
+        </div>
+        
+        <div id="songs">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Add</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr template repeat="{{song in songs}}" class="song">
+                <td class="songName">{{song.name}}</td>
+                <td class="artistName">{{song.artist.name}}</td>
+                <td class="albumName">{{song.album.name}}</td>
+                <td class="addbtn">+</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
       </div>
     </core-header-panel>
   
