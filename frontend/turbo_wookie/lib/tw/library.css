@@ -62,5 +62,18 @@ td {
   width: 32%;
 }
 
+th#addHeader {
+  text-align: right;
+}
+
 .addBtn {
+  background-image: url(images/add.svg);
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: right;
+  cursor: pointer;
+}
+
+td:hover {
+  background-image: url(images/add-hover.svg);
 }
