@@ -12,9 +12,10 @@ class Song {
   Artist artist;
   Album album;
   String name;
+  String filePath;
   
   
-  Song(this.artist, this.album, this.name);
+  Song(this.artist, this.album, this.name, this.filePath);
   
   static Future<List<Song>> getSongs(Library library, [Artist artist, Album album]) {
     var com = new Completer();
@@ -22,8 +23,6 @@ class Song {
     var artistUrl = artist != null ? "?artist=${Uri.encodeComponent(artist.name)}" : "";
     var albumUrl = album != null ? "&album=${Uri.encodeComponent(album.name)}" : "";
     var url = "/songs$artistUrl$albumUrl";
-    
-    print(url);
     
     HttpRequest.request(url)
       .then((req) {
@@ -33,7 +32,9 @@ class Song {
           var artist = new Artist(songJ["Artist"], library);
           var album = new Album(songJ["Album"], artist);
           var name = songJ["Title"];
-          var song = new Song(artist, album, name);
+          var filePath = songJ["file"];
+          
+          var song = new Song(artist, album, name, filePath);
           
           songs.add(song);
         }

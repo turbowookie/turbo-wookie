@@ -1,5 +1,6 @@
 library TurboWookie.Library;
 
+import "dart:html";
 import "package:polymer/polymer.dart";
 import "album.dart";
 import "artist.dart";
@@ -16,9 +17,9 @@ class Library extends PolymerElement {
   void attached() {
     super.attached();
     
-    showArtists();
+    //showArtists();
     
-    
+    showSongs(artist: new Artist("Bo Burnham", this));
     
     $["artistsTab"].onClick.listen((e) => showArtists());
     $["albumsTab"].onClick.listen((e) => showAlbums());
@@ -56,6 +57,12 @@ class Library extends PolymerElement {
       hideAlbums();
       switchTab("songs");
     }
+  }
+  
+  void addSong(MouseEvent e) {    
+    var elem = e.target as TableCellElement;
+    var songPath = elem.dataset["file-path"];
+    HttpRequest.request("/add?song=${Uri.encodeComponent(songPath)}");
   }
   
   void switchTab(String tab) {

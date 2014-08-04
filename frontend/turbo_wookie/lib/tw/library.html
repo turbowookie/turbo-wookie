@@ -48,7 +48,7 @@
                 <td class="songName">{{song.name}}</td>
                 <td class="artistName">{{song.artist.name}}</td>
                 <td class="albumName">{{song.album.name}}</td>
-                <td class="addBtn"></td>
+                <td class="addBtn" data-file-path="{{song.filePath}}" on-click="{{addSong}}"></td>
               </tr>
               
             </tbody>
