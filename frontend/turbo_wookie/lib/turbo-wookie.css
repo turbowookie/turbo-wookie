@@ -1,6 +1,19 @@
+tw-header {
+  width: 100%;
+  height: 60px;
+  display: block;
+}
+
 tw-playlist {
   float: left;
   width: 250px;
-  height: 100%;
+  height: calc(100% - 60px);
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+tw-library {
+  float: right;
+  width: calc(100% - 250px);
+  height: calc(100% - 60px);
+  display: block;
 }

@@ -1,0 +1,16 @@
+
+:host {
+  background: #111;
+}
+
+#logoImg {
+  height: 60px;
+  vertical-align: middle;
+}
+
+#logoText {
+  display: inline;
+  position: relative;
+  top: 5px;
+  color: #33B5E5;
+}
