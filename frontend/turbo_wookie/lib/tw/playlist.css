@@ -11,5 +11,43 @@
   margin-top: -88px;
   padding: 10px;
   background: rgba(0, 0, 0, 0.8);
+}
+
+#info div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#upcoming {
+  height: calc(100% - 250px);
+  overflow: auto;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+.albumArt {
+  width: 50px;
+  display: inline;
+}
+
+.info {
+  width: calc(100% - 65px);
+  display: inline;
+  float: right;
+}
+
+.song {
+  padding: 10px;
+  border-bottom: 1px solid #333;
+  line-height: 1.3em;
+}
+
+.song div {
+  overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }

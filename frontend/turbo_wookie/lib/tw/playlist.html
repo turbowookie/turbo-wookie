@@ -13,15 +13,24 @@
       </div>
     </div>
     
-    <ul>    
-      <template repeat="{{song in upcoming}}">
-        <div>
-          {{song.name}}
-          {{song.artist.name}}
-          {{song.album.name}}
-        </div>
-      </template>
-    </ul>
+    <div id="upcoming">
+      <ul>    
+        <template repeat="{{song in upcoming}}">
+          
+          <li class="song">
+            <img class="albumArt" src="{{song.album.img}}">
+            
+            <div class="info">
+              <div>{{song.name}}</div>
+              <div>{{song.artist.name}}</div>
+              <div>{{song.album.name}}</div>
+            </div>
+            
+          </li>
+          
+        </template>
+      </ul>
+    </div>
     
   </template>
   <script type="application/dart" src="playlist.dart"></script>
