@@ -17,9 +17,7 @@ class Library extends PolymerElement {
   void attached() {
     super.attached();
     
-    //showArtists();
-    
-    showSongs(artist: new Artist("Bo Burnham", this));
+    showArtists();
     
     $["artistsTab"].onClick.listen((e) => showArtists());
     $["albumsTab"].onClick.listen((e) => showAlbums());
