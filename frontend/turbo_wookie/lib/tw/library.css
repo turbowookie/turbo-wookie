@@ -31,6 +31,25 @@ paper-tab::shadow #ink {
   background-color: #33B5E5;
 }
 
+#search {
+  position: absolute;
+  right: 15px;
+  top: -10px;
+}
+
+#search::shadow .focusedColor {
+  background: #33B5E5;
+}
+
+#search::shadow #input {
+  color: white;
+}
+
+#search2 {
+  position: absolute;
+  right: 15px;
+  top: 20px;
+}
 
 
 /* Song Table Stuff */

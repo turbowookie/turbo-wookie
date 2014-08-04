@@ -37,20 +37,22 @@ class Album extends PolymerElement {
     var com = new Completer();
     
     HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${Uri.encodeComponent(artist.name)}&album=${Uri.encodeComponent(name)}&format=json")
-      .then((req) {
-        String src;
-        var obj = JSON.decode(req.responseText);
-        
+    .then((req) {
+      var src = "packages/turbo_wookie/tw/images/wookie.jpg";
+      var obj = JSON.decode(req.responseText);
+      
+      if(obj["album"] != null && obj["album"]["image"] != null) {
         for(var img in obj["album"]["image"]) {
           if(img["size"] == "extralarge") {
             src = img["#text"];
             break;
           }
         }
-        
-        img = src;
-        com.complete(src);
-      });
+      }
+
+      img = src;
+      com.complete(src);
+    });
     
     return com.future;    
   }

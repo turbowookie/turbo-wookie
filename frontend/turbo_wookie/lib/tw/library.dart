@@ -1,5 +1,6 @@
 library TurboWookie.Library;
 
+import "dart:convert";
 import "dart:html";
 import "package:polymer/polymer.dart";
 import "album.dart";
@@ -13,6 +14,7 @@ class Library extends PolymerElement {
   @observable List<Artist> artists;
   @observable List<Album> albums;
   @observable List<Song> songs;
+  @observable String searchStr;
   
   void attached() {
     super.attached();
@@ -22,6 +24,7 @@ class Library extends PolymerElement {
     $["artistsTab"].onClick.listen((e) => showArtists());
     $["albumsTab"].onClick.listen((e) => showAlbums());
     $["songsTab"].onClick.listen((e) => showSongs());
+    $["search2"].onInput.listen(search);
   }
   
   void showArtists({bool onlyArtists: true}) {
@@ -63,8 +66,63 @@ class Library extends PolymerElement {
     HttpRequest.request("/add?song=${Uri.encodeComponent(songPath)}");
   }
   
-  void switchTab(String tab) {
+  void search(Event e) {
+    if(searchStr.isEmpty) {
+      var tab = getTab();
+      switchTab(tab, click: true);
+      return;
+    }
+    
+    HttpRequest.request("/search?search=${Uri.encodeComponent(searchStr)}")
+    .then((req) {
+      var json = JSON.decode(req.responseText);
+      var artistsJ = json["artist"];
+      var albumsJ = json["album"];
+      var songsJ = json["song"];
+      
+      var artists = [];
+      var albums = [];
+      var songs = [];
+      
+      for(var artist in artistsJ) {
+        artists.add(new Artist(artist, this));
+      }
+      
+      for(var album in albumsJ) {
+        albums.add(new Album(album, new Artist("Uhum?", this)));
+      }
+      
+      /* This will probably crash the page...
+      for(var song in songsJ) {
+        songs.add(new Song.fromMap(song));
+      }*/
+      
+      this.artists = artists.toList();
+      this.albums = albums.toList();
+      this.songs = songs.toList();
+      
+      if(this.artists.isNotEmpty) {
+        hideArtists(false);
+      }
+      if(this.albums.isNotEmpty) {
+        hideAlbums(false);
+      }
+      if(this.songs.isNotEmpty) {
+        hideSongs(false);
+      }
+    });
+  }
+  
+  void switchTab(String tab, {bool click: false}) {
+    if(click) {
+      $["${tab}Tab"].click();
+    }
+    
     $["tabs"].selected = tab;
+  }
+  
+  String getTab() {
+    return $["tabs"].selected;
   }
   
   void hideArtists([bool hide=true]) {

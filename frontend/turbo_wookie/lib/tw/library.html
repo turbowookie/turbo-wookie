@@ -3,6 +3,7 @@
 <link rel="import" href="../../../packages/core_elements/core_header_panel.html">
 <link rel="import" href="../../../packages/core_elements/core_toolbar.html">
 <link rel="import" href="../../../packages/paper_elements/paper_tabs.html">
+<link rel="import" href="../../../packages/paper_elements/paper_input.html">
 
 <link rel="import" href="artist.html">
 <link rel="import" href="album.html">
@@ -18,6 +19,9 @@
           <paper-tab id="albumsTab" name="albums">Albums</paper-tab>
           <paper-tab id="songsTab" name="songs">Songs*</paper-tab>
         </paper-tabs>
+
+        <!--<paper-input id="search" value="{{searchStr}}" label="Search"></paper-input>-->
+        <input type="text" id="search2" value="{{searchStr}}">
       </core-toolbar>
       
       <div class="container">

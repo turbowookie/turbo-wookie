@@ -34,19 +34,22 @@ class Artist extends PolymerElement {
     var com = new Completer();
     
     HttpRequest.request("https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${Uri.encodeComponent(name)}&format=json")
-      .then((req) {
-        String src;
-        var obj = JSON.decode(req.responseText);
+    .then((req) {
+      var src = "packages/tw/images/wookie.jpg";
+      var obj = JSON.decode(req.responseText);
+      
+      if(obj["artist"] != null && obj["artist"]["image"] != null) {
         for(var img in obj["artist"]["image"]) {
           if(img["size"] == "extralarge") {
             src = img["#text"];
             break;
           }
         }
-        
-        img = src;
-        com.complete(src);
-      });
+      }
+
+      img = src;
+      com.complete(src);
+    });
     
     return com.future;
   }
