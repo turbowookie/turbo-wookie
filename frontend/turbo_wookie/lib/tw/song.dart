@@ -16,6 +16,22 @@ class Song {
   
   
   Song(this.artist, this.album, this.name, this.filePath);
+
+  factory Song.fromMap(Map json) {
+    var artistName = json["Artist"];
+    var albumName = json["Album"];
+    var name = json["Title"];
+    
+    var artist = new Artist(artistName, null);
+    var album = new Album(albumName, artist);
+    return new Song(artist, album, name, null);    
+  }
+  
+  factory Song.fromJson(String jsonStr) {
+    var json = JSON.decode(jsonStr);
+    return new Song.fromMap(json);
+  }
+
   
   static Future<List<Song>> getSongs(Library library, [Artist artist, Album album]) {
     var com = new Completer();

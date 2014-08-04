@@ -1,0 +1,28 @@
+<link rel="import" href="../../../packages/polymer/polymer.html">
+
+<polymer-element name="tw-playlist">
+  <template>
+    <link rel="stylesheet" href="playlist.css">
+    
+    <div id="currentSong">
+      <img id="currentImg" src="{{current.album.img}}">
+      <div id="info">
+        <div id="currentName">{{current.name}}</div>
+        <div id="currentArtist">{{current.artist.name}}</div>
+        <div id="currentAlbum">{{current.album.name}}</div>
+      </div>
+    </div>
+    
+    <ul>    
+      <template repeat="{{song in upcoming}}">
+        <div>
+          {{song.name}}
+          {{song.artist.name}}
+          {{song.album.name}}
+        </div>
+      </template>
+    </ul>
+    
+  </template>
+  <script type="application/dart" src="playlist.dart"></script>
+</polymer-element>

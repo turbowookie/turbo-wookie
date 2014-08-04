@@ -1,0 +1,15 @@
+:host {
+  overflow: hidden;
+}
+
+#currentImg {
+  width: 100%;
+}
+
+#info {
+  position: relative;
+  margin-top: -88px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  text-overflow: ellipsis;
+}
