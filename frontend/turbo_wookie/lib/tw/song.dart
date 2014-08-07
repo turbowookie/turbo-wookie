@@ -6,6 +6,7 @@ import "dart:html";
 import "album.dart";
 import "artist.dart";
 import "library.dart";
+import "data.dart" as Data;
 
 class Song {
   
@@ -40,6 +41,23 @@ class Song {
     var albumUrl = album != null ? "&album=${Uri.encodeComponent(album.name)}" : "";
     var url = "/songs$artistUrl$albumUrl";
     
+    var data = Data.data;
+    var songs = [];
+    
+    for(var songJ in data) {
+      var artist = new Artist(songJ["Artist"], library);
+      var album = new Album(songJ["Album"], artist);
+      var name = songJ["Title"];
+      var filePath = songJ["file"];
+      
+      var song = new Song(artist, album, name, filePath);
+      
+      songs.add(song);      
+    }
+    
+    com.complete(songs.toList());
+    
+    /*
     HttpRequest.request(url)
       .then((req) {
         var songsJson = JSON.decode(req.responseText);
@@ -59,6 +77,7 @@ class Song {
         
         com.complete(songs);
       });
+      */
     
     return com.future;
   }
