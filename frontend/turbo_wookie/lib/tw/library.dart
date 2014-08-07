@@ -24,7 +24,7 @@ class Library extends PolymerElement {
     $["artistsTab"].onClick.listen((e) => showArtists());
     $["albumsTab"].onClick.listen((e) => showAlbums());
     $["songsTab"].onClick.listen((e) => showSongs());
-    $["search2"].onInput.listen(search);
+    $["search"].onInput.listen(search);
   }
   
   void showArtists({bool onlyArtists: true}) {
@@ -50,7 +50,7 @@ class Library extends PolymerElement {
   }
   
   void showSongs({Artist artist, Album album, onlySongs: true}) {    
-    Song.getSongs(this, artist, album).then((son) => songs = son);
+    Song.getSongs(this, artist, album).then((son) => songs = son.toList());
     
     hideSongs(false);
     if(onlySongs) {

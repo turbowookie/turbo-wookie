@@ -44,6 +44,8 @@ class Song {
       .then((req) {
         var songsJson = JSON.decode(req.responseText);
         var songs = [];
+        var artist = new Artist(songsJson[0]["Artist"], library);
+        songs.add(new Song(artist, new Album(songsJson[0]["Album"], artist), songsJson[0]["Title"], songsJson[0]["file"]));
         for(var songJ in songsJson) {
           var artist = new Artist(songJ["Artist"], library);
           var album = new Album(songJ["Album"], artist);

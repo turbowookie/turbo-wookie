@@ -2,10 +2,11 @@
 core-header-panel {
   height: 100%;
   overflow: auto;
-  -webkit-overflow-scrolling: touch; 
+  -webkit-overflow-scrolling: touch;
 }
 
 core-toolbar {
+  background: transparent;
   color: white;
 }
 
@@ -34,7 +35,7 @@ paper-tab::shadow #ink {
 #search {
   position: absolute;
   right: 15px;
-  top: -10px;
+  top: 15px;
 }
 
 #search::shadow .focusedColor {

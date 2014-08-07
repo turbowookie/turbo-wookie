@@ -33,7 +33,7 @@ class Album extends PolymerElement {
     return elem;
   }
   
-  void setAlbumArt() {
+  Future setAlbumArt() {
     var com = new Completer();
     
     HttpRequest.request("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9327f98028a6c8bc780c8a4896404274&artist=${Uri.encodeComponent(artist.name)}&album=${Uri.encodeComponent(name)}&format=json")
@@ -54,7 +54,7 @@ class Album extends PolymerElement {
       com.complete(src);
     });
     
-    return com.future;    
+    return com.future;
   }
   
   static Future<List<Album>> getAlbums(Library library, [Artist artist]) {
