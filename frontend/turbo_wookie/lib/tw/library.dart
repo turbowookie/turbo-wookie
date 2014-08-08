@@ -18,6 +18,10 @@ class Library extends PolymerElement {
   
   void attached() {
     super.attached();
+    artists = toObservable([]);
+    albums = toObservable([]);
+    songs = toObservable([]);
+    
     
     showArtists();
     
@@ -28,7 +32,7 @@ class Library extends PolymerElement {
   }
   
   void showArtists({bool onlyArtists: true}) {
-    Artist.getArtists(this).then((arts) => artists = arts.toList());
+    Artist.getArtists(this);
     
     hideArtists(false); 
     if(onlyArtists) {
@@ -39,7 +43,7 @@ class Library extends PolymerElement {
   }
   
   void showAlbums({Artist artist, bool onlyAlbums: true}) {
-    Album.getAlbums(this, artist).then((alb) => albums = alb.toList());
+    Album.getAlbums(this, artist);
     
     hideAlbums(false);
     if(onlyAlbums) {
@@ -50,7 +54,7 @@ class Library extends PolymerElement {
   }
   
   void showSongs({Artist artist, Album album, onlySongs: true}) {    
-    Song.getSongs(this, artist, album).then((son) => songs = son.toList());
+    Song.getSongs(this, artist, album);
     
     hideSongs(false);
     if(onlySongs) {

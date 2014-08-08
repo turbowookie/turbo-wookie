@@ -58,31 +58,28 @@ class Album extends PolymerElement {
   }
   
   static Future<List<Album>> getAlbums(Library library, [Artist artist]) {
-    var com = new Completer();
     var url = "/albums" + (artist != null ? "?artist=${Uri.encodeComponent(artist.name)}" : "");
-    HttpRequest.request(url)
+    
+    return HttpRequest.request(url)
       .then((req) {
+        library.albums.clear();
+        
         var albumsJson = JSON.decode(req.responseText);
-        var albums = [];
         
         // If an artists was specified
         if(artist != null) {
           for(var album in albumsJson[artist.name]) {
-            albums.add(new Album(album, artist));
+            library.albums.add(new Album(album, artist));
           }
         }
         // All artists
         else {
           for(var artistName in albumsJson.keys) {
             for(var album in albumsJson[artistName]) {
-              albums.add(new Album(album, new Artist(artistName, library)));
+              library.albums.add(new Album(album, new Artist(artistName, library)));
             }
           }
         }
-        
-        com.complete(albums);
       });
-    
-    return com.future;
   }
 }

@@ -33,19 +33,17 @@ class Song {
   }
 
   
-  static Future<List<Song>> getSongs(Library library, [Artist artist, Album album]) {
-    var com = new Completer();
-    
+  static Future<List<Song>> getSongs(Library library, [Artist artist, Album album]) {    
     var artistUrl = artist != null ? "?artist=${Uri.encodeComponent(artist.name)}" : "";
     var albumUrl = album != null ? "&album=${Uri.encodeComponent(album.name)}" : "";
     var url = "/songs$artistUrl$albumUrl";
     
-    HttpRequest.request(url)
+    return HttpRequest.request(url)
       .then((req) {
+        library.songs.clear();
         var songsJson = JSON.decode(req.responseText);
-        var songs = [];
         var artist = new Artist(songsJson[0]["Artist"], library);
-        songs.add(new Song(artist, new Album(songsJson[0]["Album"], artist), songsJson[0]["Title"], songsJson[0]["file"]));
+
         for(var songJ in songsJson) {
           var artist = new Artist(songJ["Artist"], library);
           var album = new Album(songJ["Album"], artist);
@@ -54,13 +52,9 @@ class Song {
           
           var song = new Song(artist, album, name, filePath);
           
-          songs.add(song);
+          library.songs.add(song);
         }
-        
-        com.complete(songs);
       });
-    
-    return com.future;
   }
   
 }

@@ -55,15 +55,14 @@ class Artist extends PolymerElement {
   }
   
   static Future<List<Artist>> getArtists(Library library) {
-    var com = new Completer();
-    
-    HttpRequest.request("/artists")
+    return HttpRequest.request("/artists")
       .then((req) {
-        var artistsStr = JSON.decode(req.responseText);
-        var artists = artistsStr.map((str) => new Artist(str, library));
-        com.complete(artists);
+        library.artists.clear();
+        var artistsJson = JSON.decode(req.responseText);
+        for(var a in artistsJson) {
+          var artist = new Artist(a, library);
+          library.artists.add(artist);
+        }
       });
-    
-    return com.future;
   }
 }
