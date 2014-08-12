@@ -84,26 +84,21 @@ class Library extends PolymerElement {
       var albumsJ = json["album"];
       var songsJ = json["song"];
       
-      var artists = [];
-      var albums = [];
-      var songs = [];
-      
+      artists.clear();
       for(var artist in artistsJ) {
         artists.add(new Artist(artist, this));
       }
       
+      albums.clear();
       for(var album in albumsJ) {
         albums.add(new Album(album, new Artist("Uhum?", this)));
       }
       
       /* This will probably crash the page...
+      songs.clear();
       for(var song in songsJ) {
         songs.add(new Song.fromMap(song));
       }*/
-      
-      this.artists = artists.toList();
-      this.albums = albums.toList();
-      this.songs = songs.toList();
       
       if(this.artists.isNotEmpty) {
         hideArtists(false);
