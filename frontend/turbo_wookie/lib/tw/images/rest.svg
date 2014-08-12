@@ -9,30 +9,30 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="744.09448"
-   height="1052.3622"
+   height="1052.36"
    id="svg2995"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.5 r10040"
    sodipodi:docname="rest.svg">
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#000000"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
      gridtolerance="10"
      guidetolerance="10"
-     inkscape:pageopacity="0"
+     inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-width="1276"
+     inkscape:window-height="755"
      id="namedview3013"
      showgrid="false"
      inkscape:zoom="0.22425739"
-     inkscape:cx="372.04724"
-     inkscape:cy="526.18109"
-     inkscape:window-x="699"
-     inkscape:window-y="194"
-     inkscape:window-maximized="0"
+     inkscape:cx="372.04723"
+     inkscape:cy="526.18108"
+     inkscape:window-x="4"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg2995" />
   <title
      id="title2997">Quarter Rest</title>
@@ -71,10 +71,10 @@
     <linearGradient
        xlink:href="#linearGradient3013-0"
        id="linearGradient3790"
-       y2="0.79899"
+       y2="0.79899001"
        x2="0.025008"
        y1="0.230662"
-       x1="0.670723" />
+       x1="0.67072302" />
   </defs>
   <metadata
      id="metadata3917">image/svg+xmlQuarter Restjaschon<rdf:RDF>
@@ -88,17 +88,14 @@
 </metadata>
   <g
      id="g3008"
-     style="fill:#ffffff">
+     style="fill:#ffffff"
+     transform="matrix(1.1255513,0,0,1.1255513,-26.519319,-69.022644)">
     <title
        id="title3010">Layer 1</title>
     <path
-       fill="#000000"
-       fill-rule="evenodd"
-       stroke-width="4.703036"
-       stroke-linecap="round"
-       stroke-linejoin="round"
        id="path2986-1"
-       d="m508.039764,298.776917c0,59.363342 -118.726746,148.408386 -118.726746,267.134949c0,44.522705 89.045013,178.09021 148.408478,252.294373c-29.681732,-14.84082 -59.363464,-29.681763 -103.885986,-29.681763c-89.045044,0 -118.726654,74.204285 -118.726654,118.726868c0,29.68158 29.68161,59.363342 44.522522,89.044983c-89.045135,-59.363403 -148.408432,-118.726624 -148.408432,-178.090088c0,-148.408447 101.3629,-96.465393 175.567123,-126.147217c-74.204224,-74.204102 -145.885406,-185.510376 -145.885406,-230.032898c0,-29.681732 89.045013,-133.567474 118.726715,-207.77182l0,-44.522415c0,-44.522537 -29.681702,-103.885857 -44.522522,-148.408478c59.363342,74.204239 192.930908,207.771896 192.930908,237.453506z"
-       style="fill:#ffffff" />
+       d="m 508.03976,298.77692 c 0,59.36334 -118.72674,148.40838 -118.72674,267.13495 0,44.5227 89.04501,178.09021 148.40848,252.29437 -29.68174,-14.84082 -59.36347,-29.68176 -103.88599,-29.68176 -89.04504,0 -118.72665,74.20428 -118.72665,118.72686 0,29.68158 29.68161,59.36335 44.52252,89.04499 C 270.58624,936.93292 211.22295,877.5697 211.22295,818.20624 c 0,-148.40845 101.3629,-96.46539 175.56712,-126.14722 -74.20423,-74.2041 -145.88541,-185.51037 -145.88541,-230.0329 0,-29.68173 89.04502,-133.56747 118.72672,-207.77182 l 0,-44.52241 c 0,-44.52254 -29.6817,-103.88586 -44.52252,-148.408479 59.36334,74.204239 192.9309,207.771899 192.9309,237.453509 z"
+       style="fill:#ffffff;fill-rule:evenodd;stroke-width:4.70303583;stroke-linecap:round;stroke-linejoin:round"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

@@ -1,12 +1,14 @@
 <link rel="import" href="../../../packages/polymer/polymer.html">
 
 <link rel="import" href="../../../packages/paper_elements/paper_slider.html">
+<link rel="import" href="../../../packages/paper_elements/paper_icon_button.html">
 
 <polymer-element name="tw-controls">
   <template>
     <link rel="stylesheet" href="controls.css">
     <audio id="audio" autoplay src="{{streamSrc}}"></audio>
     
+    <paper-icon-button on-tap="{{toggleSound}}" iconsrc="{{pausePlayIcon}}"></paper-icon-button>
     <paper-slider min="0.0" max="100.0" value="{{volume}}" on-change="{{setVolume}}" pin></paper-slider>
     
   </template>
