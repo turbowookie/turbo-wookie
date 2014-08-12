@@ -7,20 +7,38 @@ class Controls extends PolymerElement {
   Controls.created() : super.created();
   
   @observable String streamSrc;
+  double _oldVolume;
+  AudioElement audio;
   @observable double volume;
   
   void attached() {
     super.attached();
     
+    audio = $["audio"];
     streamSrc = "/stream";
-    volume = 1.0;
+    setVolume(vol: 100.0);
+    
+    audio.onEmptied.listen((e) => reset());
+  }
+  
+  void setVolume({double vol}) {
+    if(vol != null) {
+      volume = vol;
+    }
+    
+    audio.volume = volume / 100.0;
   }
   
   void mute() {
-    volume = 0.0;
+    audio.volume = 0.0;
   }
   
   void unmute() {
-    volume = 1.0;
+    audio.volume = volume;
+  }
+  
+  void reset() {
+    streamSrc = "/stream";
+    audio.play();
   }
 }

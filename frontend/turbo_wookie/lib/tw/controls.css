@@ -1,0 +1,10 @@
+paper-slider {
+  width: 100%;
+  padding-top: 15px;
+}
+
+paper-slider::shadow #sliderKnobInner,
+paper-slider::shadow #sliderKnobInner::before,
+paper-slider::shadow #sliderBar::shadow #activeProgress {
+  background: #33B5E5;
+}

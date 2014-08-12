@@ -1,9 +1,13 @@
 <link rel="import" href="../../../packages/polymer/polymer.html">
 
+<link rel="import" href="../../../packages/paper_elements/paper_slider.html">
+
 <polymer-element name="tw-controls">
   <template>
     <link rel="stylesheet" href="controls.css">
-    <audio autoplay src="{{streamSrc}}" volume="{{volume}}"></audio>
+    <audio id="audio" autoplay src="{{streamSrc}}"></audio>
+    
+    <paper-slider min="0.0" max="100.0" value="{{volume}}" on-change="{{setVolume}}" pin></paper-slider>
     
   </template>
   <script type="application/dart" src="controls.dart"></script>
