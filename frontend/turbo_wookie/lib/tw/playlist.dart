@@ -3,8 +3,7 @@ import "package:polymer/polymer.dart";
 import "dart:async";
 import "dart:convert";
 import "dart:html";
-import "album.dart";
-import "artist.dart";
+import "observer.dart";
 import "song.dart";
 
 @CustomTag("tw-playlist")
@@ -13,40 +12,36 @@ class Playlist extends PolymerElement {
   
   @observable List<Song> upcoming;
   @observable Song current;
+  Observer observer;
   
   void attached() {
     super.attached();
+    upcoming = toObservable([]);
+    observer = new Observer(onPlaylist: getUpcoming, onPlayer: onPlayer);
     
-    getUpcoming().then((songs) => upcoming = songs.toList());
-    getCurrent().then((song) => current = song);
+    getUpcoming();
+    getCurrent();
   }
   
-  Future<List<Song>> getUpcoming() {
-    var com = new Completer();
-    
-    HttpRequest.request("/upcoming")
+  Future onPlayer() {
+    return Future.wait([getUpcoming(), getCurrent()]);
+  }
+  
+  Future getUpcoming() {
+    return HttpRequest.request("/upcoming")
     .then((req) {
       var json = JSON.decode(req.responseText);
-      var songs = [];
+      upcoming.clear();
       for(var songMap in json) {
-        songs.add(new Song.fromMap(songMap));
+        upcoming.add(new Song.fromMap(songMap));
       }
-      
-      com.complete(songs);
     });
-    
-    return com.future;
   }
   
-  Future<Song> getCurrent() {
-    var com = new Completer();
-    
-    HttpRequest.request("/current")
+  Future getCurrent() {
+    return HttpRequest.request("/current")
     .then((req) {
-      var song = new Song.fromJson(req.responseText);
-      com.complete(song);
+      current = new Song.fromJson(req.responseText);
     });
-    
-    return com.future;
   }
 }

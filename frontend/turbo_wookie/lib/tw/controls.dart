@@ -2,7 +2,7 @@ library TurboWookie.Controls;
 
 import "dart:html";
 import "package:polymer/polymer.dart";
-
+import "observer.dart";
 
 @CustomTag("tw-controls")
 class Controls extends PolymerElement {
@@ -10,12 +10,14 @@ class Controls extends PolymerElement {
   
   static final String PLAY_ICON = "packages/turbo_wookie/tw/images/volume-mute.svg";
   static final String MUTE_ICON = "packages/turbo_wookie/tw/images/volume.svg";
+  
   @observable String streamSrc;
   double _oldVolume;
   AudioElement audio;
   @observable double volume;
   @observable String pausePlayIcon;
   bool isPlaying;
+  Observer observer;
   
   void attached() {
     super.attached();
@@ -28,6 +30,7 @@ class Controls extends PolymerElement {
     var vol = double.parse(window.localStorage["volume"], (_) => 100.0);
     setVolume(vol: vol);
     
+    observer = new Observer(onPlayer: reset);
     audio.onEmptied.listen((e) => reset());
   }
   
