@@ -23,8 +23,10 @@ class Controls extends PolymerElement {
     audio = $["audio"];
     streamSrc = "/stream";
     isPlaying = true;
-    setVolume(vol: 100.0);
     pausePlayIcon = MUTE_ICON;
+    
+    var vol = double.parse(window.localStorage["volume"], (_) => 100.0);
+    setVolume(vol: vol);
     
     audio.onEmptied.listen((e) => reset());
   }
@@ -37,6 +39,7 @@ class Controls extends PolymerElement {
     }
     
     audio.volume = volume / 100.0;
+    window.localStorage["volume"] = volume.toString();
   }
   
   void mute() {
