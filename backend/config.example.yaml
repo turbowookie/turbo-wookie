@@ -7,7 +7,8 @@
 
 # Don't use quotes in the config.yaml
 
-# what port do you want Turbo Wookie to run on?
+# what domain and port do you want Turbo Wookie to run on?
+server_domain: localhost
 server_port: 9000
 
 # If MPD isn't in your path, change this to be the mpd executable's path
