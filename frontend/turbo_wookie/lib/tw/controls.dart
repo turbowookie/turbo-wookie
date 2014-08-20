@@ -14,7 +14,7 @@ class Controls extends PolymerElement {
   @observable String streamSrc;
   double _oldVolume;
   AudioElement audio;
-  @observable double volume;
+  @observable num volume;
   @observable String pausePlayIcon;
   bool isPlaying;
   Observer observer;
