@@ -1,9 +1,8 @@
 package turbowookie
 
 import (
-	//"github.com/fhs/gompd/mpd"
 	"github.com/turbowookie/gompd/mpd"
-	//"../../../gompd/mpd"
+	"gopkg.in/gorp.v1"
 	"io"
 	"log"
 	"os"
@@ -23,6 +22,8 @@ type MPDClient struct {
 	// Underlying command running MPD
 	MpdCmd *exec.Cmd
 
+	dbmap *gorp.DbMap
+
 	// configuration stuff
 	config map[string]string
 
@@ -39,6 +40,7 @@ func NewMPDClient(config map[string]string, noStartMPD bool) *MPDClient {
 	c.config = config
 	c.Domain = c.config["mpd_domain"]
 	c.Port = c.config["mpd_control_port"]
+	c.dbmap = InitDB()
 	c.queueingSong = false
 
 	// Don't start MPD if `noStartMPD` is true.
@@ -393,14 +395,14 @@ func (c *MPDClient) QueueSong() {
 	}
 
 	if attrs["state"] != "play" {
-		songs, err := client.GetFiles()
+		var song Song
+		err := c.dbmap.SelectOne(&song, "select * from Song order by random() limit 1")
 		if err != nil {
-			log.Fatal("Couldn't get all files...", err)
+			log.Fatal(err)
 		}
 
-		song := songs[random(0, len(songs))]
-		if client.Add(song) != nil {
-			log.Fatal("Couldn't add song:", song)
+		if client.Add(song.Uri) != nil {
+			log.Fatal("Couldn't add song", song.Uri)
 		}
 
 		plen, err := strconv.Atoi(attrs["playlistlength"])
@@ -430,4 +432,38 @@ func (c *MPDClient) Search(query string) ([]map[string]string, error) {
 
 	return response, nil
 
+}
+
+func (c *MPDClient) ScanLibrary() {
+	client, err := c.getClient()
+	if err != nil {
+		log.Fatal("Couldn't get client", err)
+	}
+	defer client.Close()
+
+	mpd_files, err := client.GetFiles()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range mpd_files {
+		files_info, err := client.ListAllInfo(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		file_info := files_info[0]
+
+		//fmt.Printf("------FILEINFO------\ntitle: %s\nalbum: %s\nartist: %s\n\n\n", file_info["Title"], file_info["Album"], file_info["Artist"])
+
+		title := file_info["Title"]
+		artist := file_info["Artist"]
+		album := file_info["Album"]
+		var song Song
+		err = c.dbmap.SelectOne(&song, "select * from Song where Uri=?", file)
+		if err != nil {
+			song = Song{Title: title, Artist: artist, Album: album, PlayCount: 0, SkipCount: 0, Uri: file}
+			c.dbmap.Insert(&song)
+		}
+	}
 }
