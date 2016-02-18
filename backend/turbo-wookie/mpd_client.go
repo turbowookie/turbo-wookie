@@ -1,6 +1,7 @@
 package turbowookie
 
 import (
+	"fmt"
 	"github.com/turbowookie/gompd/mpd"
 	"gopkg.in/gorp.v1"
 	"io"
@@ -413,6 +414,12 @@ func (c *MPDClient) QueueSong() {
 		if client.Play(plen) != nil {
 			log.Fatal("Couldn't play song")
 		}
+
+		song.PlayCount += 1
+		count, err := c.dbmap.Update(&song)
+		if err != nil || count != 1 {
+			log.Fatal("Couldn't update song", err, count)
+		}
 	}
 }
 
@@ -431,7 +438,48 @@ func (c *MPDClient) Search(query string) ([]map[string]string, error) {
 	response := attrsToMap(attrs)
 
 	return response, nil
+}
 
+func (c *MPDClient) SearchSongs(query string) []map[string]string {
+	likeQuery := fmt.Sprintf("%%%s%%", query)
+
+	var songs []Song
+	_, err := c.dbmap.Select(&songs, "select * from Song where Title like ?", likeQuery)
+	if err != nil {
+		log.Fatal("Couldn't search for song titles using query", likeQuery, "\n", err)
+	}
+
+	response := make([]map[string]string, 0)
+
+	for _, song := range songs {
+		response = append(response, song.ToMap())
+	}
+
+	return response
+}
+
+func (c *MPDClient) SearchAlbums(query string) []string {
+	likeQuery := fmt.Sprintf("%%%s%%", query)
+
+	var albums []string
+	_, err := c.dbmap.Select(&albums, "select distinct(Album) from Song where Album like ?", likeQuery)
+	if err != nil {
+		log.Fatal("Couldn't search for album using query", likeQuery, "\n", err)
+	}
+
+	return albums
+}
+
+func (c *MPDClient) SearchArtists(query string) []string {
+	likeQuery := fmt.Sprintf("%%%s%%", query)
+
+	var artists []string
+	_, err := c.dbmap.Select(&artists, "select distinct(Artist) from Song where Artist like ?", likeQuery)
+	if err != nil {
+		log.Fatal("Couldn't search for artist using query", likeQuery, "\n", err)
+	}
+
+	return artists
 }
 
 func (c *MPDClient) ScanLibrary() {
@@ -457,8 +505,13 @@ func (c *MPDClient) ScanLibrary() {
 		//fmt.Printf("------FILEINFO------\ntitle: %s\nalbum: %s\nartist: %s\n\n\n", file_info["Title"], file_info["Album"], file_info["Artist"])
 
 		title := file_info["Title"]
-		artist := file_info["Artist"]
 		album := file_info["Album"]
+
+		artist, is_set := file_info["AlbumArtist"]
+		if !is_set {
+			artist = file_info["Artist"]
+		}
+
 		var song Song
 		err = c.dbmap.SelectOne(&song, "select * from Song where Uri=?", file)
 		if err != nil {

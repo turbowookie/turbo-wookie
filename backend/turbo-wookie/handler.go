@@ -246,7 +246,6 @@ func (h *Handler) addSong(w http.ResponseWriter, r *http.Request) {
 
 // Searches for an artist, album, or song in the database.
 func (h *Handler) search(w http.ResponseWriter, r *http.Request) {
-	// Get the query string.
 	r.ParseForm()
 	query, ok := r.Form["search"]
 	if !ok {
@@ -254,52 +253,10 @@ func (h *Handler) search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create the response variables.
-	artistResponse := make([]string, 0)
-	albumResponse := make([]string, 0)
-	songsResponse := make([]map[string]string, 0)
+	artistResponse := h.MpdClient.SearchArtists(query[0])
+	albumResponse := h.MpdClient.SearchAlbums(query[0])
+	songsResponse := h.MpdClient.SearchSongs(query[0])
 
-	// Search for all artists.
-	songsArtist, err := h.MpdClient.Search("artist \"" + query[0] + "\"")
-	if err != nil {
-		log.Println("Error searching MPD")
-		return
-	}
-
-	// Add each artist to the list.
-	for _, song := range songsArtist {
-		if indexOf(artistResponse, song["Artist"]) == -1 {
-			artistResponse = append(artistResponse, song["Artist"])
-		}
-	}
-
-	// Search for all albums.
-	songsAlbum, err := h.MpdClient.Search("album \"" + query[0] + "\"")
-	if err != nil {
-		log.Println("Error searching MPD")
-		return
-	}
-
-	// Add each album to the list.
-	for _, song := range songsAlbum {
-		if indexOf(albumResponse, song["Album"]) == -1 {
-			albumResponse = append(albumResponse, song["Album"])
-		}
-	}
-
-	// Search for all songs.
-	songsSongs, err := h.MpdClient.Search("title \"" + query[0] + "\"")
-	if err != nil {
-		log.Println("Error searching MPD")
-		return
-	}
-
-	// Add each song to the list.
-	for _, song := range songsSongs {
-		songsResponse = append(songsResponse, song)
-	}
-
-	// Create the json response and send it to the client.
 	responseMap := make(map[string]interface{})
 	responseMap["artist"] = artistResponse
 	responseMap["album"] = albumResponse

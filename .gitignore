@@ -24,6 +24,9 @@ backend/mpd/state
 backend/mpd/pid
 backend/mpd/sticker.sql
 
+# db stuff
+backed/turbowookie.db
+
 #yaml config file
 backend/config.yaml
 
