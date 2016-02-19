@@ -180,91 +180,73 @@ func attrsToMap(attrs []mpd.Attrs) []map[string]string {
 // GetFiles returns a map of all songs in the library, and their stored
 // metadata (artist, album, etc).
 func (c *MPDClient) GetFiles() ([]map[string]string, error) {
-	client, err := c.getClient()
+	var songs []Song
+	_, err := c.dbmap.Select(&songs, "select * from Song order by Artist asc, Album asc")
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
 
-	mpdFiles, err := client.ListAllInfo("/")
-	if err != nil {
-		return nil, &tbError{Msg: "Couldn't listallinfo from MPD", Err: err}
+	response := make([]map[string]string, len(songs))
+	for i, song := range songs {
+		response[i] = song.ToMap()
 	}
 
-	return attrsToMap(mpdFiles), nil
+	return response, nil
 }
 
 func (c *MPDClient) GetSongs(artist string, album string) ([]map[string]string, error) {
-	client, err := c.getClient()
+	var songs []Song
+	var err error
+	if album == "" {
+		_, err = c.dbmap.Select(&songs, "select * from Song where Artist = ? order by Artist asc, Album asc", artist)
+	} else {
+		_, err = c.dbmap.Select(&songs, "select * from Song where Artist = ? and Album = ? order by Artist asc, Album asc", artist, album)
+	}
+
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
 
-	var requestStr string
-
-	if album != "" {
-		requestStr = "artist \"" + artist + "\" album \"" + album + "\""
-	} else {
-		requestStr = "artist \"" + artist + "\""
+	response := make([]map[string]string, len(songs))
+	for i, song := range songs {
+		response[i] = song.ToMap()
 	}
 
-	mpdFiles, err := client.Find(requestStr)
-	if err != nil {
-		return nil, &tbError{Msg: "Couldn't search from MPD", Err: err}
-	}
-
-	return attrsToMap(mpdFiles), nil
+	return response, nil
 }
 
 func (c *MPDClient) GetArtists() ([]string, error) {
-	client, err := c.getClient()
-	if err != nil {
-		return nil, err
-	}
-	defer client.Close()
-
-	artists, err := client.List("artist")
-	if err != nil {
-		return nil, err
-	}
-
-	return artists, nil
+	var artists []string
+	_, err := c.dbmap.Select(&artists, "select distinct(Artist) from Song order by Artist asc")
+	return artists, err
 }
 
 func (c *MPDClient) GetAlbums(artist string) (map[string][]string, error) {
-	client, err := c.getClient()
+	var songs []struct {
+		Artist string
+		Album  string
+	}
+	var err error
+
+	if artist == "" {
+		_, err = c.dbmap.Select(&songs, "select Artist, Album from Song group by Artist, Album order by Artist asc")
+	} else {
+		_, err = c.dbmap.Select(&songs, "select Artist, Album from Song where Artist = ? group by Artist, Album order by Artist asc", artist)
+	}
+
 	if err != nil {
 		return nil, err
 	}
-	defer client.Close()
 
 	albums := make(map[string][]string, 0)
 
-	// Only get the artist requested.
-	if len(artist) > 0 {
-		artistAlbums, err := client.List("album artist \"" + artist + "\"")
-		if err != nil {
-			return nil, err
-		}
-		albums[artist] = artistAlbums
-
-	} else {
-		// Get all albums.
-		artists, err := client.List("artist")
-		if err != nil {
-			return nil, err
+	for _, song := range songs {
+		albumList, exists := albums[song.Artist]
+		if !exists {
+			albumList = make([]string, 0)
 		}
 
-		// For earch artist, create list in the map, keyed to the artist and add
-		// all the artist's albums to it.
-		for _, artist := range artists {
-			artistAlbums, err := client.List("album artist \"" + artist + "\"")
-			if err != nil {
-				return nil, err
-			}
-			albums[artist] = artistAlbums
-		}
+		albums[song.Artist] = append(albumList, song.Album)
 	}
 
 	return albums, nil
@@ -502,14 +484,16 @@ func (c *MPDClient) ScanLibrary() {
 
 		file_info := files_info[0]
 
-		//fmt.Printf("------FILEINFO------\ntitle: %s\nalbum: %s\nartist: %s\n\n\n", file_info["Title"], file_info["Album"], file_info["Artist"])
-
 		title := file_info["Title"]
 		album := file_info["Album"]
 
 		artist, is_set := file_info["AlbumArtist"]
 		if !is_set {
 			artist = file_info["Artist"]
+		}
+
+		if title == "" {
+			continue
 		}
 
 		var song Song
