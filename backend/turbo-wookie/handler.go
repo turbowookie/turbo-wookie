@@ -236,9 +236,9 @@ func (h *Handler) addSong(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return a simple note saying that we got the song
-	m := make(map[string]string)
-	m["note"] = "Added song: " + song
-	fmt.Fprintf(w, jsoniffy(m))
+	fmt.Fprintf(w, jsoniffy(struct {
+		Note string `json:"note"`
+	}{Note: "Added song: " + song}))
 
 	// tell long pollers that the playlist changed.
 	h.PolarChanged("playlist")
@@ -257,12 +257,13 @@ func (h *Handler) search(w http.ResponseWriter, r *http.Request) {
 	albumResponse := h.MpdClient.SearchAlbums(query[0])
 	songsResponse := h.MpdClient.SearchSongs(query[0])
 
-	responseMap := make(map[string]interface{})
-	responseMap["artist"] = artistResponse
-	responseMap["album"] = albumResponse
-	responseMap["song"] = songsResponse
+	response := struct {
+		Artist []string            `json:"artist"`
+		Album  []string            `json:"album"`
+		Song   []map[string]string `json:"song"`
+	}{Artist: artistResponse, Album: albumResponse, Song: songsResponse}
 
-	fmt.Fprintf(w, jsoniffy(responseMap))
+	fmt.Fprintf(w, jsoniffy(response))
 }
 
 // Our long poller. Accessed through `/polar`.
@@ -295,10 +296,9 @@ func (h *Handler) bear(w http.ResponseWriter, r *http.Request) {
 			h.updater <- msg
 		}
 	case <-timeout:
-		m := make(map[string]string)
-		m["changed"] = "nothing"
-
-		fmt.Fprintf(w, jsoniffy(m))
+		fmt.Fprintf(w, jsoniffy(struct {
+			Changed string `json:"changed"`
+		}{Changed: "nothing"}))
 	}
 }
 
@@ -331,7 +331,7 @@ func (h *Handler) PolarChanged(element string) {
 		return
 	}
 
-	m2 := make(map[string]string)
-	m2["changed"] = element
-	h.updater <- jsoniffy(m2)
+	h.updater <- jsoniffy(struct {
+		Changed string `json:"changed"`
+	}{Changed: element})
 }
