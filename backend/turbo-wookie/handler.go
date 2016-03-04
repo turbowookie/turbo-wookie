@@ -38,7 +38,6 @@ type Handler struct {
 // NewHandler creates a new Handler, using the passed in filename as a
 // yaml file containing the server's configuation settings.
 func NewHandler(filename string, serveDart, startMPD bool, portOverride int) (*Handler, error) {
-	// make us a pointer to a handler.
 	h := &Handler{}
 
 	// attempt to read the passed in config file. See `yaml.go` for more info.
@@ -96,7 +95,6 @@ func NewHandler(filename string, serveDart, startMPD bool, portOverride int) (*H
 	h.updater = make(chan string)
 	h.pollerClients = 0
 
-	// nothing bad happened. Suprise!
 	return h, nil
 }
 
@@ -207,7 +205,6 @@ func (h *Handler) getUpcomingSongs(w http.ResponseWriter, r *http.Request) {
 // Add a song to the playlist. Using the format
 //    `/add?song=[FilePath of song]`
 func (h *Handler) addSong(w http.ResponseWriter, r *http.Request) {
-	// for some reason Go doesn't do this automatically.
 	r.ParseForm()
 
 	// Get the song from the GET request variables,

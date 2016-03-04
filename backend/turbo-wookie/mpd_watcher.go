@@ -38,7 +38,6 @@ func (mw *mpdWatcher) onWatcherEvents() {
 		select {
 		case subsystem := <-mw.w.Event:
 			if subsystem == "player" {
-				//mw.queueSong()
 				mw.h.MpdClient.QueueSong()
 			}
 

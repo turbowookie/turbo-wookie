@@ -355,6 +355,18 @@ func (c *MPDClient) Add(uri string) error {
 		}
 	}
 
+	result, err := c.dbmap.Exec("UPDATE Song SET PlayCount = PlayCount + 1 WHERE Uri = ?", uri)
+	if err != nil {
+		log.Println("Couldn't increment play count for", uri)
+		log.Println(err)
+	}
+
+	lastUpdate, err := result.RowsAffected()
+	if err != nil || lastUpdate != 1 {
+		log.Println("Couldn't increment play count for", uri)
+		log.Println(err)
+	}
+
 	return nil
 }
 
@@ -395,12 +407,6 @@ func (c *MPDClient) QueueSong() {
 
 		if client.Play(plen) != nil {
 			log.Fatal("Couldn't play song")
-		}
-
-		song.PlayCount += 1
-		count, err := c.dbmap.Update(&song)
-		if err != nil || count != 1 {
-			log.Fatal("Couldn't update song", err, count)
 		}
 	}
 }
