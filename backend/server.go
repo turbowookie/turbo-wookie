@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	// Parse out our flags
 	serveDart := flag.Bool("dart", false, "Include to serve dart code.")
 	noStartMPD := flag.Bool("nompd", false, "Include to not start MPD.")
 	configFile := flag.String("config", "config.yaml", "Location of a Turbo Wookie configuration file.")
@@ -20,6 +21,7 @@ func main() {
 
 	flag.Parse()
 
+	// create a new Turbo Wookie Handler, using our flags.
 	h, err := turbowookie.NewHandler(*configFile, *serveDart, *noStartMPD, *portOverride)
 	if err != nil {
 		log.Fatal(err)
@@ -45,8 +47,7 @@ func main() {
 		}
 	}()
 
-	go h.MpdClient.ScanLibrary()
-
+	// Listen for and serve HTTP requests
 	if err := h.ListenAndServe(); err != nil {
 		log.Println(err)
 	}
@@ -56,22 +57,28 @@ func main() {
 // Valid commands are anything permitted in the MPD protocol.
 // The protocol reference can be found at http://www.musicpd.org/doc/protocol/index.html
 func talkToMPD() {
+	//fmt.Print("\n> ")
 	fmt.Print("\n")
 
+	// Read from the stdin.
 	clientReader := bufio.NewReader(os.Stdin)
 	requestBytes, _, _ := clientReader.ReadLine()
 	request := string(requestBytes)
 
+	// Once we have read, create a connection to MPD.
 	conn, err := net.Dial("tcp", "localhost:6600")
 	checkErr(err)
 
+	// Write our response to MPD.
 	fmt.Fprintf(conn, request+"\n")
 
+	// Read from MPD.
 	reader := bufio.NewReader(conn)
 	for {
 		response, err := reader.ReadString('\n')
 		checkErr(err)
 
+		// Using fmt to print a response because we don't care about time.
 		fmt.Print(response)
 
 		// If the request was good, MPD's response will end with "OK\n"
@@ -84,6 +91,7 @@ func talkToMPD() {
 	}
 }
 
+// I got sick of checking for errors after every function call, so I did this.
 func checkErr(err error) {
 	if err != nil {
 		log.Println("Error: %s", err.Error())
