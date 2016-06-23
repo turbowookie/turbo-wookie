@@ -398,6 +398,14 @@ func (c *MPDClient) QueueSong() {
 			log.Fatal("Couldn't get all files...", err)
 		}
 
+		for numSongs := len(songs); numSongs == 0; numSongs = len(songs) {
+			log.Println("No songs found, waiting...")
+			songs, err = client.GetFiles()
+			if err != nil {
+				log.Fatal("Couldn't get all files...", err)
+			}
+		}
+
 		song := songs[random(0, len(songs))]
 		if client.Add(song) != nil {
 			log.Fatal("Couldn't add song:", song)

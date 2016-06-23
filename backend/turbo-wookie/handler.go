@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -33,6 +34,10 @@ type Handler struct {
 	// pollerClients is the number of people currently connected to the long
 	// poller.
 	pollerClients int
+
+	socketUpgrader websocket.Upgrader
+
+	socketConnections []*websocket.Conn
 }
 
 // NewHandler creates a new Handler, using the passed in filename as a
@@ -81,6 +86,7 @@ func NewHandler(filename string, serveDart, startMPD bool, portOverride int) (*H
 	h.Router.HandleFunc("/add", h.addSong)
 	h.Router.HandleFunc("/search", h.search)
 	h.Router.HandleFunc("/polar", h.bear)
+	h.Router.HandleFunc("/socket", h.websocket)
 
 	// This needs to be last, otherwise it'll override all routes after it
 	// because we're matching EVERYTHING.
@@ -95,6 +101,12 @@ func NewHandler(filename string, serveDart, startMPD bool, portOverride int) (*H
 	// setup our poller/polar stuff.
 	h.updater = make(chan string)
 	h.pollerClients = 0
+
+	h.socketUpgrader = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+	h.socketConnections = make([]*websocket.Conn, 0)
 
 	// nothing bad happened. Suprise!
 	return h, nil
@@ -345,9 +357,70 @@ func (h *Handler) bear(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Handler) websocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := h.socketUpgrader.Upgrade(w, r, nil)
+	if err != nil {
+		printError(w, "Error upgrading to websocket connection!", err)
+		return
+	}
+
+	h.socketConnections = append(h.socketConnections, conn)
+
+	for {
+		messageType, bytesBody, err := conn.ReadMessage()
+		body := string(bytesBody[:])
+		if err != nil {
+			log.Println("WS Read Error", err)
+
+			if websocket.IsUnexpectedCloseError(err) {
+				for i := 0; i < len(h.socketConnections); i++ {
+					if h.socketConnections[i] == conn {
+						copy(h.socketConnections[i:], h.socketConnections[i+1:])
+						h.socketConnections[len(h.socketConnections)-1] = nil
+						h.socketConnections = h.socketConnections[len(h.socketConnections)-1:]
+
+						log.Println("Removing WS from slice", r.RemoteAddr)
+						return
+					}
+				}
+				log.Println("WS made it through remove loop.....", r.RemoteAddr)
+			}
+
+			break
+		}
+
+		if messageType == websocket.TextMessage {
+			log.Println("WS From", r.RemoteAddr, "\n\tBody:", body)
+		} else if messageType == websocket.CloseMessage {
+			log.Println("WS Closing", r.RemoteAddr)
+
+			// TODO make this work better somehow
+			for i := 0; i < len(h.socketConnections); i++ {
+				if h.socketConnections[i] == conn {
+					copy(h.socketConnections[i:], h.socketConnections[i+1:])
+					h.socketConnections[len(h.socketConnections)-1] = nil
+					h.socketConnections = h.socketConnections[len(h.socketConnections)-1:]
+					return
+				}
+			}
+			log.Println("WS ERR!!!! Got through loop without deleting a websocket...")
+			break
+		}
+	}
+}
+
 /************************
     HELPER FUNCTIONS
 ************************/
+
+func (h *Handler) CloseWebSockets() {
+	for _, conn := range h.socketConnections {
+		err := conn.Close()
+		if err != nil {
+			log.Println("Error closing websocket", conn.RemoteAddr().String)
+		}
+	}
+}
 
 // Print an error the the screen, and send a simple message to the client.
 func printError(w http.ResponseWriter, msg string, err error) {

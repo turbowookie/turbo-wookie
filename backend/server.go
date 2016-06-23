@@ -36,6 +36,7 @@ func main() {
 		go func() {
 			for _ = range c {
 				h.MpdClient.KillMpd()
+				h.CloseWebSockets()
 				os.Exit(1)
 			}
 		}()
