@@ -14,6 +14,8 @@ frontend/turbo_wookie/.buildlog
 frontend/turbo_wookie/packages
 frontend/turbo_wookie/web/packages
 frontend/turbo_wookie/build
+frontend/turbo_wookie/.packages
+frontend/turbo_wookie/.pub
 
 # mpd stuff
 backend/mpd/music

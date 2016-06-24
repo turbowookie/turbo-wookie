@@ -10,7 +10,6 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strconv"
-	"time"
 )
 
 // Handler is our custom http.Handler used to actually do the HTTP stuff.
@@ -26,14 +25,6 @@ type Handler struct {
 	// Router is a mux.Router, it's what really does all the HTTP stuff, we just
 	// act as the interface. And the HandlerFuncs
 	Router *mux.Router
-
-	// updater is a channel used by our long poller/polar system. It contains
-	// the message of what's been changed.
-	updater chan string
-
-	// pollerClients is the number of people currently connected to the long
-	// poller.
-	pollerClients int
 
 	socketUpgrader websocket.Upgrader
 
@@ -85,7 +76,6 @@ func NewHandler(filename string, serveDart, startMPD bool, portOverride int) (*H
 	h.Router.HandleFunc("/upcoming", h.getUpcomingSongs)
 	h.Router.HandleFunc("/add", h.addSong)
 	h.Router.HandleFunc("/search", h.search)
-	h.Router.HandleFunc("/polar", h.bear)
 	h.Router.HandleFunc("/socket", h.websocket)
 
 	// This needs to be last, otherwise it'll override all routes after it
@@ -97,10 +87,6 @@ func NewHandler(filename string, serveDart, startMPD bool, portOverride int) (*H
 		fileDir += "/build/web"
 	}
 	h.Router.PathPrefix("/").Handler(http.FileServer(http.Dir(fileDir)))
-
-	// setup our poller/polar stuff.
-	h.updater = make(chan string)
-	h.pollerClients = 0
 
 	h.socketUpgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
@@ -320,49 +306,14 @@ func (h *Handler) search(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, jsoniffy(responseMap))
 }
 
-// Our long poller. Accessed through `/polar`.
-// Clients connect to this, and wait for either five minutes (after which
-// they probably reconnect) or until the server tells them something has
-// changed.
-//
-// This is done so that clients don't need to make periodic requests
-// asking for updates.
-func (h *Handler) bear(w http.ResponseWriter, r *http.Request) {
-	// we got another live one.
-	h.pollerClients += 1
-
-	// Setup a timeout to make sure the client doesn't sit here forever.
-	timeout := make(chan bool)
-	defer func() { h.pollerClients -= 1 }()
-	go func() {
-		// if after five minutes nothing has changed, timeout and have the client
-		// connect again.
-		time.Sleep(5 * time.Minute)
-		timeout <- true
-	}()
-
-	// Either the updater has news or the timeout expired.
-	// Depending on which, tell the client something or nothing changed.
-	select {
-	case msg := <-h.updater:
-		fmt.Fprintf(w, msg)
-		if h.pollerClients > 1 {
-			h.updater <- msg
-		}
-	case <-timeout:
-		m := make(map[string]string)
-		m["changed"] = "nothing"
-
-		fmt.Fprintf(w, jsoniffy(m))
-	}
-}
-
 func (h *Handler) websocket(w http.ResponseWriter, r *http.Request) {
 	conn, err := h.socketUpgrader.Upgrade(w, r, nil)
 	if err != nil {
 		printError(w, "Error upgrading to websocket connection!", err)
 		return
 	}
+
+	log.Println("Websocket connection established!")
 
 	h.socketConnections = append(h.socketConnections, conn)
 
@@ -373,17 +324,7 @@ func (h *Handler) websocket(w http.ResponseWriter, r *http.Request) {
 			log.Println("WS Read Error", err)
 
 			if websocket.IsUnexpectedCloseError(err) {
-				for i := 0; i < len(h.socketConnections); i++ {
-					if h.socketConnections[i] == conn {
-						copy(h.socketConnections[i:], h.socketConnections[i+1:])
-						h.socketConnections[len(h.socketConnections)-1] = nil
-						h.socketConnections = h.socketConnections[len(h.socketConnections)-1:]
-
-						log.Println("Removing WS from slice", r.RemoteAddr)
-						return
-					}
-				}
-				log.Println("WS made it through remove loop.....", r.RemoteAddr)
+				h.removeWebSocket(conn)
 			}
 
 			break
@@ -394,16 +335,7 @@ func (h *Handler) websocket(w http.ResponseWriter, r *http.Request) {
 		} else if messageType == websocket.CloseMessage {
 			log.Println("WS Closing", r.RemoteAddr)
 
-			// TODO make this work better somehow
-			for i := 0; i < len(h.socketConnections); i++ {
-				if h.socketConnections[i] == conn {
-					copy(h.socketConnections[i:], h.socketConnections[i+1:])
-					h.socketConnections[len(h.socketConnections)-1] = nil
-					h.socketConnections = h.socketConnections[len(h.socketConnections)-1:]
-					return
-				}
-			}
-			log.Println("WS ERR!!!! Got through loop without deleting a websocket...")
+			h.removeWebSocket(conn)
 			break
 		}
 	}
@@ -417,7 +349,7 @@ func (h *Handler) CloseWebSockets() {
 	for _, conn := range h.socketConnections {
 		err := conn.Close()
 		if err != nil {
-			log.Println("Error closing websocket", conn.RemoteAddr().String)
+			log.Println("Error closing websocket")
 		}
 	}
 }
@@ -443,11 +375,37 @@ func jsoniffy(v interface{}) string {
 // PolarChanged tell clients connected to our long-poll system that something
 // (element) has changed.
 func (h *Handler) PolarChanged(element string) {
-	if h.pollerClients < 1 {
-		return
+	connsToDelete := make([]*websocket.Conn, 0)
+	for _, conn := range h.socketConnections {
+		if conn == nil {
+			connsToDelete = append(connsToDelete, conn)
+			continue
+		}
+		log.Println("WS Sending", element)
+		err := conn.WriteMessage(websocket.TextMessage, []byte(element))
+
+		if err != nil {
+			log.Println("WS Error writing update")
+		}
 	}
 
-	m2 := make(map[string]string)
-	m2["changed"] = element
-	h.updater <- jsoniffy(m2)
+	for _, conn := range connsToDelete {
+		h.removeWebSocket(conn)
+	}
+}
+
+func (h *Handler) removeWebSocket(conn *websocket.Conn) {
+	for i := 0; i < len(h.socketConnections); i++ {
+		if h.socketConnections[i] == conn {
+			h.socketConnections[i] = nil
+			h.socketConnections[i] = h.socketConnections[len(h.socketConnections)-1]
+			h.socketConnections = h.socketConnections[len(h.socketConnections)-1:]
+			//copy(h.socketConnections[i:], h.socketConnections[i+1:])
+			//h.socketConnections[len(h.socketConnections)-1] = nil
+
+			log.Println("Removing WS from slice")
+			return
+		}
+	}
+	log.Println("WS made it through remove loop.....")
 }
